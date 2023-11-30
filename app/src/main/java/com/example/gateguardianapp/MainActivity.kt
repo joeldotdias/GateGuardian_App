@@ -17,11 +17,11 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.gateguardianapp.domain.model.User
 import com.example.gateguardianapp.presentation.SplashScreen
-import com.example.gateguardianapp.presentation.auth.ResScreen
 import com.example.gateguardianapp.presentation.auth.SecScreen
 import com.example.gateguardianapp.presentation.auth.SignInScreen
 import com.example.gateguardianapp.presentation.auth.SignInViewModel
 import com.example.gateguardianapp.presentation.auth.googleclient.GoogleAuthClient
+import com.example.gateguardianapp.presentation.resident.ResidentDrawer
 import com.example.gateguardianapp.ui.theme.GateGuardianAppTheme
 import com.example.gateguardianapp.util.Constants
 import com.google.android.gms.auth.api.identity.Identity
@@ -43,6 +43,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             GateGuardianAppTheme {
+
                 val viewModel = hiltViewModel<SignInViewModel>()
                 val state by viewModel.state.collectAsStateWithLifecycle()
                 val navController = rememberNavController()
@@ -118,7 +119,7 @@ class MainActivity : ComponentActivity() {
                     }
 
                     composable("res") {
-                        ResScreen(user = user,
+                        ResidentDrawer(user = user,
                             onSignOut = {lifecycleScope.launch {
                                 googleAuthClient.signOut()
                                 Toast.makeText(applicationContext, "Signed out", Toast.LENGTH_LONG).show()

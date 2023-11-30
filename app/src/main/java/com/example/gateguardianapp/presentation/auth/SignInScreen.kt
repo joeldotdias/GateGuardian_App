@@ -126,33 +126,3 @@ fun SecScreen(
         }
     }
 }
-
-@Composable
-fun ResScreen(
-    user: User,
-    onSignOut: () -> Unit
-) {
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        Text(
-            text = user.email,
-            textAlign = TextAlign.Center,
-            fontSize = 20.sp,
-            fontWeight = FontWeight.SemiBold
-        )
-        Spacer(modifier = Modifier.height(16.dp))
-        Text(
-            text = "Welcome ${user.category}",
-            textAlign = TextAlign.Center,
-            fontSize = 25.sp,
-            fontWeight = FontWeight.Medium
-        )
-
-        Button(onClick = onSignOut) {
-            Text(text = "Sign Out")
-        }
-    }
-}
