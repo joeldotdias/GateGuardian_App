@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "75674968967",
+    "project_id": "gateguardian-app",
+    "storage_bucket": "gateguardian-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:75674968967:android:0ca752b26c6818623ae922",
+        "android_client_info": {
+          "package_name": "com.example.gateguardianapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "75674968967-uigjq6eh9n9lnb2sfm1hjn2bbdpivear.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.gateguardianapp",
+            "certificate_hash": "fde35fa9fbc3669e9642e7e49ac56a180e029bc8"
+          }
+        },
+        {
+          "client_id": "75674968967-rdlpsejbvg6dsddnp7nn64pi4houh6ie.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDD6f_XnNdilDo1eQLkgtv_azhDKhW-oP4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "75674968967-rdlpsejbvg6dsddnp7nn64pi4houh6ie.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
