@@ -29,7 +29,8 @@ fun SecurityBottomBar(
     val screens = listOf(
         SecurityScreens.Verify,
         SecurityScreens.Notify,
-        SecurityScreens.Logs
+        SecurityScreens.Logs,
+        SecurityScreens.Profile
     )
 
     val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -67,7 +68,10 @@ fun SecurityBottomBar(
         Surface(
             modifier = Modifier.padding(bottom = it.calculateBottomPadding())
         ) {
-            SecurityNavigation(navController = navController)
+            SecurityNavigation(
+                navController = navController,
+                signOut = onSignOut
+            )
         }
     }
 }

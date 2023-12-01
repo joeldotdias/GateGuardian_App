@@ -65,7 +65,8 @@ fun ResidentDrawer(
         ResidentScreens.Visitors,
         ResidentScreens.Regulars,
         ResidentScreens.Notices,
-        ResidentScreens.Events
+        ResidentScreens.Events,
+        ResidentScreens.Profile
     )
 
 
@@ -135,7 +136,10 @@ fun ResidentDrawer(
                     .fillMaxSize()
                     .padding(top = it.calculateTopPadding())
             ) {
-                ResidentNavigation(navController = navController)
+                ResidentNavigation(
+                    navController = navController,
+                    signOut = onSignOut
+                )
             }
         }
     }

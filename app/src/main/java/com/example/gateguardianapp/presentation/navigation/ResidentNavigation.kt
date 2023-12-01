@@ -7,11 +7,15 @@ import androidx.navigation.compose.composable
 import com.example.gateguardianapp.presentation.resident.dashboard.DashboardScreen
 import com.example.gateguardianapp.presentation.resident.events.EventsScreen
 import com.example.gateguardianapp.presentation.resident.notices.NoticesScreen
+import com.example.gateguardianapp.presentation.resident.profile.ResidentProfileScreen
 import com.example.gateguardianapp.presentation.resident.regulars.RegularsScreen
 import com.example.gateguardianapp.presentation.resident.visitors.VisitorsScreen
 
 @Composable
-fun ResidentNavigation(navController: NavHostController) {
+fun ResidentNavigation(
+    navController: NavHostController,
+    signOut: () -> Unit
+) {
     NavHost(
         navController = navController,
         startDestination = ResidentScreens.Dashboard.route
@@ -34,6 +38,10 @@ fun ResidentNavigation(navController: NavHostController) {
 
         composable(route = ResidentScreens.Notices.route) {
             NoticesScreen()
+        }
+
+        composable(route = ResidentScreens.Profile.route) {
+            ResidentProfileScreen(signOut)
         }
     }
 }

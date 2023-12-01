@@ -3,8 +3,10 @@ package com.example.gateguardianapp.presentation.navigation
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.MenuBook
 import androidx.compose.material.icons.automirrored.outlined.MenuBook
+import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.NotificationsActive
 import androidx.compose.material.icons.filled.Verified
+import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material.icons.outlined.NotificationsActive
 import androidx.compose.material.icons.outlined.Verified
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -34,5 +36,12 @@ sealed class SecurityScreens(
         route = "logs",
         selectedIcon = Icons.AutoMirrored.Filled.MenuBook,
         unselectedIcon = Icons.AutoMirrored.Outlined.MenuBook
+    )
+
+    data object Profile: SecurityScreens(
+        title = "Profile",
+        route = "profile",
+        selectedIcon = Icons.Filled.AccountCircle,
+        unselectedIcon = Icons.Outlined.AccountCircle
     )
 }

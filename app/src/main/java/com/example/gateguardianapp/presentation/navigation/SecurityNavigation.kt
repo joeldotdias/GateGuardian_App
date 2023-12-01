@@ -6,11 +6,13 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.gateguardianapp.presentation.security.logs.LogsScreen
 import com.example.gateguardianapp.presentation.security.notify.NotifyScreen
+import com.example.gateguardianapp.presentation.security.profile.SecurityProfileScreen
 import com.example.gateguardianapp.presentation.security.verify.VerifyScreen
 
 @Composable
 fun SecurityNavigation(
-    navController: NavHostController
+    navController: NavHostController,
+    signOut: () -> Unit
 ) {
 
     NavHost(
@@ -28,6 +30,10 @@ fun SecurityNavigation(
 
         composable(route = SecurityScreens.Logs.route) {
             LogsScreen()
+        }
+
+        composable(route = SecurityScreens.Profile.route) {
+            SecurityProfileScreen(signOut)
         }
     }
 }
