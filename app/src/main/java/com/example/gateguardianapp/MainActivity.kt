@@ -20,6 +20,7 @@ import com.example.gateguardianapp.presentation.SplashScreen
 import com.example.gateguardianapp.presentation.auth.SignInScreen
 import com.example.gateguardianapp.presentation.auth.SignInViewModel
 import com.example.gateguardianapp.presentation.auth.googleclient.GoogleAuthClient
+import com.example.gateguardianapp.presentation.navigation.AppSections
 import com.example.gateguardianapp.presentation.resident.ResidentDrawer
 import com.example.gateguardianapp.presentation.security.SecurityBottomBar
 import com.example.gateguardianapp.ui.theme.GateGuardianAppTheme
@@ -55,23 +56,35 @@ class MainActivity : ComponentActivity() {
                         user = viewModel.getUserByEmail(authUser.email)
                         delay(Constants.SPLASH_DELAY)
                         when(user.category.lowercase()) {
-                            "resident" -> { navController.navigate("res") }
-                            "admin" -> { navController.navigate("res") }
-                            "security" -> { navController.navigate("sec") }
+                            "resident" -> {
+                                navController.navigate(AppSections.Resident.name) {
+                                    popUpTo(0)
+                                }
+                            }
+                            "admin" -> {
+                                navController.navigate(AppSections.Resident.name) {
+                                    popUpTo(0)
+                                }
+                            }
+                            "security" -> {
+                                navController.navigate(AppSections.Security.name) {
+                                    popUpTo(0)
+                                }
+                            }
                         }
                     } else {
                         delay(Constants.SPLASH_DELAY)
-                        navController.navigate("sign_in")
+                        navController.navigate(AppSections.SignIn.name)
                     }
                 }
 
-                NavHost(navController = navController, startDestination = "splash") {
+                NavHost(navController = navController, startDestination = AppSections.Splash.name) {
 
-                    composable("splash") {
+                    composable(AppSections.Splash.name) {
                         SplashScreen()
                     }
 
-                    composable("sign_in") {
+                    composable(AppSections.SignIn.name) {
                         val launcher = rememberLauncherForActivityResult(
                             contract = ActivityResultContracts.StartIntentSenderForResult(),
                             onResult = { result ->
@@ -95,9 +108,21 @@ class MainActivity : ComponentActivity() {
                                 ).show()
                                 user = viewModel.repository.getUserByEmail(email = googleAuthClient.getSignedInUser()?.email.toString())!!
                                 when(user.category.lowercase()) {
-                                    "resident" -> { navController.navigate("res") }
-                                    "admin" -> { navController.navigate("res") }
-                                    "security" -> { navController.navigate("sec") }
+                                    "resident" -> {
+                                        navController.navigate(AppSections.Resident.name) {
+                                            popUpTo(0)
+                                        }
+                                    }
+                                    "admin" -> {
+                                        navController.navigate(AppSections.Resident.name) {
+                                            popUpTo(0)
+                                        }
+                                    }
+                                    "security" -> {
+                                        navController.navigate(AppSections.Security.name) {
+                                            popUpTo(0)
+                                        }
+                                    }
                                 }
                                 viewModel.resetState()
                             }
@@ -118,7 +143,7 @@ class MainActivity : ComponentActivity() {
                         )
                     }
 
-                    composable("res") {
+                    composable(AppSections.Resident.name) {
                         ResidentDrawer(
                             user = user,
                             onSignOut = {
@@ -129,13 +154,15 @@ class MainActivity : ComponentActivity() {
                                         "Signed out",
                                         Toast.LENGTH_LONG
                                     ).show()
-                                navController.navigate("sign_in")
+                                    navController.navigate(AppSections.SignIn.name) {
+                                        popUpTo(0)
+                                    }
                                 }
                             }
                         )
                     }
 
-                    composable("sec") {
+                    composable(AppSections.Security.name) {
                         SecurityBottomBar(
                             user = user,
                             onSignOut = {
@@ -146,7 +173,9 @@ class MainActivity : ComponentActivity() {
                                         "Signed out",
                                         Toast.LENGTH_LONG
                                     ).show()
-                                    navController.navigate("sign_in")
+                                    navController.navigate(AppSections.SignIn.name) {
+                                        popUpTo(0)
+                                    }
                                 }
                             }
                         )
