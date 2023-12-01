@@ -1,7 +1,7 @@
 package com.example.gateguardianapp.di
 
-import com.example.gateguardianapp.data.repository.ApiRepositoryImpl
-import com.example.gateguardianapp.domain.repository.ApiRepository
+import com.example.gateguardianapp.data.repository.UserApiRepositoryImpl
+import com.example.gateguardianapp.domain.repository.UserApiRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -15,6 +15,6 @@ abstract class RepositoryModule {
     @Binds
     @Singleton
     abstract fun bindApiRepository(
-        apiRepositoryImpl: ApiRepositoryImpl
-    ): ApiRepository
+        userApiRepositoryImpl: UserApiRepositoryImpl
+    ): UserApiRepository
 }

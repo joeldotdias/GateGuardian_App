@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.gateguardianapp.data.remote.dto.UserDto
 import com.example.gateguardianapp.domain.model.User
-import com.example.gateguardianapp.domain.repository.ApiRepository
+import com.example.gateguardianapp.domain.repository.UserApiRepository
 import com.example.gateguardianapp.presentation.auth.googleclient.SignInResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,7 +15,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SignInViewModel @Inject constructor(
-    val repository: ApiRepository
+    val repository: UserApiRepository
 ): ViewModel() {
 
     private val _state = MutableStateFlow(SignInState())

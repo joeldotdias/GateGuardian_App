@@ -4,7 +4,7 @@ import com.example.gateguardianapp.domain.model.User
 import okhttp3.RequestBody
 import retrofit2.http.Body
 
-interface ApiRepository {
+interface UserApiRepository {
 
     suspend fun getUserByEmail(email: String): User?
 

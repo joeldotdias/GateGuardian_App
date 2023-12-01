@@ -1,8 +1,7 @@
 package com.example.gateguardianapp.di
 
-import com.example.gateguardianapp.data.remote.GateGuardianApi
-import com.example.gateguardianapp.presentation.auth.googleclient.GoogleAuthClient
-import com.google.android.gms.auth.api.identity.BeginSignInRequest
+import com.example.gateguardianapp.data.remote.UserApi
+import com.example.gateguardianapp.util.Constants
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -17,11 +16,11 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideGateGuardianApi(): GateGuardianApi {
+    fun provideGateGuardianApi(): UserApi {
         return Retrofit.Builder()
-            .baseUrl(GateGuardianApi.BASE_URL)
+            .baseUrl(Constants.BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
-            .create(GateGuardianApi::class.java)
+            .create(UserApi::class.java)
     }
 }
