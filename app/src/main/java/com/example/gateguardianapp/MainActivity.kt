@@ -17,11 +17,11 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.gateguardianapp.domain.model.User
 import com.example.gateguardianapp.presentation.SplashScreen
-import com.example.gateguardianapp.presentation.auth.SecScreen
 import com.example.gateguardianapp.presentation.auth.SignInScreen
 import com.example.gateguardianapp.presentation.auth.SignInViewModel
 import com.example.gateguardianapp.presentation.auth.googleclient.GoogleAuthClient
 import com.example.gateguardianapp.presentation.resident.ResidentDrawer
+import com.example.gateguardianapp.presentation.security.SecurityBottomBar
 import com.example.gateguardianapp.ui.theme.GateGuardianAppTheme
 import com.example.gateguardianapp.util.Constants
 import com.google.android.gms.auth.api.identity.Identity
@@ -119,21 +119,37 @@ class MainActivity : ComponentActivity() {
                     }
 
                     composable("res") {
-                        ResidentDrawer(user = user,
-                            onSignOut = {lifecycleScope.launch {
-                                googleAuthClient.signOut()
-                                Toast.makeText(applicationContext, "Signed out", Toast.LENGTH_LONG).show()
+                        ResidentDrawer(
+                            user = user,
+                            onSignOut = {
+                                lifecycleScope.launch {
+                                    googleAuthClient.signOut()
+                                    Toast.makeText(
+                                        applicationContext,
+                                        "Signed out",
+                                        Toast.LENGTH_LONG
+                                    ).show()
                                 navController.navigate("sign_in")
-                            }}
+                                }
+                            }
                         )
                     }
 
                     composable("sec") {
-                        SecScreen(user = user, onSignOut = { lifecycleScope.launch {
-                            googleAuthClient.signOut()
-                            Toast.makeText(applicationContext, "Signed out", Toast.LENGTH_LONG).show()
-                            navController.navigate("sign_in")
-                        } })
+                        SecurityBottomBar(
+                            user = user,
+                            onSignOut = {
+                                lifecycleScope.launch {
+                                    googleAuthClient.signOut()
+                                    Toast.makeText(
+                                        applicationContext,
+                                        "Signed out",
+                                        Toast.LENGTH_LONG
+                                    ).show()
+                                    navController.navigate("sign_in")
+                                }
+                            }
+                        )
                     }
                 }
              }

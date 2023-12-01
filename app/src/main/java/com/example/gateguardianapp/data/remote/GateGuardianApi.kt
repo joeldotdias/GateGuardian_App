@@ -17,6 +17,6 @@ interface GateGuardianApi {
     suspend fun saveUser(@Body userRequestBody: RequestBody)
 
     companion object {
-        const val BASE_URL = "http://192.168.0.101:8080"
+        const val BASE_URL = "http://192.168.0.100:8080"
     }
 }

@@ -38,7 +38,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import coil.compose.AsyncImage
 import com.example.gateguardianapp.domain.model.User
 import com.example.gateguardianapp.presentation.navigation.ResidentNavigation
 import com.example.gateguardianapp.presentation.navigation.ResidentScreens
