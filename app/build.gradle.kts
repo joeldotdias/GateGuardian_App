@@ -99,6 +99,9 @@ dependencies {
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
 
+    // Firebase Cloud Storage
+    implementation("com.google.firebase:firebase-storage:20.3.0")
+
     //Room
     implementation("androidx.room:room-runtime:2.6.1")
     ksp("androidx.room:room-compiler:2.6.1")
