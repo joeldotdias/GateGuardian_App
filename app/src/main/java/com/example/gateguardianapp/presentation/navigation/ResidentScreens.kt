@@ -2,6 +2,7 @@ package com.example.gateguardianapp.presentation.navigation
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.AdminPanelSettings
 import androidx.compose.material.icons.filled.Campaign
 import androidx.compose.material.icons.filled.Speed
 import androidx.compose.material.icons.filled.StarBorder
@@ -48,5 +49,11 @@ sealed class ResidentScreens(
         title = "Profile",
         route = "profile",
         icon = Icons.Filled.AccountCircle
+    )
+
+    data object Admin: ResidentScreens(
+        title = "Admin",
+        route = "admin",
+        icon = Icons.Filled.AdminPanelSettings
     )
 }

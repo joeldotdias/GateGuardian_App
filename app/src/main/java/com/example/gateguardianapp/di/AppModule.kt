@@ -1,6 +1,7 @@
 package com.example.gateguardianapp.di
 
 import com.example.gateguardianapp.data.remote.UserApi
+import com.example.gateguardianapp.data.remote.ResidentApi
 import com.example.gateguardianapp.util.Constants
 import dagger.Module
 import dagger.Provides
@@ -16,11 +17,21 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideGateGuardianApi(): UserApi {
+    fun provideUserApi(): UserApi {
         return Retrofit.Builder()
             .baseUrl(Constants.BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(UserApi::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideResidentApi(): ResidentApi {
+        return Retrofit.Builder()
+            .baseUrl(Constants.BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+            .create(ResidentApi::class.java)
     }
 }

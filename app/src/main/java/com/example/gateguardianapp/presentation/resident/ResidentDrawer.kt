@@ -66,7 +66,8 @@ fun ResidentDrawer(
         ResidentScreens.Regulars,
         ResidentScreens.Notices,
         ResidentScreens.Events,
-        ResidentScreens.Profile
+        ResidentScreens.Profile,
+        ResidentScreens.Admin
     )
 
 
@@ -81,6 +82,8 @@ fun ResidentDrawer(
 
                 // Drawer items
                 screens.forEach { screen ->
+                    if(screen.title == "Admin" && user.category.lowercase() != "admin") return@forEach
+
                     NavigationDrawerItem(
                         label = { Text(text = screen.title) },
                         selected = currentRoute == screen.route,
@@ -138,6 +141,7 @@ fun ResidentDrawer(
             ) {
                 ResidentNavigation(
                     navController = navController,
+                    email = user.email,
                     signOut = onSignOut
                 )
             }
