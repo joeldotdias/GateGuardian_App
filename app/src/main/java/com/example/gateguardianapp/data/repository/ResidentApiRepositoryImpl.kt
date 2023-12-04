@@ -17,4 +17,8 @@ class ResidentApiRepositoryImpl @Inject constructor(
         api.updateResidentPfp(email, pfpUrl)
     }
 
+    override suspend fun updateResidentProfile(email: String, name: String, aboutMe: String, phoneNo: String) {
+        api.updateResidentProfile(email, name, aboutMe, phoneNo)
+    }
+
 }

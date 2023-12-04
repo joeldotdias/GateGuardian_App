@@ -6,6 +6,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.gateguardianapp.data.cloud.FirebaseCloudClient
 import com.example.gateguardianapp.domain.repository.ResidentApiRepository
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -21,11 +23,17 @@ class ResidentProfileViewModel @Inject constructor(
     private val _state = MutableStateFlow(ResidentProfileState())
     val state = _state.asStateFlow()
 
-    fun getProfileDetails(email: String) {
+    val email = Firebase.auth.currentUser?.email
+
+    init {
+        getProfileDetails()
+    }
+
+    fun getProfileDetails() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 _state.value = state.value.copy(
-                    resident = repository.getResidentByEmail(email)
+                    resident = repository.getResidentByEmail(email!!)
                 )
             } catch(e: Exception) {
                 _state.value = state.value.copy(errorMessage = e.message)
@@ -39,9 +47,15 @@ class ResidentProfileViewModel @Inject constructor(
         firebaseCloudClient.uploadToCloud(uri, name, type, context)
     }
 
-    fun updateResidentPfpUrl(email: String, imgUrl: Uri) {
+    fun updateResidentPfpUrl(imgUrl: Uri) {
         viewModelScope.launch(Dispatchers.IO) {
-            repository.updateResidentPfp(email, imgUrl.toString())
+            repository.updateResidentPfp(email.toString(), imgUrl.toString())
+        }
+    }
+
+    fun updateResidentProfile(name: String, aboutMe: String, phoneNo: String) {
+        viewModelScope.launch {
+            repository.updateResidentProfile(email.toString(), name, aboutMe, phoneNo)
         }
     }
 }

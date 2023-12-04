@@ -18,7 +18,7 @@ class FirebaseCloudClient {
             }
 
         byteArray?.let {
-            val uploadTask = uploadRef.putBytes(byteArray)
+            uploadRef.putBytes(byteArray)
         }
     }
 

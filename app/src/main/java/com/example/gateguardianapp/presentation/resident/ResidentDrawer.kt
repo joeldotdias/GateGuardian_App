@@ -36,21 +36,25 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.gateguardianapp.domain.model.User
 import com.example.gateguardianapp.presentation.navigation.ResidentNavigation
 import com.example.gateguardianapp.presentation.navigation.ResidentScreens
-import com.example.gateguardianapp.presentation.resident.widgets.CustomerSupportButtons
+import com.example.gateguardianapp.presentation.resident.profile.ResidentProfileViewModel
+import com.example.gateguardianapp.presentation.resident.components.CustomerSupportButtons
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ResidentDrawer(
     user: User,
-    onSignOut: () -> Unit
+    onSignOut: () -> Unit,
+    viewModel: ResidentProfileViewModel = hiltViewModel()
 ) {
     val navController = rememberNavController()
+    val residentData = viewModel.state.value.resident
 
     val currentBackStackEntry by navController.currentBackStackEntryAsState()
 
@@ -139,11 +143,15 @@ fun ResidentDrawer(
                     .fillMaxSize()
                     .padding(top = it.calculateTopPadding())
             ) {
-                ResidentNavigation(
-                    navController = navController,
-                    email = user.email,
-                    signOut = onSignOut
-                )
+                residentData?.let {
+                    ResidentNavigation(
+                        navController = navController,
+                        resident = residentData,
+                        onResidentChange = viewModel::getProfileDetails,
+                        email = user.email,
+                        signOut = onSignOut
+                    )
+                }
             }
         }
     }

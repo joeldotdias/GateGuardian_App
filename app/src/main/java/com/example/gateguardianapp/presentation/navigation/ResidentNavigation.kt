@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.example.gateguardianapp.domain.model.resident.Resident
 import com.example.gateguardianapp.presentation.resident.admin.AdminScreen
 import com.example.gateguardianapp.presentation.resident.dashboard.DashboardScreen
 import com.example.gateguardianapp.presentation.resident.events.EventsScreen
@@ -15,6 +16,8 @@ import com.example.gateguardianapp.presentation.resident.visitors.VisitorsScreen
 @Composable
 fun ResidentNavigation(
     navController: NavHostController,
+    resident: Resident,
+    onResidentChange: () -> Unit,
     email: String,
     signOut: () -> Unit
 ) {
@@ -43,7 +46,7 @@ fun ResidentNavigation(
         }
 
         composable(route = ResidentScreens.Profile.route) {
-            ResidentProfileScreen(email, signOut)
+            ResidentProfileScreen(resident, onResidentChange, signOut)
         }
 
         composable(route = ResidentScreens.Admin.route) {

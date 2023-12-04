@@ -11,6 +11,14 @@ interface ResidentApi {
     @GET("/resident")
     suspend fun getResidentByEmail(@Query("email") email: String): Response<Resident>
 
-    @PUT("/update")
+    @PUT("/update-pfp")
     suspend fun updateResidentPfp(@Query("email") email: String, @Query("pfpUrl") pfpUrl: String)
+
+    @PUT("update-profile")
+    suspend fun updateResidentProfile(
+        @Query("email") email: String,
+        @Query("name") name: String,
+        @Query("aboutMe") aboutMe: String,
+        @Query("phoneNo") phoneNo: String
+    )
 }

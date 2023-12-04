@@ -7,4 +7,6 @@ interface ResidentApiRepository {
     suspend fun getResidentByEmail(email: String): Resident?
 
     suspend fun updateResidentPfp(email: String, pfpUrl: String)
+
+    suspend fun updateResidentProfile(email: String, name: String, aboutMe: String, phoneNo: String)
 }
