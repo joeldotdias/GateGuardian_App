@@ -7,28 +7,30 @@ import com.google.firebase.storage.ktx.storage
 
 class FirebaseCloudClient {
 
-    fun uploadToCloud(uri: Uri, name: String, type: String, context: Context) {
-        val storage = Firebase.storage
-        val storageRef = storage.reference
-        val uploadRef = storageRef.child("images/$type/$name.jpg")
+    companion object {
+        fun uploadToCloud(uri: Uri, name: String, type: String, context: Context) {
+            val storage = Firebase.storage
+            val storageRef = storage.reference
+            val uploadRef = storageRef.child("images/$type/$name.jpg")
 
-        val byteArray = context.contentResolver
-            .openInputStream(uri)?.use { stream ->
-                stream.readBytes()
+            val byteArray = context.contentResolver
+                .openInputStream(uri)?.use { stream ->
+                    stream.readBytes()
+                }
+
+            byteArray?.let {
+                uploadRef.putBytes(byteArray)
             }
-
-        byteArray?.let {
-            uploadRef.putBytes(byteArray)
         }
-    }
 
-    fun downloadImageUrl(name: String, type: String): Uri? {
-        var imageUrl: Uri? = null
-        val storageRef = Firebase.storage.reference
-        storageRef.child("images/$type/$name.jpg").downloadUrl
-            .addOnSuccessListener { url ->
-                imageUrl = url
-            }
-        return imageUrl
+        fun downloadImageUrl(name: String, type: String): Uri? {
+            var imageUrl: Uri? = null
+            val storageRef = Firebase.storage.reference
+            storageRef.child("images/$type/$name.jpg").downloadUrl
+                .addOnSuccessListener { url ->
+                    imageUrl = url
+                }
+            return imageUrl
+        }
     }
 }

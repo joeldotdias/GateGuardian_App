@@ -1,6 +1,7 @@
 package com.example.gateguardianapp.data.repository
 
 import com.example.gateguardianapp.data.remote.ResidentApi
+import com.example.gateguardianapp.domain.model.resident.EventMemory
 import com.example.gateguardianapp.domain.model.resident.Resident
 import com.example.gateguardianapp.domain.repository.ResidentApiRepository
 import javax.inject.Inject
@@ -21,4 +22,7 @@ class ResidentApiRepositoryImpl @Inject constructor(
         api.updateResidentProfile(email, name, aboutMe, phoneNo)
     }
 
+    override suspend fun getMemoriesByResident(email: String): List<EventMemory>? {
+        return api.getMemoriesByResident(email).body()
+    }
 }

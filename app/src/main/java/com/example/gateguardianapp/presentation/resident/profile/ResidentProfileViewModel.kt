@@ -10,6 +10,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -23,7 +24,7 @@ class ResidentProfileViewModel @Inject constructor(
     private val _state = MutableStateFlow(ResidentProfileState())
     val state = _state.asStateFlow()
 
-    val email = Firebase.auth.currentUser?.email
+    val email = Firebase.auth.currentUser?.email!!
 
     init {
         getProfileDetails()
@@ -33,7 +34,12 @@ class ResidentProfileViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 _state.value = state.value.copy(
-                    resident = repository.getResidentByEmail(email!!)
+                    resident = async {
+                        repository.getResidentByEmail(email)
+                    }.await(),
+                    eventMemories = async {
+                        repository.getMemoriesByResident(email)
+                    }.await()
                 )
             } catch(e: Exception) {
                 _state.value = state.value.copy(errorMessage = e.message)
@@ -42,20 +48,18 @@ class ResidentProfileViewModel @Inject constructor(
     }
 
     fun uploadPfpToCloud(uri: Uri, name: String, context: Context) {
-        val type = "pfp"
-        val firebaseCloudClient = FirebaseCloudClient()
-        firebaseCloudClient.uploadToCloud(uri, name, type, context)
+        FirebaseCloudClient.uploadToCloud(uri, name, "pfp", context)
     }
 
     fun updateResidentPfpUrl(imgUrl: Uri) {
         viewModelScope.launch(Dispatchers.IO) {
-            repository.updateResidentPfp(email.toString(), imgUrl.toString())
+            repository.updateResidentPfp(email, imgUrl.toString())
         }
     }
 
     fun updateResidentProfile(name: String, aboutMe: String, phoneNo: String) {
         viewModelScope.launch {
-            repository.updateResidentProfile(email.toString(), name, aboutMe, phoneNo)
+            repository.updateResidentProfile(email, name, aboutMe, phoneNo)
         }
     }
 }

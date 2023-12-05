@@ -1,13 +1,11 @@
 package com.example.gateguardianapp.presentation.resident.profile
 
-import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -16,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material.icons.Icons
@@ -44,7 +43,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusDirection
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
@@ -59,6 +57,7 @@ import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.example.gateguardianapp.domain.model.resident.Resident
+import com.example.gateguardianapp.presentation.resident.components.EventMemoryRow
 import com.example.gateguardianapp.presentation.resident.components.InputForm
 import com.example.gateguardianapp.util.Constants
 import com.google.firebase.ktx.Firebase
@@ -74,6 +73,8 @@ fun ResidentProfileScreen(
     signOut: () -> Unit,
     viewModel: ResidentProfileViewModel = hiltViewModel(),
 ) {
+
+    val state = viewModel.state.value
 
     val context = LocalContext.current
     val focusManager = LocalFocusManager.current
@@ -288,15 +289,25 @@ fun ResidentProfileScreen(
             }
         }
 
+        Text(
+            text = "Memories",
+            modifier = Modifier.padding(top = 15.dp),
+            fontSize = 45.sp,
+            fontFamily = FontFamily.Cursive
+        )
+
         LazyColumn(
-            modifier = Modifier.padding(top = 15.dp)
+            modifier = Modifier.padding(top = 15.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             item {
-                Text(
-                    text = "Memories",
-                    fontSize = 45.sp,
-                    fontFamily = FontFamily.Cursive
-                )
+
+            }
+            
+            state.eventMemories?.let { memories -> 
+                items(memories) { memory ->
+                    EventMemoryRow(memory)
+                }
             }
         }
     }

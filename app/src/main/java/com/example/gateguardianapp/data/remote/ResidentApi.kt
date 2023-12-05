@@ -1,5 +1,6 @@
 package com.example.gateguardianapp.data.remote
 
+import com.example.gateguardianapp.domain.model.resident.EventMemory
 import com.example.gateguardianapp.domain.model.resident.Resident
 import retrofit2.Response
 import retrofit2.http.GET
@@ -21,4 +22,7 @@ interface ResidentApi {
         @Query("aboutMe") aboutMe: String,
         @Query("phoneNo") phoneNo: String
     )
+
+    @GET("resident-memories")
+    suspend fun getMemoriesByResident(@Query("email") email: String): Response<List<EventMemory>>
 }
