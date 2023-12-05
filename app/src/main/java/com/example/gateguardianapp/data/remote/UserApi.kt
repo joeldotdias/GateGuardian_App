@@ -13,6 +13,6 @@ interface UserApi {
     @GET("/user")
     suspend fun getUserByEmail(@Query("email") email: String): Response<User>
 
-    @POST("/save-user")
+    @POST("/user-save")
     suspend fun saveUser(@Body userRequestBody: RequestBody)
 }
