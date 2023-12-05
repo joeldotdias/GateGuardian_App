@@ -23,6 +23,7 @@ import androidx.compose.material.icons.rounded.AccountCircle
 import androidx.compose.material.icons.rounded.CameraAlt
 import androidx.compose.material.icons.rounded.Description
 import androidx.compose.material.icons.rounded.Person
+import androidx.compose.material.icons.rounded.PhoneInTalk
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -212,11 +213,27 @@ fun ResidentProfileScreen(
                 style = MaterialTheme.typography.titleMedium,
                 fontSize = 20.sp
             )
-            Text(
-                text = aboutMe,
-                fontStyle = FontStyle.Italic
-            )
-            Text(text = "+91 $phoneNo")
+            aboutMe?.let {
+                Text(
+                    text = aboutMe,
+                    fontStyle = FontStyle.Italic
+                )
+            }
+            phoneNo?.let {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(
+                        imageVector = Icons.Rounded.PhoneInTalk,
+                        modifier = Modifier
+                            .size(21.dp)
+                            .padding(end = 3.dp),
+                        tint = Color(0xFF62B065),
+                        contentDescription = "Phone icon"
+                    )
+                    Text(text = "+91 ${phoneNo.substring(0,5)} ${phoneNo.substring(5)}")
+                }
+            }
 
             Button(
                 onClick = { isProfileEdited = true }
@@ -300,10 +317,6 @@ fun ResidentProfileScreen(
             modifier = Modifier.padding(top = 15.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            item {
-
-            }
-            
             state.eventMemories?.let { memories -> 
                 items(memories) { memory ->
                     EventMemoryRow(memory)
