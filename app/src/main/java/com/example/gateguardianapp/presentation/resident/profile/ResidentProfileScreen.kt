@@ -6,6 +6,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -16,13 +17,17 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Logout
 import androidx.compose.material.icons.rounded.AccountCircle
+import androidx.compose.material.icons.rounded.Apartment
 import androidx.compose.material.icons.rounded.CameraAlt
 import androidx.compose.material.icons.rounded.Description
+import androidx.compose.material.icons.rounded.Home
 import androidx.compose.material.icons.rounded.Person
+import androidx.compose.material.icons.rounded.Phone
 import androidx.compose.material.icons.rounded.PhoneInTalk
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -44,6 +49,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
@@ -52,6 +58,9 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardCapitalization
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.net.toUri
@@ -81,12 +90,13 @@ fun ResidentProfileScreen(
     val focusManager = LocalFocusManager.current
     val coroutineScope = rememberCoroutineScope()
 
+    var areHomeDetailsNotProvided by remember { mutableStateOf(resident.building == null) }
     var isProfileEdited by remember { mutableStateOf(false) }
     var isPfpChanged by remember { mutableStateOf(false) }
 
     var name by rememberSaveable { mutableStateOf(resident.name) }
-    var aboutMe by rememberSaveable { mutableStateOf(resident.aboutMe) }
-    var phoneNo by rememberSaveable { mutableStateOf(resident.phoneNo) }
+    var aboutMe by rememberSaveable { mutableStateOf(resident.aboutMe ?: "") }
+    var phoneNo by rememberSaveable { mutableStateOf(resident.phoneNo ?: "") }
     var pfpUri by rememberSaveable { mutableStateOf(resident.pfpUrl) }
 
     val pfpPickerLauncher = rememberLauncherForActivityResult(
@@ -117,6 +127,20 @@ fun ResidentProfileScreen(
                     contentDescription = "Sign out icon"
                 )
             }
+        }
+
+        AnimatedVisibility(visible = areHomeDetailsNotProvided) {
+            ProvideHomeDetailsForm(
+                focusManager = focusManager,
+                saveHomeDetails = { flatNo, building ->
+                    coroutineScope.launch(Dispatchers.IO) {
+                        viewModel.saveHomeDetails(flatNo, building)
+                        areHomeDetailsNotProvided = false
+                        delay(Constants.CLOUD_UPLOAD_DELAY)
+                        onResidentDataChange()
+                    }
+                }
+            )
         }
 
         Surface(
@@ -213,13 +237,13 @@ fun ResidentProfileScreen(
                 style = MaterialTheme.typography.titleMedium,
                 fontSize = 20.sp
             )
-            aboutMe?.let {
+            if(aboutMe.isNotEmpty()) {
                 Text(
                     text = aboutMe,
                     fontStyle = FontStyle.Italic
                 )
             }
-            phoneNo?.let {
+            if(phoneNo.length > 5) {
                 Row(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
@@ -259,6 +283,7 @@ fun ResidentProfileScreen(
                     label = "About Me",
                     onValChange = { aboutMe = it },
                     icon = Icons.Rounded.Description,
+                    capitalization = KeyboardCapitalization.Sentences,
                     onImeAction = KeyboardActions(
                         onNext = { focusManager.moveFocus(FocusDirection.Down) }
                     )
@@ -269,7 +294,8 @@ fun ResidentProfileScreen(
                     onValChange = {
                         if(it.length <= 10) phoneNo = it
                     },
-                    icon = Icons.Rounded.Person,
+                    icon = Icons.Rounded.Phone,
+                    keyboardType = KeyboardType.Number,
                     imeAction = ImeAction.Done,
                     onImeAction = KeyboardActions(
                         onNext = { focusManager.clearFocus() }
@@ -321,6 +347,63 @@ fun ResidentProfileScreen(
                 items(memories) { memory ->
                     EventMemoryRow(memory)
                 }
+            }
+        }
+    }
+}
+
+@Composable
+fun ProvideHomeDetailsForm(
+    focusManager: FocusManager,
+    saveHomeDetails: (String, String) -> Unit
+) {
+
+    var flatNo by remember { mutableStateOf("") }
+    var building by remember { mutableStateOf("") }
+
+    Surface(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(5.dp)
+            .border(1.dp, Color.LightGray, RoundedCornerShape(10.dp))
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(4.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = "Please provide us with a few details for a seamless experience",
+                fontStyle = FontStyle.Italic,
+                textAlign = TextAlign.Center
+            )
+            InputForm(
+                value = flatNo,
+                label = "Flat number",
+                onValChange = { flatNo = it },
+                icon = Icons.Rounded.Home,
+                keyboardType = KeyboardType.Number,
+                onImeAction = KeyboardActions(
+                    onNext = { focusManager.moveFocus(FocusDirection.Down) }
+                )
+            )
+
+            InputForm(
+                value = building,
+                label = "Building",
+                onValChange = { building = it },
+                icon = Icons.Rounded.Apartment,
+                imeAction = ImeAction.Done,
+                onImeAction = KeyboardActions(
+                    onDone = { focusManager.clearFocus() }
+                )
+            )
+
+            Button(
+                onClick = { saveHomeDetails(flatNo, building) }
+            ) {
+                Text(text = "Save")
             }
         }
     }

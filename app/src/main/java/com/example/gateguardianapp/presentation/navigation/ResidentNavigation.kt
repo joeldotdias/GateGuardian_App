@@ -18,7 +18,6 @@ fun ResidentNavigation(
     navController: NavHostController,
     resident: Resident,
     onResidentChange: () -> Unit,
-    email: String,
     signOut: () -> Unit
 ) {
     NavHost(
@@ -50,7 +49,7 @@ fun ResidentNavigation(
         }
 
         composable(route = ResidentScreens.Admin.route) {
-            AdminScreen()
+            AdminScreen(resident)
         }
     }
 }

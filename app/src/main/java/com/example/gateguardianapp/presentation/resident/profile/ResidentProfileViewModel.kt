@@ -47,6 +47,12 @@ class ResidentProfileViewModel @Inject constructor(
         }
     }
 
+    fun saveHomeDetails(flatNo: String, building: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.saveResidentHomeDetails(flatNo, building, email)
+        }
+    }
+
     fun uploadPfpToCloud(uri: Uri, name: String, context: Context) {
         FirebaseCloudClient.uploadToCloud(uri, name, "pfp", context)
     }

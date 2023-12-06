@@ -7,5 +7,6 @@ data class Resident(
     val aboutMe: String,
     val phoneNo: String,
     val flatNo: Int,
-    val building: String
+    val building: String,
+    val society: String
 )

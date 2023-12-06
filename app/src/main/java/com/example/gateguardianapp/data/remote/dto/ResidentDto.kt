@@ -8,15 +8,6 @@ import org.json.JSONObject
 data class ResidentDto(
     val name: String,
     val email: String,
-    val society: String
-) {
-    fun toRequestBody(): RequestBody {
-
-        val jsonObject = JSONObject()
-        jsonObject.put("name", name)
-        jsonObject.put("email", email)
-        jsonObject.put("society", society)
-
-        return jsonObject.toString().toRequestBody("application/json".toMediaTypeOrNull())
-    }
-}
+    val flatNo: Int,
+    val building: String
+)

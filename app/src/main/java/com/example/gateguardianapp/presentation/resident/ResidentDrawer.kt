@@ -42,8 +42,8 @@ import androidx.navigation.compose.rememberNavController
 import com.example.gateguardianapp.domain.model.User
 import com.example.gateguardianapp.presentation.navigation.ResidentNavigation
 import com.example.gateguardianapp.presentation.navigation.ResidentScreens
-import com.example.gateguardianapp.presentation.resident.profile.ResidentProfileViewModel
 import com.example.gateguardianapp.presentation.resident.components.CustomerSupportButtons
+import com.example.gateguardianapp.presentation.resident.profile.ResidentProfileViewModel
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -73,7 +73,6 @@ fun ResidentDrawer(
         ResidentScreens.Profile,
         ResidentScreens.Admin
     )
-
 
     ModalNavigationDrawer(
         drawerContent = {
@@ -148,7 +147,6 @@ fun ResidentDrawer(
                         navController = navController,
                         resident = residentData,
                         onResidentChange = viewModel::getProfileDetails,
-                        email = user.email,
                         signOut = onSignOut
                     )
                 }
