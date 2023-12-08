@@ -90,22 +90,21 @@ dependencies {
     ksp("androidx.hilt:hilt-compiler:1.1.0")
     implementation("androidx.hilt:hilt-navigation-compose:1.1.0")
 
-    // Firebase Auth
-    implementation("com.google.firebase:firebase-auth:22.3.0")
-    implementation("com.google.android.gms:play-services-auth:20.7.0")
-
     // Retrofit
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
-    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
-
-    // Firebase Cloud Storage
-    implementation("com.google.firebase:firebase-storage:20.3.0")
+    implementation("com.squareup.retrofit2:converter-moshi:2.9.0")
+    implementation("com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.3")
 
     //Room
     implementation("androidx.room:room-runtime:2.6.1")
     ksp("androidx.room:room-compiler:2.6.1")
     implementation("androidx.room:room-ktx:2.6.1")
+    implementation("androidx.room:room-paging:2.6.1")
+
+    // Paging
+    implementation("androidx.paging:paging-runtime-ktx:3.2.1")
+    implementation("androidx.paging:paging-compose:3.3.0-alpha02")
 
     // Coil
     implementation("io.coil-kt:coil-compose:2.5.0")
