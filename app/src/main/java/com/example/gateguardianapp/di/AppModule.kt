@@ -1,7 +1,7 @@
 package com.example.gateguardianapp.di
 
-import com.example.gateguardianapp.data.remote.UserApi
 import com.example.gateguardianapp.data.remote.ResidentApi
+import com.example.gateguardianapp.data.remote.UserApi
 import com.example.gateguardianapp.util.Constants
 import dagger.Module
 import dagger.Provides

@@ -1,6 +1,7 @@
 package com.example.gateguardianapp.presentation.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -10,8 +11,10 @@ import com.example.gateguardianapp.presentation.resident.dashboard.DashboardScre
 import com.example.gateguardianapp.presentation.resident.events.EventsScreen
 import com.example.gateguardianapp.presentation.resident.notices.NoticesScreen
 import com.example.gateguardianapp.presentation.resident.profile.ResidentProfileScreen
+import com.example.gateguardianapp.presentation.resident.profile.ResidentProfileViewModel
 import com.example.gateguardianapp.presentation.resident.regulars.RegularsScreen
 import com.example.gateguardianapp.presentation.resident.visitors.VisitorsScreen
+import com.example.gateguardianapp.presentation.resident.visitors.VisitorsViewModel
 
 @Composable
 fun ResidentNavigation(
@@ -29,7 +32,8 @@ fun ResidentNavigation(
         }
 
         composable(route = ResidentScreens.Visitors.route) {
-            VisitorsScreen()
+            val visitorsViewModel:VisitorsViewModel = hiltViewModel()
+            VisitorsScreen(visitorsViewModel, visitorsViewModel::getVisitorsByResident)
         }
 
         composable(route = ResidentScreens.Regulars.route) {
@@ -45,7 +49,8 @@ fun ResidentNavigation(
         }
 
         composable(route = ResidentScreens.Profile.route) {
-            ResidentProfileScreen(resident, onResidentChange, signOut)
+            val residentProfileViewModel: ResidentProfileViewModel = hiltViewModel()
+            ResidentProfileScreen(resident, onResidentChange, signOut, residentProfileViewModel)
         }
 
         composable(route = ResidentScreens.Admin.route) {

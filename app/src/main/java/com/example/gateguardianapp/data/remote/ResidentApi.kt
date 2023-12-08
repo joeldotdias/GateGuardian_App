@@ -3,7 +3,10 @@ package com.example.gateguardianapp.data.remote
 import com.example.gateguardianapp.data.remote.dto.ResidentDto
 import com.example.gateguardianapp.domain.model.resident.EventMemory
 import com.example.gateguardianapp.domain.model.resident.Resident
+import com.example.gateguardianapp.domain.model.resident.Visitor
+import okhttp3.RequestBody
 import retrofit2.Response
+import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.PUT
@@ -11,9 +14,12 @@ import retrofit2.http.Query
 
 interface ResidentApi {
 
+    // App entry
     @GET("/resident")
     suspend fun getResidentByEmail(@Query("email") email: String): Response<Resident>
 
+
+    // Admin
     @GET("/residents")
     suspend fun getResidentsBySociety(@Query("society") email: String): Response<List<ResidentDto>>
 
@@ -24,6 +30,16 @@ interface ResidentApi {
         @Query("admin") adminEmail: String
     )
 
+
+    // Visitors
+    @GET("visitors")
+    suspend fun getVisitorsByResidentEmail(@Query("email") email: String): Response<List<Visitor>>
+
+    @POST("visitor-save")
+    suspend fun saveVisitor(@Body visitorRequestBody: RequestBody)
+
+
+    // Resident Profile
     @POST("resident-home")
     suspend fun saveResidentHomeDetails(
         @Query("flat") flatNo: Int,

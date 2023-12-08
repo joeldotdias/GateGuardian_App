@@ -4,7 +4,9 @@ import com.example.gateguardianapp.data.remote.ResidentApi
 import com.example.gateguardianapp.data.remote.dto.ResidentDto
 import com.example.gateguardianapp.domain.model.resident.EventMemory
 import com.example.gateguardianapp.domain.model.resident.Resident
+import com.example.gateguardianapp.domain.model.resident.Visitor
 import com.example.gateguardianapp.domain.repository.ResidentApiRepository
+import okhttp3.RequestBody
 import javax.inject.Inject
 
 class ResidentApiRepositoryImpl @Inject constructor(
@@ -15,16 +17,28 @@ class ResidentApiRepositoryImpl @Inject constructor(
         return api.getResidentByEmail(email).body()
     }
 
+
     override suspend fun getResidentsBySociety(society: String): List<ResidentDto>? {
         return api.getResidentsBySociety(society).body()
     }
 
-    override suspend fun saveResidentHomeDetails(flatNo: String, building: String, email: String) {
-        api.saveResidentHomeDetails(flatNo.toInt(), building, email)
-    }
-
     override suspend fun saveResident(name: String, email: String, adminEmail: String) {
         api.saveResident(name, email, adminEmail)
+    }
+
+
+    override suspend fun getVisitorsByResidentEmail(email: String): List<Visitor>? {
+        return api.getVisitorsByResidentEmail(email).body()
+    }
+
+    override suspend fun saveVisitor(name: String, phoneNo: String, residentEmail: String) {
+        val visitorRequestBody = Visitor(name, phoneNo, residentEmail).toRequestBody()
+        api.saveVisitor(visitorRequestBody)
+    }
+
+
+    override suspend fun saveResidentHomeDetails(flatNo: String, building: String, email: String) {
+        api.saveResidentHomeDetails(flatNo.toInt(), building, email)
     }
 
     override suspend fun updateResidentPfp(email: String, pfpUrl: String) {

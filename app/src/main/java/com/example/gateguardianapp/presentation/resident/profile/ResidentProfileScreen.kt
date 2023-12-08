@@ -69,7 +69,7 @@ import coil.compose.AsyncImage
 import com.example.gateguardianapp.domain.model.resident.Resident
 import com.example.gateguardianapp.presentation.resident.components.EventMemoryRow
 import com.example.gateguardianapp.presentation.resident.components.InputForm
-import com.example.gateguardianapp.util.Constants
+import com.example.gateguardianapp.util.Delays
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import kotlinx.coroutines.Dispatchers
@@ -81,7 +81,7 @@ fun ResidentProfileScreen(
     resident: Resident,
     onResidentDataChange: () -> Unit,
     signOut: () -> Unit,
-    viewModel: ResidentProfileViewModel = hiltViewModel(),
+    viewModel: ResidentProfileViewModel// = hiltViewModel(),
 ) {
 
     val state = viewModel.state.value
@@ -136,7 +136,7 @@ fun ResidentProfileScreen(
                     coroutineScope.launch(Dispatchers.IO) {
                         viewModel.saveHomeDetails(flatNo, building)
                         areHomeDetailsNotProvided = false
-                        delay(Constants.CLOUD_UPLOAD_DELAY)
+                        delay(Delays.CLOUD_UPLOAD_DELAY)
                         onResidentDataChange()
                     }
                 }
@@ -213,13 +213,13 @@ fun ResidentProfileScreen(
                                 name = resident.name,
                                 context = context
                             )
-                            delay(Constants.CLOUD_UPLOAD_DELAY)
+                            delay(Delays.CLOUD_UPLOAD_DELAY)
                             val storageRef = Firebase.storage.reference
                             storageRef.child("images/pfp/${resident.name}.jpg").downloadUrl
                                 .addOnSuccessListener { imgUrl ->
                                     coroutineScope.launch(Dispatchers.IO) {
                                         viewModel.updateResidentPfpUrl(imgUrl)
-                                        delay(Constants.ON_DB_CHANGE_DELAY)
+                                        delay(Delays.ON_DB_CHANGE_DELAY)
                                         onResidentDataChange()
                                     }
                                 }
@@ -320,7 +320,7 @@ fun ResidentProfileScreen(
                         onClick = {
                             coroutineScope.launch(Dispatchers.IO) {
                                 viewModel.updateResidentProfile(name, aboutMe, phoneNo)
-                                delay(Constants.CLOUD_UPLOAD_DELAY)
+                                delay(Delays.CLOUD_UPLOAD_DELAY)
                                 onResidentDataChange()
                             }
                             isProfileEdited = false

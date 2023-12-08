@@ -44,7 +44,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.gateguardianapp.data.remote.dto.ResidentDto
 import com.example.gateguardianapp.presentation.resident.components.InputForm
-import com.example.gateguardianapp.util.Constants
+import com.example.gateguardianapp.util.Delays
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -131,7 +131,7 @@ fun AdminPeopleScreen(
 
                             coroutineScope.launch(Dispatchers.IO) {
                                 viewModel.addResident(newResidentName, newResidentEmail)
-                                delay(Constants.CLOUD_UPLOAD_DELAY)
+                                delay(Delays.CLOUD_UPLOAD_DELAY)
                                 newResidentName = ""
                                 newResidentEmail = ""
                                 onPeopleChange()
@@ -155,7 +155,7 @@ fun AdminPeopleScreen(
                             isAddingSecurity = false
 
                             coroutineScope.launch(Dispatchers.IO) {
-                                delay(Constants.CLOUD_UPLOAD_DELAY)
+                                delay(Delays.CLOUD_UPLOAD_DELAY)
                                 newSecurityName = ""
                                 newSecurityEmail = ""
                                 onPeopleChange()

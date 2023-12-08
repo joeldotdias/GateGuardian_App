@@ -24,7 +24,7 @@ import com.example.gateguardianapp.presentation.navigation.AppSections
 import com.example.gateguardianapp.presentation.resident.ResidentDrawer
 import com.example.gateguardianapp.presentation.security.SecurityBottomBar
 import com.example.gateguardianapp.ui.theme.GateGuardianAppTheme
-import com.example.gateguardianapp.util.Constants
+import com.example.gateguardianapp.util.Delays
 import com.google.android.gms.auth.api.identity.Identity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
@@ -54,7 +54,7 @@ class MainActivity : ComponentActivity() {
                     val authUser = googleAuthClient.getSignedInUser()
                     if(authUser != null) {
                         user = viewModel.getUserByEmail(authUser.email)
-                        delay(Constants.SPLASH_DELAY)
+                        delay(Delays.SPLASH_DELAY)
                         when(user.category.lowercase()) {
                             "resident" -> {
                                 navController.navigate(AppSections.Resident.name) {
@@ -73,7 +73,7 @@ class MainActivity : ComponentActivity() {
                             }
                         }
                     } else {
-                        delay(Constants.SPLASH_DELAY)
+                        delay(Delays.SPLASH_DELAY)
                         navController.navigate(AppSections.SignIn.name)
                     }
                 }
