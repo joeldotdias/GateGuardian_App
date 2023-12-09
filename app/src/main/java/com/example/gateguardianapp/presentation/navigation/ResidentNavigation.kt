@@ -32,8 +32,7 @@ fun ResidentNavigation(
         }
 
         composable(route = ResidentScreens.Visitors.route) {
-            val visitorsViewModel:VisitorsViewModel = hiltViewModel()
-            VisitorsScreen(visitorsViewModel, visitorsViewModel::getVisitorsByResident)
+            VisitorsScreen()
         }
 
         composable(route = ResidentScreens.Regulars.route) {

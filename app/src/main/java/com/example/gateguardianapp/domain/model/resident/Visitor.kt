@@ -6,6 +6,7 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONObject
 
 data class Visitor(
+    val visitorId: Int? = null,
     val name: String,
     val phoneNo: String,
     val residentEmail: String

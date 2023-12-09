@@ -27,13 +27,21 @@ class ResidentApiRepositoryImpl @Inject constructor(
     }
 
 
+    override suspend fun saveVisitor(name: String, phoneNo: String, residentEmail: String) {
+        val visitorRequestBody = Visitor(name = name, phoneNo = phoneNo, residentEmail = residentEmail).toRequestBody()
+        api.saveVisitor(visitorRequestBody)
+    }
+
+    override suspend fun getRecentVisitorOtp(email: String): String? {
+        return api.getRecentVisitorOtp(email).body()
+    }
+
     override suspend fun getVisitorsByResidentEmail(email: String): List<Visitor>? {
         return api.getVisitorsByResidentEmail(email).body()
     }
 
-    override suspend fun saveVisitor(name: String, phoneNo: String, residentEmail: String) {
-        val visitorRequestBody = Visitor(name, phoneNo, residentEmail).toRequestBody()
-        api.saveVisitor(visitorRequestBody)
+    override suspend fun getVisitorOtpById(visitorId: Int): String? {
+        return api.getVisitorOtp(visitorId).body();
     }
 
 

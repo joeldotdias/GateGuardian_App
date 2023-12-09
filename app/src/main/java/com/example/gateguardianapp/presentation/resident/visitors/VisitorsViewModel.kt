@@ -33,12 +33,22 @@ class VisitorsViewModel @Inject constructor(
                     visitors = repository.getVisitorsByResidentEmail(email)
                 )
             } catch(e: Exception) {
-                _state.value = state.value.copy(errorMessage = e.message)
+                _state.value = state.value.copy(
+                    errorMessage = e.message
+                )
             }
         }
     }
 
     suspend fun saveVisitor(name: String, phoneNo: String) {
         repository.saveVisitor(name, phoneNo, email)
+    }
+
+    suspend fun getRecentVisitorOtp(): String? {
+        return repository.getRecentVisitorOtp(email)
+    }
+
+    suspend fun getVisitorOtp(visitorId: Int): String? {
+        return repository.getVisitorOtpById(visitorId)
     }
 }

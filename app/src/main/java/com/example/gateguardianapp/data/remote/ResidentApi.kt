@@ -38,6 +38,12 @@ interface ResidentApi {
     @POST("visitor-save")
     suspend fun saveVisitor(@Body visitorRequestBody: RequestBody)
 
+    @GET("visitor-recent")
+    suspend fun getRecentVisitorOtp(@Query("email") email: String): Response<String>
+
+    @GET("visitor-otp")
+    suspend fun getVisitorOtp(@Query("visitorId") visitorId: Int): Response<String>
+
 
     // Resident Profile
     @POST("resident-home")

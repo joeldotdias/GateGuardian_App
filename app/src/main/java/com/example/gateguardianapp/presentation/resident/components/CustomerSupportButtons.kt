@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
@@ -28,6 +27,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import com.example.gateguardianapp.util.Constants
 
 @Composable
 fun CustomerSupportButtons () {
@@ -35,35 +35,40 @@ fun CustomerSupportButtons () {
     val supportClicked = remember { mutableStateOf(false) }
 
     Row (
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(0.dp),
+        modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.Bottom,
         horizontalArrangement = Arrangement.End
     ){
         if(supportClicked.value) {
             FilledTonalButton(
                 onClick = {
-                    context.sendMail()
+                    context.mailCustomerSupport()
                 },
                 contentPadding = PaddingValues(0.dp),
                 shape = CircleShape,
                 modifier = Modifier.size(60.dp),
             ) {
-                Icon(imageVector = Icons.Rounded.Mail, tint = MaterialTheme.colorScheme.onSurface, contentDescription = null)
+                Icon(
+                    imageVector = Icons.Rounded.Mail,
+                    tint = MaterialTheme.colorScheme.onSurface,
+                    contentDescription = "Mail customer support icon")
             }
 
             Spacer(modifier = Modifier.width(5.dp))
 
             FilledTonalButton(
                 onClick = {
-                    context.dial()
+                    context.dialCustomerSupport()
                 },
                 contentPadding = PaddingValues(0.dp),
                 shape = CircleShape,
                 modifier = Modifier.size(60.dp),
             ) {
-                Icon(imageVector = Icons.Rounded.Call, tint = MaterialTheme.colorScheme.onSurface, contentDescription = null)
+                Icon(
+                    imageVector = Icons.Rounded.Call,
+                    tint = MaterialTheme.colorScheme.onSurface,
+                    contentDescription = "Dial customer support icon"
+                )
             }
 
             Spacer(modifier = Modifier.width(5.dp))
@@ -76,7 +81,11 @@ fun CustomerSupportButtons () {
                 shape = CircleShape,
                 modifier = Modifier.size(60.dp),
             ) {
-                Icon(imageVector = Icons.Rounded.Cancel, tint = MaterialTheme.colorScheme.onSurface, contentDescription = null)
+                Icon(
+                    imageVector = Icons.Rounded.Cancel,
+                    tint = MaterialTheme.colorScheme.onSurface,
+                    contentDescription = "Hide customer support buttons icon"
+                )
             }
         } else {
             FilledTonalButton(
@@ -87,33 +96,38 @@ fun CustomerSupportButtons () {
                 shape = CircleShape,
                 modifier = Modifier.size(60.dp),
             ) {
-                Icon(imageVector = Icons.Rounded.SupportAgent, tint = MaterialTheme.colorScheme.onSurface, contentDescription = null)
+                Icon(
+                    imageVector = Icons.Rounded.SupportAgent,
+                    tint = MaterialTheme.colorScheme.onSurface,
+                    contentDescription = "Show customer support buttons icon"
+                )
             }
         }
-
-
     }
 }
 
 
-fun Context.sendMail() {
+fun Context.mailCustomerSupport() {
     try {
-        val intent = Intent(Intent.ACTION_SEND).apply {
+        val mailCustomerSupportIntent = Intent(Intent.ACTION_SEND).apply {
             this.type = "vnd.android.cursor.item/email"
-            this.putExtra(Intent.EXTRA_EMAIL, arrayOf("customersupport@gateguardian.com"))
+            this.putExtra(Intent.EXTRA_EMAIL, arrayOf(Constants.CUSTOMER_SUPPORT_EMAIL))
             this.putExtra(Intent.EXTRA_SUBJECT, "Need assistance")
         }
-        startActivity(intent)
+        startActivity(mailCustomerSupportIntent)
     } catch (e: ActivityNotFoundException) {
         /* Todo */
     }
 }
 
 
-fun Context.dial() {
+fun Context.dialCustomerSupport() {
     try {
-        val intent = Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", "+91 8369270284", null))
-        startActivity(intent)
+        val dialCustomerSupportIntent = Intent(
+            Intent.ACTION_DIAL,
+            Uri.fromParts("tel", Constants.CUSTOMER_SUPPORT_NUMBER, null)
+        )
+        startActivity(dialCustomerSupportIntent)
     } catch (t: Throwable) {
         /* Todo */
     }
