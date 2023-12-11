@@ -41,6 +41,9 @@ interface ResidentApi {
     @GET("visitor-recent")
     suspend fun getRecentVisitorOtp(@Query("email") email: String): Response<String>
 
+    @GET("visitor-recento")
+    suspend fun getRecentVisitorCred(@Query("email") email: String): Response<VisitorCredDto>
+
     @GET("visitor-otp")
     suspend fun getVisitorOtp(@Query("visitorId") visitorId: Int): Response<String>
 
@@ -67,3 +70,8 @@ interface ResidentApi {
     @GET("resident-memories")
     suspend fun getMemoriesByResident(@Query("email") email: String): Response<List<EventMemory>>
 }
+
+data class VisitorCredDto(
+    val uid: String,
+    val otp: String
+)

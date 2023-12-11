@@ -48,7 +48,15 @@ class VisitorsViewModel @Inject constructor(
         return repository.getRecentVisitorOtp(email)
     }
 
-    suspend fun getVisitorOtp(visitorId: Int): String? {
-        return repository.getVisitorOtpById(visitorId)
+    fun getVisitorOtp(visitorId: Int): String? {
+        var otp: String? = null
+        viewModelScope.launch(Dispatchers.IO) {
+            otp = try {
+                repository.getVisitorOtpById(visitorId)
+            } catch(e: Exception) {
+                "Could not find visitor"
+            }
+        }
+        return otp
     }
 }

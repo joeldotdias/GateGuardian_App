@@ -3,26 +3,30 @@ package com.example.gateguardianapp.presentation.resident.visitors
 import android.content.Context
 import android.content.Intent
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.AddIcCall
 import androidx.compose.material.icons.rounded.Person
+import androidx.compose.material.icons.rounded.Phone
 import androidx.compose.material.icons.rounded.Share
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -31,6 +35,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
@@ -100,6 +105,7 @@ fun VisitorsScreen(
                 onClick = {
                     name = ""
                     phoneNo = ""
+                    focusManager.clearFocus()
                 }
             ) {
                 Text(text = "Clear")
@@ -109,6 +115,7 @@ fun VisitorsScreen(
                 onClick = {
                     coroutineScope.launch(Dispatchers.IO) {
                         viewModel.saveVisitor(name, phoneNo)
+                        focusManager.clearFocus()
                         delay(Delays.CLOUD_UPLOAD_DELAY)
                         onVisitorsDataChange()
                         generatedOtp = viewModel.getRecentVisitorOtp().toString()
@@ -128,20 +135,24 @@ fun VisitorsScreen(
                     .padding(20.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(text = "Generated otp")
+                Text(text = "Your code to come in")
                 TextField(
                     value = generatedOtp,
                     readOnly = true,
                     modifier = Modifier.padding(start = 18.dp),
+                    colors = TextFieldDefaults.colors(unfocusedContainerColor = MaterialTheme.colorScheme.primaryContainer),
                     trailingIcon = {
                         IconButton(
                             onClick = {
-                                context.shareOtp(generatedOtp, phoneNo)
-                                name = ""
-                                phoneNo = ""
-                                showVisitorOtp = false
-                                generatedOtp = ""
-                                focusManager.clearFocus()
+                                coroutineScope.launch {
+                                    context.shareOtp(generatedOtp, phoneNo)
+                                    delay(150L)
+                                    name = ""
+                                    phoneNo = ""
+                                    showVisitorOtp = false
+                                    generatedOtp = ""
+                                    focusManager.clearFocus()
+                                }
                             }
                         ) {
                             Icon(
@@ -152,17 +163,15 @@ fun VisitorsScreen(
                     },
                     onValueChange = {}
                 )
-
             }
         }
 
 
         Button(
-            modifier = Modifier
-                .padding(top = 15.dp, bottom = 12.dp),
+            modifier = Modifier.padding(top = 15.dp, bottom = 12.dp),
             onClick = { showPastVisitors = !showPastVisitors }
         ) {
-            Text(text = "Show visitors")
+            Text(text = "My Visitors")
         }
 
         AnimatedVisibility(visible = showPastVisitors) {
@@ -172,7 +181,12 @@ fun VisitorsScreen(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     items(items = visitors) { visitor ->
-                        VisitorRow(visitor)
+                        VisitorRow(
+                            visitor = visitor,
+                            shareVisitorOtp = { otp, phoneNo ->
+                                context.shareOtp(otp, phoneNo)
+                            }
+                        )
                     }
                 }
             }
@@ -187,7 +201,7 @@ fun Context.shareOtp(otp: String, phoneNo: String) {
             this.type = "text/plain"
             this.`package` = "com.whatsapp"
             this.putExtra(Intent.EXTRA_TEXT, "Hi! Here's your code to come in: $otp")
-            this.putExtra(Intent.EXTRA_PHONE_NUMBER, "++91 $phoneNo")
+            this.putExtra(Intent.EXTRA_PHONE_NUMBER, "+91 $phoneNo")
         }
         startActivity(shareOtpIntent)
     } catch(e: Exception) {
@@ -196,13 +210,82 @@ fun Context.shareOtp(otp: String, phoneNo: String) {
 }
 
 @Composable
-fun VisitorRow(visitor: Visitor) {
-    Column(
+fun VisitorRow(
+    visitor: Visitor,
+    shareVisitorOtp: (String, String) -> Unit
+) {
+
+    var isOtpVisible by remember { mutableStateOf(false) }
+
+    Row(
         modifier = Modifier
             .fillMaxWidth()
-            .height(150.dp)
+            .padding(10.dp)
+            .clip(RoundedCornerShape(18.dp))
+            .border(1.dp, MaterialTheme.colorScheme.onSurface, RoundedCornerShape(18.dp))
     ) {
-        Text(text = visitor.name)
-        Text(text = "${visitor.visitorId}")
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(15.dp)
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    imageVector = Icons.Rounded.Person,
+                    contentDescription = "Person icon"
+                )
+                Text(text = visitor.name)
+            }
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    imageVector = Icons.Rounded.Phone,
+                    contentDescription = "Phone number icon"
+                )
+                Text(text = visitor.phoneNo)
+            }
+            
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Button(
+                    onClick = {
+                        isOtpVisible = !isOtpVisible
+                    }
+                ) {
+                    Text(text = if(!isOtpVisible) "Show OTP" else "Hide OTP")
+                }
+                AnimatedVisibility(visible = isOtpVisible) {
+                    TextField(
+                        value = visitor.otp,
+                        readOnly = true,
+                        modifier = Modifier
+                            .weight(1f)
+                            .padding(start = 18.dp, end = 12.dp),
+                        colors = TextFieldDefaults.colors(unfocusedContainerColor = MaterialTheme.colorScheme.primaryContainer),
+                        trailingIcon = {
+                            IconButton(
+                                onClick = {
+                                    shareVisitorOtp(visitor.otp, visitor.phoneNo)
+                                }
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Rounded.Share,
+                                    contentDescription = "Share otp icon"
+                                )
+                            }
+                        },
+                        onValueChange = {}
+                    )
+                }
+            }
+        }
     }
 }

@@ -9,7 +9,8 @@ data class Visitor(
     val visitorId: Int? = null,
     val name: String,
     val phoneNo: String,
-    val residentEmail: String
+    val residentEmail: String,
+    val otp: String = ""
 ) {
     fun toRequestBody(): RequestBody {
 

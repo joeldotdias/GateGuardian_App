@@ -14,7 +14,6 @@ import com.example.gateguardianapp.presentation.resident.profile.ResidentProfile
 import com.example.gateguardianapp.presentation.resident.profile.ResidentProfileViewModel
 import com.example.gateguardianapp.presentation.resident.regulars.RegularsScreen
 import com.example.gateguardianapp.presentation.resident.visitors.VisitorsScreen
-import com.example.gateguardianapp.presentation.resident.visitors.VisitorsViewModel
 
 @Composable
 fun ResidentNavigation(

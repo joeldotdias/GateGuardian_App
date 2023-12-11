@@ -6,7 +6,6 @@ import com.example.gateguardianapp.domain.model.resident.EventMemory
 import com.example.gateguardianapp.domain.model.resident.Resident
 import com.example.gateguardianapp.domain.model.resident.Visitor
 import com.example.gateguardianapp.domain.repository.ResidentApiRepository
-import okhttp3.RequestBody
 import javax.inject.Inject
 
 class ResidentApiRepositoryImpl @Inject constructor(
@@ -41,7 +40,7 @@ class ResidentApiRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getVisitorOtpById(visitorId: Int): String? {
-        return api.getVisitorOtp(visitorId).body();
+        return api.getVisitorOtp(visitorId).body()
     }
 
 
