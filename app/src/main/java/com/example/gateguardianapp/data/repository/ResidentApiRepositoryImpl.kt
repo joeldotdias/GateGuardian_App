@@ -2,6 +2,7 @@ package com.example.gateguardianapp.data.repository
 
 import com.example.gateguardianapp.data.remote.ResidentApi
 import com.example.gateguardianapp.data.remote.dto.ResidentDto
+import com.example.gateguardianapp.data.remote.dto.SecurityDto
 import com.example.gateguardianapp.domain.model.resident.EventMemory
 import com.example.gateguardianapp.domain.model.resident.Resident
 import com.example.gateguardianapp.domain.model.resident.Visitor
@@ -19,6 +20,10 @@ class ResidentApiRepositoryImpl @Inject constructor(
 
     override suspend fun getResidentsBySociety(society: String): List<ResidentDto>? {
         return api.getResidentsBySociety(society).body()
+    }
+
+    override suspend fun getSecuritiesBySociety(society: String): List<SecurityDto>? {
+        return  api.getSecuritiesBySociety(society).body()
     }
 
     override suspend fun saveResident(name: String, email: String, adminEmail: String) {

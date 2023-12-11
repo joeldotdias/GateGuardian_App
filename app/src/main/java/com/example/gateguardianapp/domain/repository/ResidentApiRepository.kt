@@ -1,6 +1,7 @@
 package com.example.gateguardianapp.domain.repository
 
 import com.example.gateguardianapp.data.remote.dto.ResidentDto
+import com.example.gateguardianapp.data.remote.dto.SecurityDto
 import com.example.gateguardianapp.domain.model.resident.EventMemory
 import com.example.gateguardianapp.domain.model.resident.Resident
 import com.example.gateguardianapp.domain.model.resident.Visitor
@@ -13,6 +14,7 @@ interface ResidentApiRepository {
 
     // Admin
     suspend fun getResidentsBySociety(society: String): List<ResidentDto>?
+    suspend fun getSecuritiesBySociety(society: String): List<SecurityDto>?
     suspend fun saveResident(name: String, email: String, adminEmail: String)
 
     //Visitors

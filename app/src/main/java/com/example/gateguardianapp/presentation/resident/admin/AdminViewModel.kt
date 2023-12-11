@@ -7,6 +7,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -28,9 +29,23 @@ class AdminViewModel @Inject constructor(
 
     fun getAdminScreenDetails() {
         viewModelScope.launch(Dispatchers.IO) {
+//            try {
+//                _state.value = state.value.copy(
+//                    residents = repository.getResidentsBySociety(adminEmail)
+//                )
+//            } catch(e: Exception) {
+//                _state.value = state.value.copy(
+//                    errorMessage = e.message
+//                )
+//            }
             try {
                 _state.value = state.value.copy(
-                    residents = repository.getResidentsBySociety(adminEmail)
+                    residents = async {
+                        repository.getResidentsBySociety(adminEmail)
+                    }.await(),
+                    securities = async {
+                        repository.getSecuritiesBySociety(adminEmail)
+                    }.await()
                 )
             } catch(e: Exception) {
                 _state.value = state.value.copy(

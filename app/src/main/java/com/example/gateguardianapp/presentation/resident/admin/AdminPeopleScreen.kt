@@ -19,8 +19,11 @@ import androidx.compose.material.icons.filled.FilterAlt
 import androidx.compose.material.icons.rounded.AddModerator
 import androidx.compose.material.icons.rounded.AdminPanelSettings
 import androidx.compose.material.icons.rounded.AlternateEmail
+import androidx.compose.material.icons.rounded.Badge
+import androidx.compose.material.icons.rounded.Home
 import androidx.compose.material.icons.rounded.Person
 import androidx.compose.material.icons.rounded.PersonAdd
+import androidx.compose.material.icons.rounded.Security
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -43,6 +46,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.gateguardianapp.data.remote.dto.ResidentDto
+import com.example.gateguardianapp.data.remote.dto.SecurityDto
 import com.example.gateguardianapp.presentation.resident.components.InputForm
 import com.example.gateguardianapp.util.Delays
 import kotlinx.coroutines.Dispatchers
@@ -56,6 +60,7 @@ fun AdminPeopleScreen(
     onPeopleChange: () -> Unit
 ) {
     val residentsData = viewModel.state.value.residents
+    val securitiesData = viewModel.state.value.securities
 
     val coroutineScope = rememberCoroutineScope()
 
@@ -174,6 +179,12 @@ fun AdminPeopleScreen(
                 )
             }
         }
+
+        securitiesData?.let { securities ->
+            items(items = securities) { security ->
+                SecurityDetailsCard(security)
+            }
+        }
     }
 }
 
@@ -198,7 +209,24 @@ fun ResidentDetailsCard(
                 fontWeight = FontWeight.SemiBold,
                 fontSize = 20.sp
             )
-            Text(text = "${resident.flatNo}, ${resident.building}")
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    imageVector = Icons.Rounded.Home,
+                    modifier = Modifier.size(19.dp),
+                    contentDescription = "Resident home icon"
+                )
+                if(resident.flatNo != 0) {
+                    Text(text = resident.flatNo.toString())
+                }
+                resident.building?.let { building ->
+                    Text(text = ", $building")
+                }
+            }
+
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
@@ -209,6 +237,53 @@ fun ResidentDetailsCard(
                     contentDescription = "Resident icon"
                 )
                 Text(text = if(isAdmin) "Admin" else "Resident")
+            }
+        }
+    }
+}
+
+@Composable
+fun SecurityDetailsCard(security: SecurityDto) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(10.dp)
+            .border(width = 1.dp, color = Color.LightGray, shape = RoundedCornerShape(10.dp))
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(4.dp)
+        ) {
+            Text(
+                text = security.name,
+                fontWeight = FontWeight.SemiBold,
+                fontSize = 20.sp
+            )
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    imageVector = Icons.Rounded.Badge,
+                    modifier = Modifier.size(19.dp),
+                    contentDescription = "Security badge icon"
+                )
+                security.badgeId?.let { badgeId ->
+                    Text(text = badgeId)
+                }
+            }
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    imageVector = Icons.Rounded.Security,
+                    modifier = Modifier.size(19.dp),
+                    contentDescription = "Resident icon"
+                )
+                Text(text = "Security")
             }
         }
     }

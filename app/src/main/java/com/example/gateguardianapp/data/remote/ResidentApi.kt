@@ -1,6 +1,7 @@
 package com.example.gateguardianapp.data.remote
 
 import com.example.gateguardianapp.data.remote.dto.ResidentDto
+import com.example.gateguardianapp.data.remote.dto.SecurityDto
 import com.example.gateguardianapp.domain.model.resident.EventMemory
 import com.example.gateguardianapp.domain.model.resident.Resident
 import com.example.gateguardianapp.domain.model.resident.Visitor
@@ -22,6 +23,9 @@ interface ResidentApi {
     // Admin
     @GET("/residents")
     suspend fun getResidentsBySociety(@Query("admin") email: String): Response<List<ResidentDto>>
+
+    @GET("securities")
+    suspend fun getSecuritiesBySociety(@Query("admin") email: String): Response<List<SecurityDto>>
 
     @POST("resident-save")
     suspend fun saveResident(
