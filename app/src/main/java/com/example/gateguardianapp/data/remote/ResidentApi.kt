@@ -34,6 +34,13 @@ interface ResidentApi {
         @Query("admin") adminEmail: String
     )
 
+    @POST("security-save")
+    suspend fun saveSecurity(
+        @Query("name") name: String,
+        @Query("email") email: String,
+        @Query("admin") adminEmail: String
+    )
+
 
     // Visitors
     @GET("visitors")

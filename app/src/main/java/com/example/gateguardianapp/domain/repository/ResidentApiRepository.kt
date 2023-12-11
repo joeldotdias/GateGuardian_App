@@ -13,9 +13,10 @@ interface ResidentApiRepository {
 
 
     // Admin
-    suspend fun getResidentsBySociety(society: String): List<ResidentDto>?
-    suspend fun getSecuritiesBySociety(society: String): List<SecurityDto>?
+    suspend fun getResidentsBySociety(adminEmail: String): List<ResidentDto>?
+    suspend fun getSecuritiesBySociety(adminEmail: String): List<SecurityDto>?
     suspend fun saveResident(name: String, email: String, adminEmail: String)
+    suspend fun saveSecurity(name: String, email: String, adminEmail: String)
 
     //Visitors
     suspend fun saveVisitor(name: String, phoneNo: String, residentEmail: String)

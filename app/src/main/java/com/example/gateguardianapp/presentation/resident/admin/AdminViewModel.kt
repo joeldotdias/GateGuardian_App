@@ -29,15 +29,6 @@ class AdminViewModel @Inject constructor(
 
     fun getAdminScreenDetails() {
         viewModelScope.launch(Dispatchers.IO) {
-//            try {
-//                _state.value = state.value.copy(
-//                    residents = repository.getResidentsBySociety(adminEmail)
-//                )
-//            } catch(e: Exception) {
-//                _state.value = state.value.copy(
-//                    errorMessage = e.message
-//                )
-//            }
             try {
                 _state.value = state.value.copy(
                     residents = async {
@@ -58,6 +49,12 @@ class AdminViewModel @Inject constructor(
     fun addResident(name: String, email: String) {
         viewModelScope.launch(Dispatchers.IO) {
             repository.saveResident(name, email, adminEmail)
+        }
+    }
+
+    fun addSecurity(name: String, email: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.saveSecurity(name, email, adminEmail)
         }
     }
 }

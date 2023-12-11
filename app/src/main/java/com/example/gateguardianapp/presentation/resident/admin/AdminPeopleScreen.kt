@@ -160,6 +160,7 @@ fun AdminPeopleScreen(
                             isAddingSecurity = false
 
                             coroutineScope.launch(Dispatchers.IO) {
+                                viewModel.addSecurity(newSecurityName, newSecurityEmail)
                                 delay(Delays.CLOUD_UPLOAD_DELAY)
                                 newSecurityName = ""
                                 newSecurityEmail = ""

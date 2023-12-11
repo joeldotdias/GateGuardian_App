@@ -18,16 +18,20 @@ class ResidentApiRepositoryImpl @Inject constructor(
     }
 
 
-    override suspend fun getResidentsBySociety(society: String): List<ResidentDto>? {
-        return api.getResidentsBySociety(society).body()
+    override suspend fun getResidentsBySociety(adminEmail: String): List<ResidentDto>? {
+        return api.getResidentsBySociety(adminEmail).body()
     }
 
-    override suspend fun getSecuritiesBySociety(society: String): List<SecurityDto>? {
-        return  api.getSecuritiesBySociety(society).body()
+    override suspend fun getSecuritiesBySociety(adminEmail: String): List<SecurityDto>? {
+        return  api.getSecuritiesBySociety(adminEmail).body()
     }
 
     override suspend fun saveResident(name: String, email: String, adminEmail: String) {
         api.saveResident(name, email, adminEmail)
+    }
+
+    override suspend fun saveSecurity(name: String, email: String, adminEmail: String) {
+        api.saveSecurity(name, email, adminEmail)
     }
 
 
