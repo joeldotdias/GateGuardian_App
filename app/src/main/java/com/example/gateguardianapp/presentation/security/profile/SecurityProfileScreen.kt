@@ -8,6 +8,7 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -54,7 +55,9 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
@@ -106,29 +109,28 @@ fun SecurityProfileScreen(
                 isPfpChanged = true
             }
         )
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(2.dp),
+            horizontalArrangement = Arrangement.End,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(text = "Sign out", fontSize = 20.sp)
+            IconButton(
+                onClick = { signOut() }
+            ) {
+                Icon(
+                    imageVector = Icons.AutoMirrored.Filled.Logout,
+                    contentDescription = "Sign out icon"
+                )
+            }
+        }
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
         ) {
-            item {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(2.dp),
-                    horizontalArrangement = Arrangement.End,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(text = "Sign out", fontSize = 20.sp)
-                    IconButton(
-                        onClick = { signOut() }
-                    ) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Filled.Logout,
-                            contentDescription = "Sign out icon"
-                        )
-                    }
-                }
-            }
 
             item {
                 AnimatedVisibility(visible = areSecurityDetailsNotProvided) {
@@ -146,11 +148,123 @@ fun SecurityProfileScreen(
                 }
             }
 
+            item {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                ) {
+                    Card(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(10.dp)
+                            .border(1.dp, Color.Black, RoundedCornerShape(15.dp)),
+                        shape = RoundedCornerShape(15.dp),
+                        colors = CardDefaults.cardColors(containerColor = Color.White)
+                    ) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(top = 10.dp, bottom = 20.dp),
+                            horizontalArrangement = Arrangement.Center
+                        ) {
+                            Text(
+                                text = security.society,
+                                fontWeight = FontWeight.Bold,
+                                fontFamily = FontFamily.SansSerif,
+                                fontSize = 30.sp
+                            )
+                        }
+
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(5.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Surface(
+                                modifier = Modifier
+                                    //.align(Alignment.CenterHorizontally)
+                                    .padding(top = 30.dp, bottom = 30.dp)
+                            ) {
+                                Card(
+                                    shape = RoundedCornerShape(10.dp),
+                                    colors = CardDefaults.cardColors(containerColor = Color.Transparent),
+                                    border = BorderStroke(width = 1.dp, color = Color.LightGray)
+                                ) {
+                                    // Do not remove this null check
+                                    if (pfpUri != null) {
+                                        AsyncImage(
+                                            model = pfpUri.toUri(),
+                                            modifier = Modifier
+                                                .size(150.dp)
+                                                .clip(RoundedCornerShape(10.dp)),
+                                            contentScale = ContentScale.Crop,
+                                            contentDescription = "Pfp"
+                                        )
+                                    } else {
+                                        Image(
+                                            imageVector = Icons.Rounded.AccountCircle,
+                                            modifier = Modifier.size(150.dp),
+                                            colorFilter = ColorFilter.tint(Color(0xFF59EBDD)),
+                                            contentDescription = "Default Pfp icon"
+                                        )
+                                    }
+                                }
+                            }
+
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(start = 5.dp)
+                            ) {
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Rounded.Person,
+                                        modifier = Modifier
+                                            .size(25.dp)
+                                            .padding(end = 3.dp),
+                                        contentDescription = "Security badge icon"
+                                    )
+                                    Text(text = name)
+                                }
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Rounded.Phone,
+                                        modifier = Modifier
+                                            .size(23.dp)
+                                            .padding(end = 3.dp),
+                                        tint = Color(0xFF62B065),
+                                        contentDescription = "Security badge icon"
+                                    )
+                                    Text(text = "+91 ${phoneNo.substring(0, 5)} ${phoneNo.substring(5)}")
+                                }
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Rounded.Badge,
+                                        modifier = Modifier
+                                            .size(25.dp)
+                                            .padding(end = 3.dp),
+                                        tint = Color(0xFF3F51B5),
+                                        contentDescription = "Security badge icon"
+                                    )
+                                    Text(text = badgeId)
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
 
             item {
                 Surface(
                     modifier = Modifier
-                        //.align(Alignment.CenterHorizontally)
                         .padding(top = 30.dp, bottom = 17.dp)
                 ) {
                     Card(
@@ -414,5 +528,3 @@ fun ProvideSecurityDetailsForm(
         }
     }
 }
-
-

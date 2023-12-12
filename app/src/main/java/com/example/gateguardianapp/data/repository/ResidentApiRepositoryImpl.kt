@@ -5,7 +5,7 @@ import com.example.gateguardianapp.data.remote.dto.ResidentDto
 import com.example.gateguardianapp.data.remote.dto.SecurityDto
 import com.example.gateguardianapp.domain.model.resident.EventMemory
 import com.example.gateguardianapp.domain.model.resident.Resident
-import com.example.gateguardianapp.domain.model.resident.Visitor
+import com.example.gateguardianapp.domain.model.resident.VisitorResidentDto
 import com.example.gateguardianapp.domain.repository.ResidentApiRepository
 import javax.inject.Inject
 
@@ -36,15 +36,15 @@ class ResidentApiRepositoryImpl @Inject constructor(
 
 
     override suspend fun saveVisitor(name: String, phoneNo: String, residentEmail: String) {
-        val visitorRequestBody = Visitor(name = name, phoneNo = phoneNo, residentEmail = residentEmail).toRequestBody()
-        api.saveVisitor(visitorRequestBody)
+        val visitorResidentDtoRequestBody = VisitorResidentDto(name = name, phoneNo = phoneNo, hostEmail = residentEmail).toRequestBody()
+        api.saveVisitor(visitorResidentDtoRequestBody)
     }
 
     override suspend fun getRecentVisitorOtp(email: String): String? {
         return api.getRecentVisitorOtp(email).body()
     }
 
-    override suspend fun getVisitorsByResidentEmail(email: String): List<Visitor>? {
+    override suspend fun getVisitorsByResidentEmail(email: String): List<VisitorResidentDto>? {
         return api.getVisitorsByResidentEmail(email).body()
     }
 

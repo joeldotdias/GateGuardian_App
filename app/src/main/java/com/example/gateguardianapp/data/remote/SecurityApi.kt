@@ -1,6 +1,7 @@
 package com.example.gateguardianapp.data.remote
 
 import com.example.gateguardianapp.domain.model.security.Security
+import com.example.gateguardianapp.domain.model.security.VisitorSecurityDto
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.PUT
@@ -11,6 +12,10 @@ interface SecurityApi {
     // App entry
     @GET("/security")
     suspend fun getSecurityByEmail(@Query("email") email: String): Response<Security>
+
+    // Verify visitors
+    @GET("/visitors-for")
+    suspend fun getVisitorsBySociety(@Query("email") email: String): Response<List<VisitorSecurityDto>>
 
     // Security profile
     @PUT("/update-security-pfp")

@@ -5,11 +5,11 @@ import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONObject
 
-data class Visitor(
+data class VisitorResidentDto(
     val visitorId: Int? = null,
     val name: String,
     val phoneNo: String,
-    val residentEmail: String,
+    val hostEmail: String,
     val otp: String = ""
 ) {
     fun toRequestBody(): RequestBody {
@@ -17,7 +17,7 @@ data class Visitor(
         val jsonObject = JSONObject()
         jsonObject.put("name", name)
         jsonObject.put("phoneNo", phoneNo)
-        jsonObject.put("residentEmail", residentEmail)
+        jsonObject.put("hostEmail", hostEmail)
 
         return jsonObject.toString().toRequestBody("application/json".toMediaTypeOrNull())
     }

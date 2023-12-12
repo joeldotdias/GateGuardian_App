@@ -4,7 +4,7 @@ import com.example.gateguardianapp.data.remote.dto.ResidentDto
 import com.example.gateguardianapp.data.remote.dto.SecurityDto
 import com.example.gateguardianapp.domain.model.resident.EventMemory
 import com.example.gateguardianapp.domain.model.resident.Resident
-import com.example.gateguardianapp.domain.model.resident.Visitor
+import com.example.gateguardianapp.domain.model.resident.VisitorResidentDto
 import okhttp3.RequestBody
 import retrofit2.Response
 import retrofit2.http.Body
@@ -44,7 +44,7 @@ interface ResidentApi {
 
     // Visitors
     @GET("/visitors")
-    suspend fun getVisitorsByResidentEmail(@Query("email") email: String): Response<List<Visitor>>
+    suspend fun getVisitorsByResidentEmail(@Query("email") email: String): Response<List<VisitorResidentDto>>
 
     @POST("/visitor-save")
     suspend fun saveVisitor(@Body visitorRequestBody: RequestBody)

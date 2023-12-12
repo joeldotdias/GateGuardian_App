@@ -4,7 +4,7 @@ import com.example.gateguardianapp.data.remote.dto.ResidentDto
 import com.example.gateguardianapp.data.remote.dto.SecurityDto
 import com.example.gateguardianapp.domain.model.resident.EventMemory
 import com.example.gateguardianapp.domain.model.resident.Resident
-import com.example.gateguardianapp.domain.model.resident.Visitor
+import com.example.gateguardianapp.domain.model.resident.VisitorResidentDto
 
 interface ResidentApiRepository {
 
@@ -21,7 +21,7 @@ interface ResidentApiRepository {
     //Visitors
     suspend fun saveVisitor(name: String, phoneNo: String, residentEmail: String)
     suspend fun getRecentVisitorOtp(email: String): String?
-    suspend fun getVisitorsByResidentEmail(email: String): List<Visitor>?
+    suspend fun getVisitorsByResidentEmail(email: String): List<VisitorResidentDto>?
     suspend fun getVisitorOtpById(visitorId: Int): String?
 
     // Resident Profile
