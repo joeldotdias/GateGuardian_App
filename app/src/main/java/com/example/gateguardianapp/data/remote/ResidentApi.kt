@@ -24,17 +24,17 @@ interface ResidentApi {
     @GET("/residents")
     suspend fun getResidentsBySociety(@Query("admin") email: String): Response<List<ResidentDto>>
 
-    @GET("securities")
+    @GET("/securities")
     suspend fun getSecuritiesBySociety(@Query("admin") email: String): Response<List<SecurityDto>>
 
-    @POST("resident-save")
+    @POST("/resident-save")
     suspend fun saveResident(
         @Query("name") name: String,
         @Query("email") email: String,
         @Query("admin") adminEmail: String
     )
 
-    @POST("security-save")
+    @POST("/security-save")
     suspend fun saveSecurity(
         @Query("name") name: String,
         @Query("email") email: String,
@@ -43,24 +43,24 @@ interface ResidentApi {
 
 
     // Visitors
-    @GET("visitors")
+    @GET("/visitors")
     suspend fun getVisitorsByResidentEmail(@Query("email") email: String): Response<List<Visitor>>
 
-    @POST("visitor-save")
+    @POST("/visitor-save")
     suspend fun saveVisitor(@Body visitorRequestBody: RequestBody)
 
-    @GET("visitor-recent")
+    @GET("/visitor-recent")
     suspend fun getRecentVisitorOtp(@Query("email") email: String): Response<String>
 
 //    @GET("visitor-recento")
 //    suspend fun getRecentVisitorCred(@Query("email") email: String): Response<VisitorCredDto>
 
-    @GET("visitor-otp")
+    @GET("/visitor-otp")
     suspend fun getVisitorOtp(@Query("visitorId") visitorId: Int): Response<String>
 
 
     // Resident Profile
-    @POST("resident-home")
+    @POST("/resident-home")
     suspend fun saveResidentHomeDetails(
         @Query("flat") flatNo: Int,
         @Query("building") building: String,
@@ -70,7 +70,7 @@ interface ResidentApi {
     @PUT("/update-pfp")
     suspend fun updateResidentPfp(@Query("email") email: String, @Query("pfpUrl") pfpUrl: String)
 
-    @PUT("update-profile")
+    @PUT("/update-profile")
     suspend fun updateResidentProfile(
         @Query("email") email: String,
         @Query("name") name: String,
@@ -78,7 +78,7 @@ interface ResidentApi {
         @Query("phoneNo") phoneNo: String
     )
 
-    @GET("resident-memories")
+    @GET("/resident-memories")
     suspend fun getMemoriesByResident(@Query("email") email: String): Response<List<EventMemory>>
 }
 //

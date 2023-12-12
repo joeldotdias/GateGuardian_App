@@ -1,8 +1,10 @@
 package com.example.gateguardianapp.di
 
 import com.example.gateguardianapp.data.repository.ResidentApiRepositoryImpl
+import com.example.gateguardianapp.data.repository.SecurityApiRepositoryImpl
 import com.example.gateguardianapp.data.repository.UserApiRepositoryImpl
 import com.example.gateguardianapp.domain.repository.ResidentApiRepository
+import com.example.gateguardianapp.domain.repository.SecurityApiRepository
 import com.example.gateguardianapp.domain.repository.UserApiRepository
 import dagger.Binds
 import dagger.Module
@@ -25,4 +27,10 @@ abstract class RepositoryModule {
     abstract fun bindResidentApiRepository(
         residentApiRepositoryImpl: ResidentApiRepositoryImpl
     ): ResidentApiRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindSecurityApiRepository(
+        securityApiRepositoryImpl: SecurityApiRepositoryImpl
+    ): SecurityApiRepository
 }

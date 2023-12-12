@@ -32,6 +32,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -62,7 +63,7 @@ fun VisitorsScreen(
     val focusManager = LocalFocusManager.current
     val coroutineScope = rememberCoroutineScope()
 
-    var showPastVisitors by remember { mutableStateOf(false) }
+    var showPastVisitors by rememberSaveable { mutableStateOf(false) }
     var showVisitorOtp by remember { mutableStateOf(false) }
 
     var name by remember { mutableStateOf("") }
@@ -135,7 +136,7 @@ fun VisitorsScreen(
                     .padding(20.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(text = "Your code to come in")
+                Text(text = "Your ComeIn code")
                 TextField(
                     value = generatedOtp,
                     readOnly = true,

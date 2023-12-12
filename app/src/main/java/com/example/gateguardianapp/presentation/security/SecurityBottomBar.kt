@@ -1,5 +1,6 @@
 package com.example.gateguardianapp.presentation.security
 
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -21,7 +22,8 @@ import com.example.gateguardianapp.presentation.navigation.SecurityScreens
 @Composable
 fun SecurityBottomBar(
     user: User,
-    onSignOut: () -> Unit
+
+    onSignOut: () -> Unit,
 ) {
 
     val navController = rememberNavController()
@@ -64,9 +66,11 @@ fun SecurityBottomBar(
                 }
             }
         }
-    ) {
+    ) { bottomBarPadding ->
         Surface(
-            modifier = Modifier.padding(bottom = it.calculateBottomPadding())
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(bottom = bottomBarPadding.calculateBottomPadding())
         ) {
             SecurityNavigation(
                 navController = navController,

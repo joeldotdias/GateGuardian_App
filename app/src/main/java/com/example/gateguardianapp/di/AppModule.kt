@@ -1,6 +1,7 @@
 package com.example.gateguardianapp.di
 
 import com.example.gateguardianapp.data.remote.ResidentApi
+import com.example.gateguardianapp.data.remote.SecurityApi
 import com.example.gateguardianapp.data.remote.UserApi
 import com.example.gateguardianapp.util.Constants
 import dagger.Module
@@ -9,6 +10,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.create
 import javax.inject.Singleton
 
 @Module
@@ -33,5 +35,15 @@ object AppModule {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(ResidentApi::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideSecurityApi(): SecurityApi {
+        return Retrofit.Builder()
+            .baseUrl(Constants.BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+            .create(SecurityApi::class.java)
     }
 }

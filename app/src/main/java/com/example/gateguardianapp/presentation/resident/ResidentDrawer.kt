@@ -1,6 +1,5 @@
 package com.example.gateguardianapp.presentation.resident
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -119,7 +118,6 @@ fun ResidentDrawer(
                         IconButton(
                             onClick = {
                                 coroutineScope.launch {
-                                    Log.d("TAG", "ResDrawer: huh")
                                     drawerState.open()
                                 }
                             }
@@ -136,11 +134,11 @@ fun ResidentDrawer(
             floatingActionButton = {
                 CustomerSupportButtons()
             }
-        ) {
+        ) { topBarPadding ->
             Surface(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(top = it.calculateTopPadding())
+                    .padding(top = topBarPadding.calculateTopPadding())
             ) {
                 residentData?.let {
                     ResidentNavigation(

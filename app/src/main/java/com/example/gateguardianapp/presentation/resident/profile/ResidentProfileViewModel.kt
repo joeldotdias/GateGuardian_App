@@ -64,7 +64,7 @@ class ResidentProfileViewModel @Inject constructor(
     }
 
     fun updateResidentProfile(name: String, aboutMe: String, phoneNo: String) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             repository.updateResidentProfile(email, name, aboutMe, phoneNo)
         }
     }

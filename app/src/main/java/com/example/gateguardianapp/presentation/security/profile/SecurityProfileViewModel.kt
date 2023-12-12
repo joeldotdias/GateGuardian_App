@@ -1,48 +1,61 @@
 package com.example.gateguardianapp.presentation.security.profile
 
-//@HiltViewModel
-//class SecurityProfileViewModel @Inject constructor(
-//    private val repository: SecurityApiRepository
-//): ViewModel() {
-//
-//    private val _state = MutableStateFlow(SecurityProfileState())
-//    val state = _state.asStateFlow()
-//
-//    val email = Firebase.auth.currentUser?.email!!
-//
-//    fun getSecurityProfileDetails() {
-//        viewModelScope.launch(Dispatchers.IO) {
-//            try {
-//                _state.value = state.value.copy(
-//                    security = repository.getSecurityByEmail(email)
-//                )
-//            } catch(e: Exception) {
-//                _state.value = state.value.copy(
-//                    errorMessage = e.message
-//                )
-//            }
-//        }
-//    }
-//
-//    fun saveBadgeId(badgeId: String) {
-//        viewModelScope.launch(Dispatchers.IO) {
-//            //
-//        }
-//    }
-//
-//    fun uploadPfpToCloud(uri: Uri, name: String, context: Context) {
-//        FirebaseCloudClient.uploadToCloud(uri, name, "pfp", context)
-//    }
-//
-//    fun updateResidentPfpUrl(imgUrl: Uri) {
-//        viewModelScope.launch(Dispatchers.IO) {
-//           // repository.updateResidentPfp(email, imgUrl.toString())
-//        }
-//    }
-//
-//    fun updateSecurityProfile(name: String, phoneNo: String) {
-//        viewModelScope.launch {
-//            //repository.updateResidentProfile(email, name, aboutMe, phoneNo)
-//        }
-//    }
-//}
+import android.content.Context
+import android.net.Uri
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.gateguardianapp.data.cloud.FirebaseCloudClient
+import com.example.gateguardianapp.domain.repository.SecurityApiRepository
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
+import javax.inject.Inject
+
+@HiltViewModel
+class SecurityProfileViewModel @Inject constructor(
+    private val repository: SecurityApiRepository
+): ViewModel() {
+
+    private val _state = MutableStateFlow(SecurityProfileState())
+    val state = _state.asStateFlow()
+
+    val email = Firebase.auth.currentUser?.email!!
+
+    init {
+        getSecurityProfileDetails()
+    }
+
+    fun getSecurityProfileDetails() {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                _state.value = state.value.copy(
+                    security = repository.getSecurityByEmail(email)
+                )
+            } catch(e: Exception) {
+                _state.value = state.value.copy(
+                    errorMessage = e.message
+                )
+            }
+        }
+    }
+
+    fun uploadPfpToCloud(uri: Uri, name: String, context: Context) {
+        FirebaseCloudClient.uploadToCloud(uri, name, "pfp", context)
+    }
+
+    fun updateSecurityPfpUrl(imgUrl: Uri) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.updateSecurityPfp(email, imgUrl.toString())
+        }
+    }
+
+    fun updateSecurityProfile(name: String, badgeId: String, phoneNo: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.updateSecurityProfile(email, name, badgeId, phoneNo)
+        }
+    }
+}
