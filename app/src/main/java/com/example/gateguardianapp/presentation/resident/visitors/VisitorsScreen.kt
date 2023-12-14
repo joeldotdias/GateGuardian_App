@@ -78,7 +78,7 @@ fun VisitorsScreen(
             value = name,
             label = "Name",
             onValChange = { name = it },
-            icon = Icons.Rounded.Person,
+            leadingIcon = Icons.Rounded.Person,
             onImeAction = KeyboardActions(
                 onNext = { focusManager.moveFocus(FocusDirection.Down) }
             )
@@ -88,7 +88,7 @@ fun VisitorsScreen(
             value = phoneNo,
             label = "Phone number",
             onValChange = { phoneNo = it },
-            icon = Icons.Rounded.AddIcCall,
+            leadingIcon = Icons.Rounded.AddIcCall,
             keyboardType = KeyboardType.Number,
             imeAction = ImeAction.Done,
             onImeAction = KeyboardActions(

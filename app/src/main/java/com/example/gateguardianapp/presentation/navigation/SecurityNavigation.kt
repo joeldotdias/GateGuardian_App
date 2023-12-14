@@ -24,7 +24,7 @@ fun SecurityNavigation(
 
         composable(route = SecurityScreens.Verify.route) {
             val verifyViewModel: VerifyViewModel = hiltViewModel()
-            VerifyScreen(verifyViewModel)
+            VerifyScreen(verifyViewModel, verifyViewModel::getVisitors)
         }
 
         composable(route = SecurityScreens.Notify.route) {

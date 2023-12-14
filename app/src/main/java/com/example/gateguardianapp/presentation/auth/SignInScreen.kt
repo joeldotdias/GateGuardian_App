@@ -88,7 +88,7 @@ fun SignInScreen(
                     value = name,
                     label = "Your name",
                     onValChange = { name = it },
-                    icon = Icons.Rounded.Person,
+                    leadingIcon = Icons.Rounded.Person,
                     onImeAction =  KeyboardActions(
                         onNext = { focusManager.moveFocus(FocusDirection.Down) }
                     )
@@ -98,7 +98,7 @@ fun SignInScreen(
                     value = email,
                     label = "Email",
                     onValChange = { email = it },
-                    icon = Icons.Rounded.AlternateEmail,
+                    leadingIcon = Icons.Rounded.AlternateEmail,
                     keyboardType = KeyboardType.Email,
                     onImeAction =  KeyboardActions(
                         onNext = { focusManager.moveFocus(FocusDirection.Down) }
@@ -109,7 +109,7 @@ fun SignInScreen(
                     value = society,
                     label = "Society name",
                     onValChange = { society = it },
-                    icon = Icons.Rounded.Apartment,
+                    leadingIcon = Icons.Rounded.Apartment,
                     imeAction = ImeAction.Done,
                     onImeAction =  KeyboardActions(
                         onDone = { focusManager.clearFocus() }

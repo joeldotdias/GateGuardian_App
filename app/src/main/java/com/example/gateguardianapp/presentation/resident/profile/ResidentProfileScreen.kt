@@ -64,7 +64,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.net.toUri
-import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.example.gateguardianapp.domain.model.resident.Resident
 import com.example.gateguardianapp.presentation.resident.components.EventMemoryRow
@@ -81,7 +80,7 @@ fun ResidentProfileScreen(
     resident: Resident,
     onResidentDataChange: () -> Unit,
     signOut: () -> Unit,
-    viewModel: ResidentProfileViewModel// = hiltViewModel(),
+    viewModel: ResidentProfileViewModel
 ) {
 
     val state = viewModel.state.value
@@ -273,7 +272,7 @@ fun ResidentProfileScreen(
                     value = name,
                     label = "Name",
                     onValChange = { name = it },
-                    icon = Icons.Rounded.Person,
+                    leadingIcon = Icons.Rounded.Person,
                     onImeAction = KeyboardActions(
                         onNext = { focusManager.moveFocus(FocusDirection.Down) }
                     )
@@ -282,7 +281,7 @@ fun ResidentProfileScreen(
                     value = aboutMe,
                     label = "About Me",
                     onValChange = { aboutMe = it },
-                    icon = Icons.Rounded.Description,
+                    leadingIcon = Icons.Rounded.Description,
                     capitalization = KeyboardCapitalization.Sentences,
                     onImeAction = KeyboardActions(
                         onNext = { focusManager.moveFocus(FocusDirection.Down) }
@@ -294,7 +293,7 @@ fun ResidentProfileScreen(
                     onValChange = {
                         if(it.length <= 10) phoneNo = it
                     },
-                    icon = Icons.Rounded.Phone,
+                    leadingIcon = Icons.Rounded.Phone,
                     keyboardType = KeyboardType.Number,
                     imeAction = ImeAction.Done,
                     onImeAction = KeyboardActions(
@@ -382,7 +381,7 @@ fun ProvideHomeDetailsForm(
                 value = flatNo,
                 label = "Flat number",
                 onValChange = { flatNo = it },
-                icon = Icons.Rounded.Home,
+                leadingIcon = Icons.Rounded.Home,
                 keyboardType = KeyboardType.Number,
                 onImeAction = KeyboardActions(
                     onNext = { focusManager.moveFocus(FocusDirection.Down) }
@@ -393,7 +392,7 @@ fun ProvideHomeDetailsForm(
                 value = building,
                 label = "Building",
                 onValChange = { building = it },
-                icon = Icons.Rounded.Apartment,
+                leadingIcon = Icons.Rounded.Apartment,
                 imeAction = ImeAction.Done,
                 onImeAction = KeyboardActions(
                     onDone = { focusManager.clearFocus() }

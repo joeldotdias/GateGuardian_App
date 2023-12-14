@@ -23,7 +23,7 @@ fun InputForm(
     label: String,
     maxLines: Int = 3,
     onValChange: (String) -> Unit,
-    icon: ImageVector,
+    leadingIcon: ImageVector,
     keyboardType: KeyboardType = KeyboardType.Text,
     capitalization: KeyboardCapitalization = KeyboardCapitalization.Words,
     visualTransformation: VisualTransformation = VisualTransformation.None,
@@ -34,7 +34,7 @@ fun InputForm(
         value = value,
         onValueChange = onValChange,
         label = { Text(text = label) },
-        leadingIcon = { Icon(imageVector = icon, contentDescription = null) },
+        leadingIcon = { Icon(imageVector = leadingIcon, contentDescription = null) },
         modifier = modifier
             .fillMaxWidth()
             .padding(bottom = 20.dp, start = 20.dp, end = 20.dp),

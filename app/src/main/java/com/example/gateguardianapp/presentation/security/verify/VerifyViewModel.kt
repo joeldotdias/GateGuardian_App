@@ -1,6 +1,5 @@
 package com.example.gateguardianapp.presentation.security.verify
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.gateguardianapp.domain.repository.SecurityApiRepository
@@ -38,6 +37,12 @@ class VerifyViewModel @Inject constructor(
                     errorMessage = e.message
                 )
             }
+        }
+    }
+
+    fun deleteVerifiedVisitor(visitorId: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.deleteVerifiedVisitor(visitorId)
         }
     }
 }

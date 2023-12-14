@@ -3,6 +3,7 @@ package com.example.gateguardianapp.data.remote
 import com.example.gateguardianapp.domain.model.security.Security
 import com.example.gateguardianapp.domain.model.security.VisitorSecurityDto
 import retrofit2.Response
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.PUT
 import retrofit2.http.Query
@@ -16,6 +17,9 @@ interface SecurityApi {
     // Verify visitors
     @GET("/visitors-for")
     suspend fun getVisitorsBySociety(@Query("email") email: String): Response<List<VisitorSecurityDto>>
+
+    @DELETE("visitor-verified")
+    suspend fun deleteVerifiedVisitor(@Query("id") visitorId: Int)
 
     // Security profile
     @PUT("/update-security-pfp")

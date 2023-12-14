@@ -109,28 +109,32 @@ fun SecurityProfileScreen(
                 isPfpChanged = true
             }
         )
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(2.dp),
-            horizontalArrangement = Arrangement.End,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(text = "Sign out", fontSize = 20.sp)
-            IconButton(
-                onClick = { signOut() }
-            ) {
-                Icon(
-                    imageVector = Icons.AutoMirrored.Filled.Logout,
-                    contentDescription = "Sign out icon"
-                )
-            }
-        }
+
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
+
+            item {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(2.dp),
+                    horizontalArrangement = Arrangement.End,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(text = "Sign out", fontSize = 20.sp)
+                    IconButton(
+                        onClick = { signOut() }
+                    ) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.Logout,
+                            contentDescription = "Sign out icon"
+                        )
+                    }
+                }
+            }
 
             item {
                 AnimatedVisibility(visible = areSecurityDetailsNotProvided) {
@@ -407,7 +411,7 @@ fun SecurityProfileScreen(
                             value = name,
                             label = "Name",
                             onValChange = { name = it },
-                            icon = Icons.Rounded.Person,
+                            leadingIcon = Icons.Rounded.Person,
                             onImeAction = KeyboardActions(
                                 onNext = { focusManager.moveFocus(FocusDirection.Down) }
                             )
@@ -416,7 +420,7 @@ fun SecurityProfileScreen(
                             value = badgeId,
                             label = "About Me",
                             onValChange = { badgeId = it },
-                            icon = Icons.Rounded.Description,
+                            leadingIcon = Icons.Rounded.Description,
                             capitalization = KeyboardCapitalization.Sentences,
                             onImeAction = KeyboardActions(
                                 onNext = { focusManager.moveFocus(FocusDirection.Down) }
@@ -428,7 +432,7 @@ fun SecurityProfileScreen(
                             onValChange = {
                                 if (it.length <= 10) phoneNo = it
                             },
-                            icon = Icons.Rounded.Phone,
+                            leadingIcon = Icons.Rounded.Phone,
                             keyboardType = KeyboardType.Number,
                             imeAction = ImeAction.Done,
                             onImeAction = KeyboardActions(
@@ -502,7 +506,7 @@ fun ProvideSecurityDetailsForm(
                 value = phoneNo,
                 label = "Phone number",
                 onValChange = { phoneNo = it },
-                icon = Icons.Rounded.AddIcCall,
+                leadingIcon = Icons.Rounded.AddIcCall,
                 keyboardType = KeyboardType.Number,
                 onImeAction = KeyboardActions(
                     onNext = { focusManager.moveFocus(FocusDirection.Down) }
@@ -513,7 +517,7 @@ fun ProvideSecurityDetailsForm(
                 value = badgeId,
                 label = "Badge ID",
                 onValChange = { badgeId = it },
-                icon = Icons.Rounded.Badge,
+                leadingIcon = Icons.Rounded.Badge,
                 imeAction = ImeAction.Done,
                 onImeAction = KeyboardActions(
                     onDone = { focusManager.clearFocus() }

@@ -308,7 +308,7 @@ fun AddPersonForm(
             value = name,
             label = "Name",
             onValChange = onNameChanged,
-            icon = Icons.Rounded.Person,
+            leadingIcon = Icons.Rounded.Person,
             onImeAction = KeyboardActions(
                 onNext = { focusManager.moveFocus(FocusDirection.Down) }
             )
@@ -317,7 +317,7 @@ fun AddPersonForm(
             value = email,
             label = "Email",
             onValChange = onEmailChanged,
-            icon = Icons.Rounded.AlternateEmail,
+            leadingIcon = Icons.Rounded.AlternateEmail,
             keyboardType = KeyboardType.Email,
             capitalization = KeyboardCapitalization.None,
             imeAction = ImeAction.Done,
