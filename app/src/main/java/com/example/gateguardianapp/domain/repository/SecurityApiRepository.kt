@@ -1,10 +1,7 @@
 package com.example.gateguardianapp.domain.repository
 
-import com.example.gateguardianapp.data.local.VisitorEntity
 import com.example.gateguardianapp.domain.model.security.Security
 import com.example.gateguardianapp.domain.model.security.VisitorSecurityDto
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.StateFlow
 
 interface SecurityApiRepository {
 
