@@ -36,7 +36,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SearchBarDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -163,8 +162,8 @@ fun VerifyScreen(
                 items(items = visitors) { visitor ->
                     SecurityVisitorRow(
                         visitor = visitor,
-                        isExpanded = searchedVisitorId == visitor.visitorId,
-                        hideVerificationForm = { searchedVisitorId = -1 },
+                        isHighlighted = searchedVisitorId == visitor.visitorId,
+                        stopHighlighting = { searchedVisitorId = -1 },
                         verifyCode = { codeToVerify ->
                             var isVisitorVerified = false
                             if(codeToVerify == visitor.otp) {
@@ -173,9 +172,9 @@ fun VerifyScreen(
                             }
                             return@SecurityVisitorRow isVisitorVerified
                         },
-                        deleteVerifiedVisitor = {
+                        moveVerifiedVisitorToLogs = {
                             coroutineScope.launch {
-                                viewModel.deleteVerifiedVisitor(visitor.visitorId)
+                                viewModel.moveVerifiedVisitorToLogs(visitor.visitorId)
                                 delay(Delays.CLOUD_UPLOAD_DELAY)
                                 onVisitorsDataChange()
                             }
@@ -213,16 +212,16 @@ fun getSearchResultIndex(
 @Composable
 fun SecurityVisitorRow(
     visitor: VisitorSecurityDto,
-    isExpanded: Boolean,
-    hideVerificationForm: () -> Unit,
+    isHighlighted: Boolean,
+    stopHighlighting: () -> Unit,
     verifyCode: (String) -> Boolean,
-    deleteVerifiedVisitor: () -> Unit
+    moveVerifiedVisitorToLogs: () -> Unit
 ) {
     val focusManager = LocalFocusManager.current
 
     var codeToVerify by remember { mutableStateOf("") }
     var isCodeVerified by remember { mutableStateOf(false) }
-    var isExpandedFromForm by remember { mutableStateOf(false) }
+    var isExpanded by remember { mutableStateOf(false) }
 
     Row(
         modifier = Modifier
@@ -230,7 +229,7 @@ fun SecurityVisitorRow(
             .padding(10.dp)
             .clip(RoundedCornerShape(18.dp))
             .border(1.dp, MaterialTheme.colorScheme.onSurface, RoundedCornerShape(18.dp))
-            .background(if (isExpanded) Color(0xFFB4F7B7) else Color.Transparent)
+            .background(if (isHighlighted) Color(0xFFB4F7B7) else Color.Transparent)
     ) {
         Column(
             modifier = Modifier
@@ -265,15 +264,15 @@ fun SecurityVisitorRow(
                 Text(text = "${visitor.hostFlat}, ${visitor.hostBuilding}")
             }
 
-            AnimatedVisibility(visible = !isExpanded && !isExpandedFromForm && !isCodeVerified) {
+            AnimatedVisibility(visible = !isExpanded && !isCodeVerified) {
                 Button(
-                    onClick = { isExpandedFromForm = true }
+                    onClick = { isExpanded = true }
                 ) {
                     Text(text = "Verify")
                 }
             }
 
-            AnimatedVisibility(visible = isExpanded || isExpandedFromForm) {
+            AnimatedVisibility(visible = isExpanded) {
                 Column(
                     modifier = Modifier.fillMaxWidth()
                 ) {
@@ -298,8 +297,8 @@ fun SecurityVisitorRow(
                                 if(codeToVerify.isNotEmpty()) {
                                     codeToVerify = ""
                                 } else {
-                                    hideVerificationForm()
-                                    isExpandedFromForm = false
+                                    stopHighlighting()
+                                    isExpanded = false
                                 }
                             }
                         ) {
@@ -310,7 +309,7 @@ fun SecurityVisitorRow(
                             onClick = {
                                 isCodeVerified = verifyCode(codeToVerify.trim())
                                 if(isCodeVerified) {
-                                    isExpandedFromForm = false
+                                    isExpanded = false
                                 }
                                 Log.d("TAG", "SecurityVisitorRow: $isCodeVerified")
                             }
@@ -345,7 +344,7 @@ fun SecurityVisitorRow(
             ) {
                 if(isCodeVerified) {
                     IconButton(
-                        onClick = deleteVerifiedVisitor
+                        onClick = {}// deleteVerifiedVisitor
                     ) {
                         Icon(
                             imageVector = Icons.Rounded.Delete,
@@ -355,7 +354,7 @@ fun SecurityVisitorRow(
                     }
                 }
                 IconButton(
-                    onClick = hideVerificationForm
+                    onClick = stopHighlighting
                 ) {
                     Icon(
                         imageVector = Icons.Rounded.Cancel,

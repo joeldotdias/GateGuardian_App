@@ -18,8 +18,8 @@ class SecurityApiRepositoryImpl @Inject constructor(
         return api.getVisitorsBySociety(email).body()
     }
 
-    override suspend fun deleteVerifiedVisitor(visitorId: Int) {
-        api.deleteVerifiedVisitor(visitorId)
+    override suspend fun moveVerifiedVisitorToLogs(visitorId: Int) {
+        api.moveVerifiedVisitorToLogs(visitorId)
     }
 
 

@@ -19,7 +19,7 @@ interface SecurityApi {
     suspend fun getVisitorsBySociety(@Query("email") email: String): Response<List<VisitorSecurityDto>>
 
     @DELETE("visitor-verified")
-    suspend fun deleteVerifiedVisitor(@Query("id") visitorId: Int)
+    suspend fun moveVerifiedVisitorToLogs(@Query("id") visitorId: Int)
 
     // Security profile
     @PUT("/update-security-pfp")

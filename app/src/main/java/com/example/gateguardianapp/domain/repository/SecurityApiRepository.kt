@@ -10,7 +10,7 @@ interface SecurityApiRepository {
 
     // Verify visitors
     suspend fun getVisitorsBySociety(email: String): List<VisitorSecurityDto>?
-    suspend fun deleteVerifiedVisitor(visitorId: Int)
+    suspend fun moveVerifiedVisitorToLogs(visitorId: Int)
 
     // Security profile
     suspend fun updateSecurityPfp(email: String, pfpUrl: String)

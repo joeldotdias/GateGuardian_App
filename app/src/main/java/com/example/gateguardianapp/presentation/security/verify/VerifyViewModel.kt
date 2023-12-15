@@ -40,9 +40,9 @@ class VerifyViewModel @Inject constructor(
         }
     }
 
-    fun deleteVerifiedVisitor(visitorId: Int) {
+    fun moveVerifiedVisitorToLogs(visitorId: Int) {
         viewModelScope.launch(Dispatchers.IO) {
-            repository.deleteVerifiedVisitor(visitorId)
+            repository.moveVerifiedVisitorToLogs(visitorId)
         }
     }
 }
