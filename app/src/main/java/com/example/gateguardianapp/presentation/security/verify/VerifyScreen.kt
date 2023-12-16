@@ -310,6 +310,7 @@ fun SecurityVisitorRow(
                                 isCodeVerified = verifyCode(codeToVerify.trim())
                                 if(isCodeVerified) {
                                     isExpanded = false
+                                    moveVerifiedVisitorToLogs()
                                 }
                                 Log.d("TAG", "SecurityVisitorRow: $isCodeVerified")
                             }
@@ -342,17 +343,17 @@ fun SecurityVisitorRow(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.End
             ) {
-                if(isCodeVerified) {
-                    IconButton(
-                        onClick = {}// deleteVerifiedVisitor
-                    ) {
-                        Icon(
-                            imageVector = Icons.Rounded.Delete,
-                            modifier = Modifier.size(30.dp),
-                            contentDescription = "Delete verified visitor icon"
-                        )
-                    }
-                }
+//                if(isCodeVerified) {
+//                    IconButton(
+//                        onClick = {}// deleteVerifiedVisitor
+//                    ) {
+//                        Icon(
+//                            imageVector = Icons.Rounded.Delete,
+//                            modifier = Modifier.size(30.dp),
+//                            contentDescription = "Delete verified visitor icon"
+//                        )
+//                    }
+//                }
                 IconButton(
                     onClick = stopHighlighting
                 ) {

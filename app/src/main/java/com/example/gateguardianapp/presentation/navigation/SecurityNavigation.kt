@@ -6,6 +6,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.gateguardianapp.presentation.security.logs.LogsScreen
+import com.example.gateguardianapp.presentation.security.logs.LogsViewModel
 import com.example.gateguardianapp.presentation.security.notify.NotifyScreen
 import com.example.gateguardianapp.presentation.security.profile.SecurityProfileScreen
 import com.example.gateguardianapp.presentation.security.verify.VerifyScreen
@@ -32,7 +33,8 @@ fun SecurityNavigation(
         }
 
         composable(route = SecurityScreens.Logs.route) {
-            LogsScreen()
+            val logsViewModel: LogsViewModel = hiltViewModel()
+            LogsScreen(logsViewModel)
         }
 
         composable(route = SecurityScreens.Profile.route) {

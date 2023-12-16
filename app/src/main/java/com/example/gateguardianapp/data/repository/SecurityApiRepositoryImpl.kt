@@ -2,6 +2,7 @@ package com.example.gateguardianapp.data.repository
 
 import com.example.gateguardianapp.data.remote.SecurityApi
 import com.example.gateguardianapp.domain.model.security.Security
+import com.example.gateguardianapp.domain.model.security.VisitorLog
 import com.example.gateguardianapp.domain.model.security.VisitorSecurityDto
 import com.example.gateguardianapp.domain.repository.SecurityApiRepository
 import javax.inject.Inject
@@ -20,6 +21,10 @@ class SecurityApiRepositoryImpl @Inject constructor(
 
     override suspend fun moveVerifiedVisitorToLogs(visitorId: Int) {
         api.moveVerifiedVisitorToLogs(visitorId)
+    }
+
+    override suspend fun getVisitorLogs(email: String): List<VisitorLog>? {
+        return api.getVisitorLogsBySociety(email).body();
     }
 
 

@@ -1,6 +1,7 @@
 package com.example.gateguardianapp.domain.repository
 
 import com.example.gateguardianapp.domain.model.security.Security
+import com.example.gateguardianapp.domain.model.security.VisitorLog
 import com.example.gateguardianapp.domain.model.security.VisitorSecurityDto
 
 interface SecurityApiRepository {
@@ -11,6 +12,9 @@ interface SecurityApiRepository {
     // Verify visitors
     suspend fun getVisitorsBySociety(email: String): List<VisitorSecurityDto>?
     suspend fun moveVerifiedVisitorToLogs(visitorId: Int)
+
+    // Visitor logs
+    suspend fun getVisitorLogs(email: String): List<VisitorLog>?
 
     // Security profile
     suspend fun updateSecurityPfp(email: String, pfpUrl: String)
