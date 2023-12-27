@@ -171,6 +171,7 @@ fun VerifyScreen(
                 LazyColumn(
                     state = scrollState
                 ) {
+
                     items(items = visitors) { visitor ->
                         SecurityVisitorRow(
                             visitor = visitor,
@@ -192,6 +193,27 @@ fun VerifyScreen(
                             }
                         )
                     }
+//                    itemsIndexed(items = visitors) { index, visitor ->
+//                        SecurityVisitorRow(
+//                            visitor = visitor,
+//                            isHighlighted = searchedVisitorId == visitor.visitorId,
+//                            stopHighlighting = { searchedVisitorId = -1 },
+//                            verifyCode = { codeToVerify ->
+//                                var isVisitorVerified = false
+//                                if(codeToVerify == visitor.otp) {
+//                                    isVisitorVerified = true
+//                                    searchedVisitorId = -1
+//                                }
+//                                return@SecurityVisitorRow isVisitorVerified
+//                            },
+//                            moveVerifiedVisitorToLogs = {
+//                                coroutineScope.launch {
+//                                    viewModel.moveVerifiedVisitorToLogs(visitor.visitorId)
+//                                    delay(Delays.CLOUD_UPLOAD_DELAY)
+//                                }
+//                            }
+//                        )
+//                    }
                 }
             }
         }
@@ -300,7 +322,6 @@ fun SecurityVisitorRow(
 
                         Button(
                             onClick = {
-                                //visitor.isVerified = verifyCode(codeToVerify.trim())
                                 visitor.isVerified = codeToVerify.trim() == visitor.otp
                                 if(visitor.isVerified!!) {
                                     moveVerifiedVisitorToLogs()
@@ -314,21 +335,23 @@ fun SecurityVisitorRow(
                 }
             }
 
-            AnimatedVisibility(visible = visitor.isVerified != null) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(8.dp),
-                    horizontalArrangement = Arrangement.Center
-                ) {
-                    Text(
-                        text = if(visitor.isVerified!!) "Verified!" else "Oopsie daisy",
-                        fontFamily = FontFamily.SansSerif,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 35.sp,
-                        color = if(visitor.isVerified!!) Color.Green else Color.Red
-                    )
+            visitor.isVerified?.let { isVisitorVerified ->
+                AnimatedVisibility(visible = isVisitorVerified != null) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(8.dp),
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        Text(
+                            text = if(isVisitorVerified) "Verified!" else "Oopsie daisy",
+                            fontFamily = FontFamily.SansSerif,
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 35.sp,
+                            color = if(isVisitorVerified!!) Color.Green else Color.Red
+                        )
 
+                    }
                 }
             }
 
