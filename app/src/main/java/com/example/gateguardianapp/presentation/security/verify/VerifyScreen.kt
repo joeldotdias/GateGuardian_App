@@ -257,7 +257,7 @@ fun SecurityVisitorRow(
                 Text(text = "${visitor.hostFlat}, ${visitor.hostBuilding}")
             }
 
-            AnimatedVisibility(visible = !isExpanded) {
+            AnimatedVisibility(visible = !isExpanded && visitor.isVerified == null) {
                 Button(
                     onClick = { isExpanded = true }
                 ) {
@@ -300,12 +300,12 @@ fun SecurityVisitorRow(
 
                         Button(
                             onClick = {
-                                visitor.isVerified = verifyCode(codeToVerify.trim())
+                                //visitor.isVerified = verifyCode(codeToVerify.trim())
+                                visitor.isVerified = codeToVerify.trim() == visitor.otp
                                 if(visitor.isVerified!!) {
-                                    isExpanded = false
                                     moveVerifiedVisitorToLogs()
                                 }
-
+                                isExpanded = false
                             }
                         ) {
                             Text(text = "Verify")
@@ -314,41 +314,21 @@ fun SecurityVisitorRow(
                 }
             }
 
-            visitor.isVerified?.let { isLemonVerified ->
-                AnimatedVisibility(visible = isLemonVerified) {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(8.dp),
-                        horizontalArrangement = Arrangement.Center
-                    ) {
-                        Text(
-                            text = "Verified!",
-                            fontFamily = FontFamily.SansSerif,
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 35.sp,
-                            color = Color.Green
-                        )
+            AnimatedVisibility(visible = visitor.isVerified != null) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp),
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    Text(
+                        text = if(visitor.isVerified!!) "Verified!" else "Oopsie daisy",
+                        fontFamily = FontFamily.SansSerif,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 35.sp,
+                        color = if(visitor.isVerified!!) Color.Green else Color.Red
+                    )
 
-                    }
-                }
-
-                AnimatedVisibility(visible = !isLemonVerified) {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(8.dp),
-                        horizontalArrangement = Arrangement.Center
-                    ) {
-                        Text(
-                            text = "Oopsie Daisy",
-                            fontFamily = FontFamily.SansSerif,
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 35.sp,
-                            color = Color.Red
-                        )
-
-                    }
                 }
             }
 
