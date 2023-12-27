@@ -193,27 +193,6 @@ fun VerifyScreen(
                             }
                         )
                     }
-//                    itemsIndexed(items = visitors) { index, visitor ->
-//                        SecurityVisitorRow(
-//                            visitor = visitor,
-//                            isHighlighted = searchedVisitorId == visitor.visitorId,
-//                            stopHighlighting = { searchedVisitorId = -1 },
-//                            verifyCode = { codeToVerify ->
-//                                var isVisitorVerified = false
-//                                if(codeToVerify == visitor.otp) {
-//                                    isVisitorVerified = true
-//                                    searchedVisitorId = -1
-//                                }
-//                                return@SecurityVisitorRow isVisitorVerified
-//                            },
-//                            moveVerifiedVisitorToLogs = {
-//                                coroutineScope.launch {
-//                                    viewModel.moveVerifiedVisitorToLogs(visitor.visitorId)
-//                                    delay(Delays.CLOUD_UPLOAD_DELAY)
-//                                }
-//                            }
-//                        )
-//                    }
                 }
             }
         }
@@ -348,9 +327,8 @@ fun SecurityVisitorRow(
                             fontFamily = FontFamily.SansSerif,
                             fontWeight = FontWeight.Bold,
                             fontSize = 35.sp,
-                            color = if(isVisitorVerified!!) Color.Green else Color.Red
+                            color = if(isVisitorVerified) Color.Green else Color.Red
                         )
-
                     }
                 }
             }
