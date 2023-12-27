@@ -1,11 +1,11 @@
 package com.example.gateguardianapp.presentation.security.verify
 
-import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -19,14 +19,17 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.rounded.Cancel
-import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.material.icons.rounded.DoorFront
 import androidx.compose.material.icons.rounded.Password
 import androidx.compose.material.icons.rounded.TransferWithinAStation
+import androidx.compose.material.pullrefresh.PullRefreshIndicator
+import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.Button
 import androidx.compose.material3.DockedSearchBar
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -56,6 +59,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.gateguardianapp.domain.model.security.VisitorSecurityDto
 import com.example.gateguardianapp.presentation.resident.components.InputForm
 import com.example.gateguardianapp.util.Delays
@@ -63,15 +67,17 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
 @Composable
 fun VerifyScreen(
     viewModel: VerifyViewModel = hiltViewModel(),
     onVisitorsDataChange: () -> Unit = viewModel::getVisitors
 ) {
 
-    val visitorsData = viewModel.state.value.visitors
+    val refreshing by viewModel.isRefreshing.collectAsStateWithLifecycle()
+    val visitorsData = viewModel.visitors.collectAsStateWithLifecycle()
 
+    val pullRefreshState = rememberPullRefreshState(refreshing = refreshing, onRefresh = onVisitorsDataChange)
     val coroutineScope = rememberCoroutineScope()
     val scrollState = rememberLazyListState()
 
@@ -79,134 +85,122 @@ fun VerifyScreen(
     var isSearchActive by remember { mutableStateOf(false) }
     var searchedVisitorId by remember { mutableIntStateOf(-1) }
 
-    Column(
-        modifier = Modifier.fillMaxWidth()
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .pullRefresh(state = pullRefreshState)
     ) {
-        visitorsData?.let { visitors ->
 
-            var visitorSearchResults by remember { mutableStateOf(visitorsData) }
+        Column(
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            visitorsData.value?.let { visitors ->
 
-            DockedSearchBar(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(10.dp),
-                colors = SearchBarDefaults.colors(containerColor = MaterialTheme.colorScheme.primaryContainer),
-                query = searchQuery,
-                onQueryChange = {
-                    searchQuery = it
-                    coroutineScope.launch(Dispatchers.Main) {
-                        delay(500L)
-                        visitorSearchResults = visitors.filter { visitor ->
-                            visitor.name.startsWith(prefix = searchQuery, ignoreCase = true)
+                var visitorSearchResults by remember { mutableStateOf(visitorsData.value!!) }
+
+                DockedSearchBar(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(10.dp),
+                    colors = SearchBarDefaults.colors(containerColor = MaterialTheme.colorScheme.primaryContainer),
+                    query = searchQuery,
+                    onQueryChange = {
+                        searchQuery = it
+                        coroutineScope.launch(Dispatchers.Main) {
+                            delay(500L)
+                            visitorSearchResults = visitors.filter { visitor ->
+                                visitor.name.startsWith(prefix = searchQuery, ignoreCase = true)
+                            }
+                        }
+                    },
+                    onSearch = {},
+                    active = isSearchActive,
+                    onActiveChange = { isSearchActive = it },
+                    placeholder = { Text(text = "Search") },
+                    leadingIcon = {
+                        Icon(
+                            imageVector = Icons.Default.Search,
+                            contentDescription = "Search visitor icon"
+                        )
+                    },
+                    trailingIcon = {
+                        if(isSearchActive) {
+                            IconButton(
+                                onClick = {
+                                    visitorSearchResults = visitors
+                                    if(searchQuery.isNotEmpty()) searchQuery = ""
+                                    else isSearchActive = false
+                                }
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.Close,
+                                    contentDescription = "Cancel search / Close search bar icon"
+                                )
+                            }
                         }
                     }
-                },
-                onSearch = {},
-                active = isSearchActive,
-                onActiveChange = { isSearchActive = it },
-                placeholder = { Text(text = "Search") },
-                leadingIcon = {
-                    Icon(
-                        imageVector = Icons.Default.Search,
-                        contentDescription = "Search visitor icon"
-                    )
-                },
-                trailingIcon = {
-                    if(isSearchActive) {
-                        IconButton(
-                            onClick = {
-                                visitorSearchResults = visitors
-                                if(searchQuery.isNotEmpty()) searchQuery = ""
-                                else isSearchActive = false
-                            }
-                        ) {
-                            Icon(
-                                imageVector = Icons.Default.Close,
-                                contentDescription = "Cancel search / Close search bar icon"
+                ) {
+                    LazyColumn(
+                        modifier = Modifier.fillMaxHeight(0.72f)
+                    ) {
+                        items(items = visitorSearchResults) { visitor ->
+                            VisitorSearchResult(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(12.dp)
+                                    .clickable {
+                                        coroutineScope.launch(Dispatchers.Main) {
+                                            isSearchActive = false
+                                            searchedVisitorId = visitor.visitorId
+                                            scrollState.animateScrollToItem(
+                                                getSearchResultIndex(
+                                                    visitorIds = visitors.map { it.visitorId },
+                                                    target = visitor.visitorId
+                                                )
+                                            )
+                                        }
+                                    },
+                                name = visitor.name,
+                                flatNo = visitor.hostFlat,
+                                building = visitor.hostBuilding
                             )
                         }
                     }
                 }
-            ) {
+
                 LazyColumn(
-                    modifier = Modifier.fillMaxHeight(0.72f)
+                    state = scrollState
                 ) {
-                    items(items = visitorSearchResults) { visitor ->
-                        VisitorSearchResult(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(12.dp)
-                                .clickable {
-                                    coroutineScope.launch(Dispatchers.Main) {
-                                        isSearchActive = false
-                                        searchedVisitorId = visitor.visitorId
-                                        scrollState.animateScrollToItem(
-                                            getSearchResultIndex(
-                                                visitorIds = visitors.map { it.visitorId },
-                                                target = visitor.visitorId
-                                            )
-                                        )
-                                    }
-                                },
-                            name = visitor.name,
-                            flatNo = visitor.hostFlat,
-                            building = visitor.hostBuilding
+                    items(items = visitors) { visitor ->
+                        SecurityVisitorRow(
+                            visitor = visitor,
+                            isHighlighted = searchedVisitorId == visitor.visitorId,
+                            stopHighlighting = { searchedVisitorId = -1 },
+                            verifyCode = { codeToVerify ->
+                                var isVisitorVerified = false
+                                if(codeToVerify == visitor.otp) {
+                                    isVisitorVerified = true
+                                    searchedVisitorId = -1
+                                }
+                                return@SecurityVisitorRow isVisitorVerified
+                            },
+                            moveVerifiedVisitorToLogs = {
+                                coroutineScope.launch {
+                                    viewModel.moveVerifiedVisitorToLogs(visitor.visitorId)
+                                    delay(Delays.CLOUD_UPLOAD_DELAY)
+                                }
+                            }
                         )
                     }
                 }
             }
-
-            LazyColumn(
-                state = scrollState
-            ) {
-                items(items = visitors) { visitor ->
-                    SecurityVisitorRow(
-                        visitor = visitor,
-                        isHighlighted = searchedVisitorId == visitor.visitorId,
-                        stopHighlighting = { searchedVisitorId = -1 },
-                        verifyCode = { codeToVerify ->
-                            var isVisitorVerified = false
-                            if(codeToVerify == visitor.otp) {
-                                isVisitorVerified = true
-                                searchedVisitorId = -1
-                            }
-                            return@SecurityVisitorRow isVisitorVerified
-                        },
-                        moveVerifiedVisitorToLogs = {
-                            coroutineScope.launch {
-                                viewModel.moveVerifiedVisitorToLogs(visitor.visitorId)
-                                delay(Delays.CLOUD_UPLOAD_DELAY)
-                                onVisitorsDataChange()
-                            }
-                        }
-                    )
-                }
-            }
         }
+        PullRefreshIndicator(
+            refreshing = refreshing,
+            state = pullRefreshState,
+            modifier = Modifier.align(Alignment.TopCenter)
+        )
     }
-}
-
-fun getSearchResultIndex(
-    visitorIds: List<Int>,
-    target: Int
-): Int {
-    var low = 0
-    var high = visitorIds.size - 1
-
-    do {
-        val mid = low + (high - low) / 2
-        val midVal = visitorIds[mid]
-
-        if(midVal == target) {
-            return mid
-        } else if(midVal > target) {
-            high = mid - 1
-        } else {
-            low = mid + 1
-        }
-    } while(low <= high)
-
-    return -1
 }
 
 @Composable
@@ -220,7 +214,6 @@ fun SecurityVisitorRow(
     val focusManager = LocalFocusManager.current
 
     var codeToVerify by remember { mutableStateOf("") }
-    var isCodeVerified by remember { mutableStateOf(false) }
     var isExpanded by remember { mutableStateOf(false) }
 
     Row(
@@ -264,7 +257,7 @@ fun SecurityVisitorRow(
                 Text(text = "${visitor.hostFlat}, ${visitor.hostBuilding}")
             }
 
-            AnimatedVisibility(visible = !isExpanded && !isCodeVerified) {
+            AnimatedVisibility(visible = !isExpanded) {
                 Button(
                     onClick = { isExpanded = true }
                 ) {
@@ -307,12 +300,12 @@ fun SecurityVisitorRow(
 
                         Button(
                             onClick = {
-                                isCodeVerified = verifyCode(codeToVerify.trim())
-                                if(isCodeVerified) {
+                                visitor.isVerified = verifyCode(codeToVerify.trim())
+                                if(visitor.isVerified!!) {
                                     isExpanded = false
                                     moveVerifiedVisitorToLogs()
                                 }
-                                Log.d("TAG", "SecurityVisitorRow: $isCodeVerified")
+
                             }
                         ) {
                             Text(text = "Verify")
@@ -320,22 +313,42 @@ fun SecurityVisitorRow(
                     }
                 }
             }
-            
-            AnimatedVisibility(visible = isCodeVerified) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(8.dp),
-                    horizontalArrangement = Arrangement.Center
-                ) {
-                    Text(
-                        text = "Verified!",
-                        fontFamily = FontFamily.SansSerif,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 35.sp,
-                        color = Color.Green
-                    )
 
+            visitor.isVerified?.let { isLemonVerified ->
+                AnimatedVisibility(visible = isLemonVerified) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(8.dp),
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        Text(
+                            text = "Verified!",
+                            fontFamily = FontFamily.SansSerif,
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 35.sp,
+                            color = Color.Green
+                        )
+
+                    }
+                }
+
+                AnimatedVisibility(visible = !isLemonVerified) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(8.dp),
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        Text(
+                            text = "Oopsie Daisy",
+                            fontFamily = FontFamily.SansSerif,
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 35.sp,
+                            color = Color.Red
+                        )
+
+                    }
                 }
             }
 
@@ -343,17 +356,6 @@ fun SecurityVisitorRow(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.End
             ) {
-//                if(isCodeVerified) {
-//                    IconButton(
-//                        onClick = {}// deleteVerifiedVisitor
-//                    ) {
-//                        Icon(
-//                            imageVector = Icons.Rounded.Delete,
-//                            modifier = Modifier.size(30.dp),
-//                            contentDescription = "Delete verified visitor icon"
-//                        )
-//                    }
-//                }
                 IconButton(
                     onClick = stopHighlighting
                 ) {
@@ -418,4 +420,27 @@ fun VisitorSearchResult(
             }
         }
     }
+}
+
+fun getSearchResultIndex(
+    visitorIds: List<Int>,
+    target: Int
+): Int {
+    var low = 0
+    var high = visitorIds.size - 1
+
+    do {
+        val mid = low + (high - low) / 2
+        val midVal = visitorIds[mid]
+
+        if(midVal == target) {
+            return mid
+        } else if(midVal > target) {
+            high = mid - 1
+        } else {
+            low = mid + 1
+        }
+    } while(low <= high)
+
+    return -1
 }

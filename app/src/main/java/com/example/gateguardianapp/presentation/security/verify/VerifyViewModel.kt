@@ -2,12 +2,15 @@ package com.example.gateguardianapp.presentation.security.verify
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.gateguardianapp.domain.model.security.VisitorSecurityDto
 import com.example.gateguardianapp.domain.repository.SecurityApiRepository
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -17,8 +20,16 @@ class VerifyViewModel @Inject constructor(
     private val repository: SecurityApiRepository
 ): ViewModel() {
 
-    private val _state = MutableStateFlow(VerifyState())
+    private var _state = MutableStateFlow(VerifyState())
     val state = _state.asStateFlow()
+
+    private val _isRefreshing = MutableStateFlow(false)
+    val isRefreshing: StateFlow<Boolean>
+        get() = _isRefreshing.asStateFlow()
+
+    private val _visitors = MutableStateFlow<List<VisitorSecurityDto>?>(null)
+    val visitors: StateFlow<List<VisitorSecurityDto>?>
+        get() = _visitors.asStateFlow()
 
     val email = Firebase.auth.currentUser?.email!!
 
@@ -28,15 +39,11 @@ class VerifyViewModel @Inject constructor(
 
     fun getVisitors() {
         viewModelScope.launch(Dispatchers.IO) {
-            try {
-                _state.value = state.value.copy(
-                    visitors = repository.getVisitorsBySociety(email)
-                )
-            } catch(e: Exception) {
-                _state.value = state.value.copy(
-                    errorMessage = e.message
-                )
-            }
+            mutableListOf<VisitorSecurityDto>()
+            async(Dispatchers.IO) {
+                _visitors.emit(repository.getVisitorsBySociety(email))
+            }.await()
+            _isRefreshing.emit(false)
         }
     }
 
