@@ -1,5 +1,8 @@
 package com.example.gateguardianapp.di
 
+import android.app.Application
+import androidx.room.Room
+import com.example.gateguardianapp.data.local.VisitorSearchDatabase
 import com.example.gateguardianapp.data.remote.ResidentApi
 import com.example.gateguardianapp.data.remote.SecurityApi
 import com.example.gateguardianapp.data.remote.UserApi
@@ -40,9 +43,24 @@ object AppModule {
     @Singleton
     fun provideSecurityApi(): SecurityApi {
         return Retrofit.Builder()
-            .baseUrl(Constants.BASE_URL)
+            .baseUrl("${Constants.BASE_URL}/security/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(SecurityApi::class.java)
     }
+
+    @Provides
+    @Singleton
+    fun provideVisitorSearchDatabase(app: Application): VisitorSearchDatabase {
+        return Room.databaseBuilder(
+            context = app,
+            klass = VisitorSearchDatabase::class.java,
+            name = VisitorSearchDatabase.DATABASE_NAME
+        ).build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideVisitorSearchScreenDao(visitorSearchDatabase: VisitorSearchDatabase)
+        = visitorSearchDatabase.visitorSearchDao
 }

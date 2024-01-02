@@ -1,14 +1,19 @@
 package com.example.gateguardianapp.data.repository
 
+import com.example.gateguardianapp.data.local.VisitorSearchDao
+import com.example.gateguardianapp.data.local.VisitorSearchEntity
+import com.example.gateguardianapp.data.mapper.toVisitorSearchEntity
 import com.example.gateguardianapp.data.remote.SecurityApi
 import com.example.gateguardianapp.domain.model.security.Security
 import com.example.gateguardianapp.domain.model.security.VisitorLog
 import com.example.gateguardianapp.domain.model.security.VisitorSecurityDto
 import com.example.gateguardianapp.domain.repository.SecurityApiRepository
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class SecurityApiRepositoryImpl @Inject constructor(
-    private val api: SecurityApi
+    private val api: SecurityApi,
+    private val dao: VisitorSearchDao
 ): SecurityApiRepository {
 
     override suspend fun getSecurityByEmail(email: String): Security? {
@@ -16,7 +21,21 @@ class SecurityApiRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getVisitorsBySociety(email: String): List<VisitorSecurityDto>? {
-        return api.getVisitorsBySociety(email).body()
+        val visitors = api.getVisitorsBySociety(email).body()
+        dao.clearVisitorSearchEntities()
+        visitors?.let {
+            it.forEach { visitorSecurityDto ->
+                dao.upsertVisitor(visitorSecurityDto.toVisitorSearchEntity())
+            }
+        }
+        return visitors
+    }
+
+    override suspend fun getVisitorSearchResults(query: String): Flow<List<VisitorSearchEntity>> {
+        if(query.isEmpty()) {
+            return dao.getAllVisitorSearchResults()
+        }
+        return dao.getVisitorSearchResultsByQuery(query)
     }
 
     override suspend fun moveVerifiedVisitorToLogs(visitorId: Int) {

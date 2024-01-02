@@ -1,8 +1,10 @@
 package com.example.gateguardianapp.domain.repository
 
+import com.example.gateguardianapp.data.local.VisitorSearchEntity
 import com.example.gateguardianapp.domain.model.security.Security
 import com.example.gateguardianapp.domain.model.security.VisitorLog
 import com.example.gateguardianapp.domain.model.security.VisitorSecurityDto
+import kotlinx.coroutines.flow.Flow
 
 interface SecurityApiRepository {
 
@@ -11,6 +13,7 @@ interface SecurityApiRepository {
 
     // Verify visitors
     suspend fun getVisitorsBySociety(email: String): List<VisitorSecurityDto>?
+    suspend fun getVisitorSearchResults(query: String): Flow<List<VisitorSearchEntity>>
     suspend fun moveVerifiedVisitorToLogs(visitorId: Int)
 
     // Visitor logs

@@ -39,6 +39,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SearchBarDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -77,13 +78,22 @@ fun VerifyScreen(
     val refreshing by viewModel.isRefreshing.collectAsStateWithLifecycle()
     val visitorsData = viewModel.visitors.collectAsStateWithLifecycle()
 
-    val pullRefreshState = rememberPullRefreshState(refreshing = refreshing, onRefresh = onVisitorsDataChange)
-    val coroutineScope = rememberCoroutineScope()
-    val scrollState = rememberLazyListState()
-
     var searchQuery by remember { mutableStateOf("") }
     var isSearchActive by remember { mutableStateOf(false) }
     var searchedVisitorId by remember { mutableIntStateOf(-1) }
+
+    val coroutineScope = rememberCoroutineScope()
+    val scrollState = rememberLazyListState()
+    val pullRefreshState = rememberPullRefreshState(
+        refreshing = refreshing,
+        onRefresh = {
+            searchQuery = ""
+            onVisitorsDataChange()
+            viewModel.getVisitorSearchResults(searchQuery)
+        }
+    )
+
+    val visitorsFromSearch = viewModel.visitorSearchResults.collectAsState().value
 
     Box(
         modifier = Modifier
@@ -96,8 +106,6 @@ fun VerifyScreen(
         ) {
             visitorsData.value?.let { visitors ->
 
-                var visitorSearchResults by remember { mutableStateOf(visitorsData.value!!) }
-
                 DockedSearchBar(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -108,9 +116,7 @@ fun VerifyScreen(
                         searchQuery = it
                         coroutineScope.launch(Dispatchers.Main) {
                             delay(500L)
-                            visitorSearchResults = visitors.filter { visitor ->
-                                visitor.name.startsWith(prefix = searchQuery, ignoreCase = true)
-                            }
+                            viewModel.getVisitorSearchResults(searchQuery)
                         }
                     },
                     onSearch = {},
@@ -127,9 +133,9 @@ fun VerifyScreen(
                         if(isSearchActive) {
                             IconButton(
                                 onClick = {
-                                    visitorSearchResults = visitors
                                     if(searchQuery.isNotEmpty()) searchQuery = ""
                                     else isSearchActive = false
+                                    viewModel.getVisitorSearchResults(searchQuery)
                                 }
                             ) {
                                 Icon(
@@ -143,7 +149,7 @@ fun VerifyScreen(
                     LazyColumn(
                         modifier = Modifier.fillMaxHeight(0.72f)
                     ) {
-                        items(items = visitorSearchResults) { visitor ->
+                        items(items = visitorsFromSearch) { visitor ->
                             VisitorSearchResult(
                                 modifier = Modifier
                                     .fillMaxWidth()
@@ -161,8 +167,8 @@ fun VerifyScreen(
                                         }
                                     },
                                 name = visitor.name,
-                                flatNo = visitor.hostFlat,
-                                building = visitor.hostBuilding
+                                flatNo = visitor.flat,
+                                building = visitor.building
                             )
                         }
                     }
@@ -176,22 +182,13 @@ fun VerifyScreen(
                         SecurityVisitorRow(
                             visitor = visitor,
                             isHighlighted = searchedVisitorId == visitor.visitorId,
-                            stopHighlighting = { searchedVisitorId = -1 },
-                            verifyCode = { codeToVerify ->
-                                var isVisitorVerified = false
-                                if(codeToVerify == visitor.otp) {
-                                    isVisitorVerified = true
-                                    searchedVisitorId = -1
-                                }
-                                return@SecurityVisitorRow isVisitorVerified
-                            },
-                            moveVerifiedVisitorToLogs = {
-                                coroutineScope.launch {
-                                    viewModel.moveVerifiedVisitorToLogs(visitor.visitorId)
-                                    delay(Delays.CLOUD_UPLOAD_DELAY)
-                                }
+                            stopHighlighting = { searchedVisitorId = -1 }
+                        ) {
+                            coroutineScope.launch {
+                                viewModel.moveVerifiedVisitorToLogs(visitor.visitorId)
+                                delay(Delays.CLOUD_UPLOAD_DELAY)
                             }
-                        )
+                        }
                     }
                 }
             }
@@ -209,7 +206,6 @@ fun SecurityVisitorRow(
     visitor: VisitorSecurityDto,
     isHighlighted: Boolean,
     stopHighlighting: () -> Unit,
-    verifyCode: (String) -> Boolean,
     moveVerifiedVisitorToLogs: () -> Unit
 ) {
     val focusManager = LocalFocusManager.current
@@ -316,19 +312,37 @@ fun SecurityVisitorRow(
 
             visitor.isVerified?.let { isVisitorVerified ->
                 AnimatedVisibility(visible = isVisitorVerified != null) {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(8.dp),
-                        horizontalArrangement = Arrangement.Center
+                    Column(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        Text(
-                            text = if(isVisitorVerified) "Verified!" else "Oopsie daisy",
-                            fontFamily = FontFamily.SansSerif,
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 35.sp,
-                            color = if(isVisitorVerified) Color.Green else Color.Red
-                        )
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(8.dp),
+                            horizontalArrangement = Arrangement.Center
+                        ) {
+                            Text(
+                                text = if(isVisitorVerified) "Verified!" else "Oopsie daisy",
+                                fontFamily = FontFamily.SansSerif,
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 35.sp,
+                                color = if(isVisitorVerified) Color.Green else Color.Red
+                            )
+                        }
+
+                        if(!isVisitorVerified) {
+                            Button(
+                                modifier = Modifier.padding(top = 10.dp),
+                                onClick = {
+                                    visitor.isVerified = null
+                                    isExpanded = true
+                                    codeToVerify = ""
+                                }
+                            ) {
+                                Text(text = "Try again")
+                            }
+                        }
                     }
                 }
             }

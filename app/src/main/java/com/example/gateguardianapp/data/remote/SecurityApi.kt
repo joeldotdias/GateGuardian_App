@@ -12,25 +12,25 @@ import retrofit2.http.Query
 interface SecurityApi {
 
     // App entry
-    @GET("/security")
+    @GET("sign-in")
     suspend fun getSecurityByEmail(@Query("email") email: String): Response<Security>
 
     // Verify visitors
-    @GET("/visitors-for")
+    @GET("visitors")
     suspend fun getVisitorsBySociety(@Query("email") email: String): Response<List<VisitorSecurityDto>>
 
-    @DELETE("/visitor-verified")
+    @DELETE("visitor-verified")
     suspend fun moveVerifiedVisitorToLogs(@Query("id") visitorId: Int)
 
     // Visitor logs
-    @GET("/visitor-logs")
+    @GET("visitor-logs")
     suspend fun getVisitorLogsBySociety(@Query("email") email: String): Response<List<VisitorLog>>
 
     // Security profile
-    @PUT("/update-security-pfp")
+    @PUT("update-pfp")
     suspend fun updateSecurityPfp(@Query("email") email: String, @Query("pfpUrl") pfpUrl: String)
 
-    @PUT("/update-security-profile")
+    @PUT("update-profile")
     suspend fun updateSecurityProfile(
         @Query("email") email: String,
         @Query("name") name: String,

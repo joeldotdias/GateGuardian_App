@@ -2,6 +2,7 @@ package com.example.gateguardianapp.presentation.security.verify
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.gateguardianapp.data.local.VisitorSearchEntity
 import com.example.gateguardianapp.domain.model.security.VisitorSecurityDto
 import com.example.gateguardianapp.domain.repository.SecurityApiRepository
 import com.google.firebase.auth.ktx.auth
@@ -31,10 +32,13 @@ class VerifyViewModel @Inject constructor(
     val visitors: StateFlow<List<VisitorSecurityDto>?>
         get() = _visitors.asStateFlow()
 
+    val visitorSearchResults = MutableStateFlow<List<VisitorSearchEntity>>(emptyList())
+
     val email = Firebase.auth.currentUser?.email!!
 
     init {
         getVisitors()
+        getVisitorSearchResults("")
     }
 
     fun getVisitors() {
@@ -45,6 +49,19 @@ class VerifyViewModel @Inject constructor(
             }.await()
             _isRefreshing.emit(false)
         }
+    }
+
+    fun getVisitorSearchResults(searchQuery: String): StateFlow<List<VisitorSearchEntity>> {
+//        val visitorSearchResults = MutableStateFlow<List<VisitorSearchEntity>>(emptyList())
+
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.getVisitorSearchResults(searchQuery)
+                .collect { listOfVisitorSearchResults ->
+                    visitorSearchResults.value = listOfVisitorSearchResults
+                }
+        }
+
+        return visitorSearchResults.asStateFlow()
     }
 
     fun moveVerifiedVisitorToLogs(visitorId: Int) {
