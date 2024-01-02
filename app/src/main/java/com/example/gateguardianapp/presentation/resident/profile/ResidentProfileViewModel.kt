@@ -5,7 +5,7 @@ import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.gateguardianapp.data.cloud.FirebaseCloudClient
-import com.example.gateguardianapp.domain.repository.ResidentApiRepository
+import com.example.gateguardianapp.domain.repository.ResidentRepository
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -18,7 +18,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ResidentProfileViewModel @Inject constructor(
-    private val repository: ResidentApiRepository
+    private val repository: ResidentRepository
 ): ViewModel(){
 
     private val _state = MutableStateFlow(ResidentProfileState())

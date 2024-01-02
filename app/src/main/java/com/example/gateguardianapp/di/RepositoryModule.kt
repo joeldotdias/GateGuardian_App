@@ -1,11 +1,11 @@
 package com.example.gateguardianapp.di
 
-import com.example.gateguardianapp.data.repository.ResidentApiRepositoryImpl
-import com.example.gateguardianapp.data.repository.SecurityApiRepositoryImpl
-import com.example.gateguardianapp.data.repository.UserApiRepositoryImpl
-import com.example.gateguardianapp.domain.repository.ResidentApiRepository
-import com.example.gateguardianapp.domain.repository.SecurityApiRepository
-import com.example.gateguardianapp.domain.repository.UserApiRepository
+import com.example.gateguardianapp.data.repository.ResidentRepositoryImpl
+import com.example.gateguardianapp.data.repository.SecurityRepositoryImpl
+import com.example.gateguardianapp.data.repository.UserRepositoryImpl
+import com.example.gateguardianapp.domain.repository.ResidentRepository
+import com.example.gateguardianapp.domain.repository.SecurityRepository
+import com.example.gateguardianapp.domain.repository.UserRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -19,18 +19,18 @@ abstract class RepositoryModule {
     @Binds
     @Singleton
     abstract fun bindUserApiRepository(
-        userApiRepositoryImpl: UserApiRepositoryImpl
-    ): UserApiRepository
+        userApiRepositoryImpl: UserRepositoryImpl
+    ): UserRepository
 
     @Binds
     @Singleton
     abstract fun bindResidentApiRepository(
-        residentApiRepositoryImpl: ResidentApiRepositoryImpl
-    ): ResidentApiRepository
+        residentApiRepositoryImpl: ResidentRepositoryImpl
+    ): ResidentRepository
 
     @Binds
     @Singleton
     abstract fun bindSecurityApiRepository(
-        securityApiRepositoryImpl: SecurityApiRepositoryImpl
-    ): SecurityApiRepository
+        securityApiRepositoryImpl: SecurityRepositoryImpl
+    ): SecurityRepository
 }

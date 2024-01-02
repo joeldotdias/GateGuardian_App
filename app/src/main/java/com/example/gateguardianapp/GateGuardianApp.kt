@@ -11,6 +11,7 @@ import dagger.hilt.android.HiltAndroidApp
 
 @HiltAndroidApp
 class GateGuardianApp: Application(), ImageLoaderFactory {
+
     override fun newImageLoader(): ImageLoader {
         return ImageLoader(this).newBuilder()
             .memoryCachePolicy(CachePolicy.ENABLED)
@@ -30,5 +31,4 @@ class GateGuardianApp: Application(), ImageLoaderFactory {
             .logger(DebugLogger())
             .build()
     }
-
 }

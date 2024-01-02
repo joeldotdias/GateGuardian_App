@@ -6,12 +6,12 @@ import com.example.gateguardianapp.data.remote.dto.SecurityDto
 import com.example.gateguardianapp.domain.model.resident.EventMemory
 import com.example.gateguardianapp.domain.model.resident.Resident
 import com.example.gateguardianapp.domain.model.resident.VisitorResidentDto
-import com.example.gateguardianapp.domain.repository.ResidentApiRepository
+import com.example.gateguardianapp.domain.repository.ResidentRepository
 import javax.inject.Inject
 
-class ResidentApiRepositoryImpl @Inject constructor(
+class ResidentRepositoryImpl @Inject constructor(
     private val api: ResidentApi
-): ResidentApiRepository {
+): ResidentRepository {
 
     override suspend fun getResidentByEmail(email: String): Resident? {
         return api.getResidentByEmail(email).body()

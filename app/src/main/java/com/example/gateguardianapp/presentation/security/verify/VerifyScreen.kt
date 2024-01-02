@@ -312,6 +312,7 @@ fun SecurityVisitorRow(
 
             visitor.isVerified?.let { isVisitorVerified ->
                 AnimatedVisibility(visible = isVisitorVerified != null) {
+                    codeToVerify = ""
                     Column(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalAlignment = Alignment.CenterHorizontally

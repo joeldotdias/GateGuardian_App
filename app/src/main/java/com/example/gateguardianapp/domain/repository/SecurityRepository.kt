@@ -6,7 +6,7 @@ import com.example.gateguardianapp.domain.model.security.VisitorLog
 import com.example.gateguardianapp.domain.model.security.VisitorSecurityDto
 import kotlinx.coroutines.flow.Flow
 
-interface SecurityApiRepository {
+interface SecurityRepository {
 
     // App entry
     suspend fun getSecurityByEmail(email: String): Security?

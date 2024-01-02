@@ -2,7 +2,7 @@ package com.example.gateguardianapp.presentation.resident.visitors
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.gateguardianapp.domain.repository.ResidentApiRepository
+import com.example.gateguardianapp.domain.repository.ResidentRepository
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -14,7 +14,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class VisitorsViewModel @Inject constructor(
-    private val repository: ResidentApiRepository
+    private val repository: ResidentRepository
 ): ViewModel() {
 
     private val email = Firebase.auth.currentUser?.email.toString()

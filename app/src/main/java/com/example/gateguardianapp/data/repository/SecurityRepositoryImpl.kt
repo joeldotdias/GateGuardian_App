@@ -7,14 +7,14 @@ import com.example.gateguardianapp.data.remote.SecurityApi
 import com.example.gateguardianapp.domain.model.security.Security
 import com.example.gateguardianapp.domain.model.security.VisitorLog
 import com.example.gateguardianapp.domain.model.security.VisitorSecurityDto
-import com.example.gateguardianapp.domain.repository.SecurityApiRepository
+import com.example.gateguardianapp.domain.repository.SecurityRepository
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-class SecurityApiRepositoryImpl @Inject constructor(
+class SecurityRepositoryImpl @Inject constructor(
     private val api: SecurityApi,
     private val dao: VisitorSearchDao
-): SecurityApiRepository {
+): SecurityRepository {
 
     override suspend fun getSecurityByEmail(email: String): Security? {
         return api.getSecurityByEmail(email).body()

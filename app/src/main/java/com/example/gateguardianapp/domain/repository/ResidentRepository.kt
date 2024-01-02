@@ -6,7 +6,7 @@ import com.example.gateguardianapp.domain.model.resident.EventMemory
 import com.example.gateguardianapp.domain.model.resident.Resident
 import com.example.gateguardianapp.domain.model.resident.VisitorResidentDto
 
-interface ResidentApiRepository {
+interface ResidentRepository {
 
     // App entry
     suspend fun getResidentByEmail(email: String): Resident?
