@@ -33,7 +33,7 @@ object AppModule {
     @Singleton
     fun provideResidentApi(): ResidentApi {
         return Retrofit.Builder()
-            .baseUrl(Constants.BASE_URL)
+            .baseUrl("${Constants.BASE_URL}/resident/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(ResidentApi::class.java)

@@ -16,58 +16,36 @@ import retrofit2.http.Query
 interface ResidentApi {
 
     // App entry
-    @GET("/resident")
+    @GET("sign-in")
     suspend fun getResidentByEmail(@Query("email") email: String): Response<Resident>
 
 
-    // Admin
-    @GET("/residents")
-    suspend fun getResidentsBySociety(@Query("admin") email: String): Response<List<ResidentDto>>
-
-    @GET("/securities")
-    suspend fun getSecuritiesBySociety(@Query("admin") email: String): Response<List<SecurityDto>>
-
-    @POST("/resident-save")
-    suspend fun saveResident(
-        @Query("name") name: String,
-        @Query("email") email: String,
-        @Query("admin") adminEmail: String
-    )
-
-    @POST("/security-save")
-    suspend fun saveSecurity(
-        @Query("name") name: String,
-        @Query("email") email: String,
-        @Query("admin") adminEmail: String
-    )
-
-
     // Visitors
-    @GET("/visitors")
+    @GET("visitors")
     suspend fun getVisitorsByResidentEmail(@Query("email") email: String): Response<List<VisitorResidentDto>>
 
-    @POST("/visitor-save")
+    @POST("visitor-save")
     suspend fun saveVisitor(@Body visitorRequestBody: RequestBody)
 
-    @GET("/visitor-recent")
+    @GET("visitor-recent")
     suspend fun getRecentVisitorOtp(@Query("email") email: String): Response<String>
 
-    @GET("/visitor-otp")
+    @GET("visitor-otp")
     suspend fun getVisitorOtp(@Query("visitorId") visitorId: Int): Response<String>
 
 
-    // Resident Profile
-    @POST("/resident-home")
+    // Profile
+    @PUT("update-home")
     suspend fun saveResidentHomeDetails(
         @Query("flat") flatNo: Int,
         @Query("building") building: String,
         @Query("email") email: String
     )
 
-    @PUT("/update-pfp")
+    @PUT("update-pfp")
     suspend fun updateResidentPfp(@Query("email") email: String, @Query("pfpUrl") pfpUrl: String)
 
-    @PUT("/update-profile")
+    @PUT("update-profile")
     suspend fun updateResidentProfile(
         @Query("email") email: String,
         @Query("name") name: String,
@@ -75,11 +53,28 @@ interface ResidentApi {
         @Query("phoneNo") phoneNo: String
     )
 
-    @GET("/resident-memories")
+    @GET("memories")
     suspend fun getMemoriesByResident(@Query("email") email: String): Response<List<EventMemory>>
+
+
+    // Admin
+    @GET("admin/residents")
+    suspend fun getResidentsBySociety(@Query("admin") email: String): Response<List<ResidentDto>>
+
+    @POST("admin/save-resident")
+    suspend fun saveResident(
+        @Query("name") name: String,
+        @Query("email") email: String,
+        @Query("admin") adminEmail: String
+    )
+
+    @GET("admin/securities")
+    suspend fun getSecuritiesBySociety(@Query("admin") email: String): Response<List<SecurityDto>>
+
+    @POST("admin/save-security")
+    suspend fun saveSecurity(
+        @Query("name") name: String,
+        @Query("email") email: String,
+        @Query("admin") adminEmail: String
+    )
 }
-//
-//data class VisitorCredDto(
-//    val uid: String,
-//    val otp: String
-//)
