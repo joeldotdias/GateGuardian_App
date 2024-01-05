@@ -51,17 +51,13 @@ class VerifyViewModel @Inject constructor(
         }
     }
 
-    fun getVisitorSearchResults(searchQuery: String): StateFlow<List<VisitorSearchEntity>> {
-//        val visitorSearchResults = MutableStateFlow<List<VisitorSearchEntity>>(emptyList())
-
+    fun getVisitorSearchResults(searchQuery: String) {
         viewModelScope.launch(Dispatchers.IO) {
             repository.getVisitorSearchResults(searchQuery)
                 .collect { listOfVisitorSearchResults ->
                     visitorSearchResults.value = listOfVisitorSearchResults
                 }
         }
-
-        return visitorSearchResults.asStateFlow()
     }
 
     fun moveVerifiedVisitorToLogs(visitorId: Int) {

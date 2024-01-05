@@ -23,7 +23,6 @@ fun LogsScreen(
         val visitorLogsData = viewModel.state.value.visitorLogs
 
         visitorLogsData?.let { visitorLogs ->
-            Log.d("Cloudfire", "LogsScreen: $visitorLogs")
             items(items = visitorLogs) { visitorLog ->
                 Text(text = visitorLog.toString())
             }
