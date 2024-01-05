@@ -21,9 +21,6 @@ class VerifyViewModel @Inject constructor(
     private val repository: SecurityRepository
 ): ViewModel() {
 
-    private var _state = MutableStateFlow(VerifyState())
-    val state = _state.asStateFlow()
-
     private val _isRefreshing = MutableStateFlow(false)
     val isRefreshing: StateFlow<Boolean>
         get() = _isRefreshing.asStateFlow()
