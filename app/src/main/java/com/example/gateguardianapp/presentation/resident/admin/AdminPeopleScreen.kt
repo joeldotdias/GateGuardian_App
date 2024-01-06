@@ -47,7 +47,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.gateguardianapp.data.remote.dto.ResidentDto
 import com.example.gateguardianapp.data.remote.dto.SecurityDto
-import com.example.gateguardianapp.presentation.resident.components.InputForm
+import com.example.gateguardianapp.presentation.components.InputForm
 import com.example.gateguardianapp.util.Delays
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay

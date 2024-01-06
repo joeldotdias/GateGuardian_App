@@ -9,6 +9,7 @@ import okhttp3.RequestBody
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.Header
 import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Query
@@ -17,18 +18,18 @@ interface ResidentApi {
 
     // App entry
     @GET("sign-in")
-    suspend fun getResidentByEmail(@Query("email") email: String): Response<Resident>
+    suspend fun getResidentByEmail(@Header("email") email: String): Response<Resident>
 
 
     // Visitors
     @GET("visitors")
-    suspend fun getVisitorsByResidentEmail(@Query("email") email: String): Response<List<VisitorResidentDto>>
+    suspend fun getVisitorsByResidentEmail(@Header("email") email: String): Response<List<VisitorResidentDto>>
 
     @POST("visitor-save")
     suspend fun saveVisitor(@Body visitorRequestBody: RequestBody)
 
     @GET("visitor-recent")
-    suspend fun getRecentVisitorOtp(@Query("email") email: String): Response<String>
+    suspend fun getRecentVisitorOtp(@Header("email") email: String): Response<String>
 
     @GET("visitor-otp")
     suspend fun getVisitorOtp(@Query("visitorId") visitorId: Int): Response<String>
@@ -37,44 +38,44 @@ interface ResidentApi {
     // Profile
     @PUT("update-home")
     suspend fun saveResidentHomeDetails(
+        @Header("email") email: String,
         @Query("flat") flatNo: Int,
-        @Query("building") building: String,
-        @Query("email") email: String
+        @Query("building") building: String
     )
 
     @PUT("update-pfp")
-    suspend fun updateResidentPfp(@Query("email") email: String, @Query("pfpUrl") pfpUrl: String)
+    suspend fun updateResidentPfp(@Header("email") email: String, @Query("pfpUrl") pfpUrl: String)
 
     @PUT("update-profile")
     suspend fun updateResidentProfile(
-        @Query("email") email: String,
+        @Header("email") email: String,
         @Query("name") name: String,
         @Query("aboutMe") aboutMe: String,
         @Query("phoneNo") phoneNo: String
     )
 
     @GET("memories")
-    suspend fun getMemoriesByResident(@Query("email") email: String): Response<List<EventMemory>>
+    suspend fun getMemoriesByResident(@Header("email") email: String): Response<List<EventMemory>>
 
 
     // Admin
     @GET("admin/residents")
-    suspend fun getResidentsBySociety(@Query("admin") email: String): Response<List<ResidentDto>>
+    suspend fun getResidentsBySociety(@Header("admin") email: String): Response<List<ResidentDto>>
 
     @POST("admin/save-resident")
     suspend fun saveResident(
+        @Header("admin") adminEmail: String,
         @Query("name") name: String,
-        @Query("email") email: String,
-        @Query("admin") adminEmail: String
+        @Query("email") email: String
     )
 
     @GET("admin/securities")
-    suspend fun getSecuritiesBySociety(@Query("admin") email: String): Response<List<SecurityDto>>
+    suspend fun getSecuritiesBySociety(@Header("admin") email: String): Response<List<SecurityDto>>
 
     @POST("admin/save-security")
     suspend fun saveSecurity(
+        @Header("admin") adminEmail: String,
         @Query("name") name: String,
-        @Query("email") email: String,
-        @Query("admin") adminEmail: String
+        @Query("email") email: String
     )
 }

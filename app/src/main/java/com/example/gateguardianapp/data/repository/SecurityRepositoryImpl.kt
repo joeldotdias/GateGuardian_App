@@ -60,5 +60,4 @@ class SecurityRepositoryImpl @Inject constructor(
     ) {
         api.updateSecurityProfile(email, name, badgeId, phoneNo)
     }
-
 }

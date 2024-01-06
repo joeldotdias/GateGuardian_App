@@ -62,7 +62,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.gateguardianapp.domain.model.security.VisitorSecurityDto
-import com.example.gateguardianapp.presentation.resident.components.InputForm
+import com.example.gateguardianapp.presentation.components.InputForm
 import com.example.gateguardianapp.util.Delays
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay

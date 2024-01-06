@@ -67,7 +67,7 @@ import androidx.compose.ui.unit.sp
 import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
-import com.example.gateguardianapp.presentation.resident.components.InputForm
+import com.example.gateguardianapp.presentation.components.InputForm
 import com.example.gateguardianapp.util.Delays
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage

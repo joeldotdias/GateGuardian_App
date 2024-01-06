@@ -41,7 +41,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.gateguardianapp.domain.model.User
 import com.example.gateguardianapp.presentation.navigation.ResidentNavigation
 import com.example.gateguardianapp.presentation.navigation.ResidentScreens
-import com.example.gateguardianapp.presentation.resident.components.CustomerSupportButtons
+import com.example.gateguardianapp.presentation.components.CustomerSupportButtons
 import com.example.gateguardianapp.presentation.resident.profile.ResidentProfileViewModel
 import kotlinx.coroutines.launch
 

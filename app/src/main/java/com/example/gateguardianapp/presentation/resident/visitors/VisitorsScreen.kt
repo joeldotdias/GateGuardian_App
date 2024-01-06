@@ -45,7 +45,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.gateguardianapp.domain.model.resident.VisitorResidentDto
-import com.example.gateguardianapp.presentation.resident.components.InputForm
+import com.example.gateguardianapp.presentation.components.InputForm
 import com.example.gateguardianapp.util.Delays
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay

@@ -1,4 +1,4 @@
-package com.example.gateguardianapp.presentation.resident.components
+package com.example.gateguardianapp.presentation.components
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding

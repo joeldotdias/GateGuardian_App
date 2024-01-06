@@ -66,8 +66,8 @@ import androidx.compose.ui.unit.sp
 import androidx.core.net.toUri
 import coil.compose.AsyncImage
 import com.example.gateguardianapp.domain.model.resident.Resident
-import com.example.gateguardianapp.presentation.resident.components.EventMemoryRow
-import com.example.gateguardianapp.presentation.resident.components.InputForm
+import com.example.gateguardianapp.presentation.components.EventMemoryRow
+import com.example.gateguardianapp.presentation.components.InputForm
 import com.example.gateguardianapp.util.Delays
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage

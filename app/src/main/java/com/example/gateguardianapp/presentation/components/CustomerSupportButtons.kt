@@ -1,4 +1,4 @@
-package com.example.gateguardianapp.presentation.resident.components
+package com.example.gateguardianapp.presentation.components
 
 import android.content.ActivityNotFoundException
 import android.content.Context

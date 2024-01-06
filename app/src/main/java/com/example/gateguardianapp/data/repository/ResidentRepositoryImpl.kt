@@ -27,11 +27,11 @@ class ResidentRepositoryImpl @Inject constructor(
     }
 
     override suspend fun saveResident(name: String, email: String, adminEmail: String) {
-        api.saveResident(name, email, adminEmail)
+        api.saveResident(adminEmail, name, email)
     }
 
     override suspend fun saveSecurity(name: String, email: String, adminEmail: String) {
-        api.saveSecurity(name, email, adminEmail)
+        api.saveSecurity(adminEmail, name, email)
     }
 
 
@@ -54,7 +54,7 @@ class ResidentRepositoryImpl @Inject constructor(
 
 
     override suspend fun saveResidentHomeDetails(flatNo: String, building: String, email: String) {
-        api.saveResidentHomeDetails(flatNo.toInt(), building, email)
+        api.saveResidentHomeDetails(email, flatNo.toInt(), building)
     }
 
     override suspend fun updateResidentPfp(email: String, pfpUrl: String) {

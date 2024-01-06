@@ -1,4 +1,4 @@
-package com.example.gateguardianapp.presentation.resident.components
+package com.example.gateguardianapp.presentation.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
