@@ -1,5 +1,6 @@
 package com.example.gateguardianapp.presentation.resident.visitors
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.gateguardianapp.domain.repository.ResidentRepository
@@ -18,6 +19,9 @@ class VisitorsViewModel @Inject constructor(
 ): ViewModel() {
 
     private val email = Firebase.auth.currentUser?.email.toString()
+    private val token = Firebase.auth.currentUser?.getIdToken(true)?.addOnSuccessListener {
+        Log.d("TAG", ": ${it.token}")
+    }
 
     private val _state = MutableStateFlow(VisitorsState())
     val state = _state.asStateFlow()
