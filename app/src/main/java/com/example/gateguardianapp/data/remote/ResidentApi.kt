@@ -1,5 +1,6 @@
 package com.example.gateguardianapp.data.remote
 
+import com.example.gateguardianapp.data.remote.schema.RecentVisitorOtp
 import com.example.gateguardianapp.data.remote.dto.ResidentDto
 import com.example.gateguardianapp.data.remote.dto.SecurityDto
 import com.example.gateguardianapp.domain.model.resident.EventMemory
@@ -18,7 +19,8 @@ interface ResidentApi {
 
     // App entry
     @GET("sign-in")
-    suspend fun getResidentByEmail(@Header("email") email: String): Response<Resident>
+//    suspend fun getResidentByEmail(@Header("email") email: String): Response<Resident>
+    suspend fun getResidentByEmail(@Header("email") email: String, @Header("Authorization") token: String): Response<Resident>
 
 
     // Visitors
@@ -29,30 +31,33 @@ interface ResidentApi {
     suspend fun saveVisitor(@Body visitorRequestBody: RequestBody)
 
     @GET("visitor-recent")
-    suspend fun getRecentVisitorOtp(@Header("email") email: String): Response<String>
-
-    @GET("visitor-otp")
-    suspend fun getVisitorOtp(@Query("visitorId") visitorId: Int): Response<String>
+    suspend fun getRecentVisitorOtp(@Header("email") email: String): Response<RecentVisitorOtp>
 
 
     // Profile
     @PUT("update-home")
     suspend fun saveResidentHomeDetails(
         @Header("email") email: String,
-        @Query("flat") flatNo: Int,
-        @Query("building") building: String
+        @Body homeDetailsSchema: RequestBody
+    )
+//    )suspend fun saveResidentHomeDetails(
+//        @Header("email") email: String,
+//        @Query("flat") flatNo: Int,
+//        @Query("building") building: String
+//    )
+
+    @PUT("update-profile")
+    suspend fun updateResidentProfile(
+        @Header("email") email: String,
+//        @Query("name") name: String,
+//        @Query("aboutMe") aboutMe: String,
+//        @Query("phoneNo") phoneNo: String
+        @Body profileDetailsSchema: RequestBody
     )
 
     @PUT("update-pfp")
     suspend fun updateResidentPfp(@Header("email") email: String, @Query("pfpUrl") pfpUrl: String)
 
-    @PUT("update-profile")
-    suspend fun updateResidentProfile(
-        @Header("email") email: String,
-        @Query("name") name: String,
-        @Query("aboutMe") aboutMe: String,
-        @Query("phoneNo") phoneNo: String
-    )
 
     @GET("memories")
     suspend fun getMemoriesByResident(@Header("email") email: String): Response<List<EventMemory>>

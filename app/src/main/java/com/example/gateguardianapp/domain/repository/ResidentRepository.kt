@@ -9,7 +9,7 @@ import com.example.gateguardianapp.domain.model.resident.VisitorResidentDto
 interface ResidentRepository {
 
     // App entry
-    suspend fun getResidentByEmail(email: String): Resident?
+    suspend fun getResidentByEmail(email: String, token: String): Resident?
 
 
     // Admin
@@ -22,9 +22,9 @@ interface ResidentRepository {
     suspend fun saveVisitor(name: String, phoneNo: String, residentEmail: String)
     suspend fun getRecentVisitorOtp(email: String): String?
     suspend fun getVisitorsByResidentEmail(email: String): List<VisitorResidentDto>?
-    suspend fun getVisitorOtpById(visitorId: Int): String?
 
     // Resident Profile
+//    suspend fun saveResidentHomeDetails(flatNo: String, building: String, email: String)
     suspend fun saveResidentHomeDetails(flatNo: String, building: String, email: String)
     suspend fun updateResidentPfp(email: String, pfpUrl: String)
     suspend fun updateResidentProfile(email: String, name: String, aboutMe: String, phoneNo: String)
