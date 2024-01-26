@@ -40,18 +40,10 @@ interface ResidentApi {
         @Header("email") email: String,
         @Body homeDetailsSchema: RequestBody
     )
-//    )suspend fun saveResidentHomeDetails(
-//        @Header("email") email: String,
-//        @Query("flat") flatNo: Int,
-//        @Query("building") building: String
-//    )
 
     @PUT("update-profile")
     suspend fun updateResidentProfile(
         @Header("email") email: String,
-//        @Query("name") name: String,
-//        @Query("aboutMe") aboutMe: String,
-//        @Query("phoneNo") phoneNo: String
         @Body profileDetailsSchema: RequestBody
     )
 
