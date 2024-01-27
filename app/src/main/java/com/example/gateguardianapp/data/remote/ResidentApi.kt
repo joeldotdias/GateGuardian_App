@@ -19,7 +19,6 @@ interface ResidentApi {
 
     // App entry
     @GET("sign-in")
-//    suspend fun getResidentByEmail(@Header("email") email: String): Response<Resident>
     suspend fun getResidentByEmail(@Header("email") email: String, @Header("Authorization") token: String): Response<Resident>
 
 
