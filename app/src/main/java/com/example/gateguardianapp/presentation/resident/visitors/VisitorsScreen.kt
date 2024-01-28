@@ -58,7 +58,6 @@ fun VisitorsScreen(
     onVisitorsDataChange: () -> Unit = viewModel::getVisitorsByResident
 ) {
 
-//    val visitorsData = viewModel.state.value.visitors
     val visitorsData = viewModel.state.collectAsState().value.visitors
 
     val context = LocalContext.current

@@ -5,7 +5,7 @@ import androidx.room.RoomDatabase
 
 @Database(
     entities = [VisitorSearchEntity::class],
-    version = 2,
+    version = 1,
     exportSchema = false
 )
 abstract class VisitorSearchDatabase: RoomDatabase() {
