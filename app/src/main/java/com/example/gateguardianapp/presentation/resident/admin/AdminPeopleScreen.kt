@@ -29,6 +29,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -49,6 +50,8 @@ import com.example.gateguardianapp.data.remote.dto.ResidentDto
 import com.example.gateguardianapp.data.remote.dto.SecurityDto
 import com.example.gateguardianapp.presentation.components.InputForm
 import com.example.gateguardianapp.util.Delays
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -56,11 +59,11 @@ import kotlinx.coroutines.launch
 @Composable
 fun AdminPeopleScreen(
     viewModel: AdminViewModel,
-    adminEmail: String,
+    adminEmail: String = Firebase.auth.currentUser?.email!!,
     onPeopleChange: () -> Unit
 ) {
-    val residentsData = viewModel.state.value.residents
-    val securitiesData = viewModel.state.value.securities
+    val residentsData = viewModel.state.collectAsState().value.residents
+    val securitiesData = viewModel.state.collectAsState().value.securities
 
     val coroutineScope = rememberCoroutineScope()
 

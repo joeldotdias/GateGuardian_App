@@ -2,7 +2,6 @@ package com.example.gateguardianapp.domain.model.resident
 
 data class Resident(
     val name: String,
-    val email: String,
     val pfpUrl: String,
     val aboutMe: String,
     val phoneNo: String,
