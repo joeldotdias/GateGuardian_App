@@ -19,7 +19,7 @@ interface ResidentApi {
 
     // App entry
     @GET("sign-in")
-    suspend fun getResidentByEmail(@Header("email") email: String, @Header("Authorization") token: String): Response<Resident>
+    suspend fun getResidentByEmail(@Header("email") email: String): Response<Resident>
 
 
     // Visitors
@@ -27,7 +27,10 @@ interface ResidentApi {
     suspend fun getVisitorsByResidentEmail(@Header("email") email: String): Response<List<VisitorResidentDto>>
 
     @POST("visitor-save")
-    suspend fun saveVisitor(@Body visitorRequestBody: RequestBody)
+    suspend fun saveVisitor(
+        @Header("email") email: String,
+        @Body visitorRequestBody: RequestBody
+    )
 
     @GET("visitor-recent")
     suspend fun getRecentVisitorOtp(@Header("email") email: String): Response<RecentVisitorOtp>

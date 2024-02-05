@@ -15,8 +15,8 @@ class ResidentRepositoryImpl @Inject constructor(
     private val api: ResidentApi
 ): ResidentRepository {
 
-    override suspend fun getResidentByEmail(email: String, token: String): Resident? {
-        return api.getResidentByEmail(email, "Bearer $token").body()
+    override suspend fun getResidentByEmail(email: String): Resident? {
+        return api.getResidentByEmail(email).body()
     }
 
 
@@ -38,12 +38,12 @@ class ResidentRepositoryImpl @Inject constructor(
 
 
     override suspend fun saveVisitor(name: String, phoneNo: String, residentEmail: String) {
-        val visitorResidentDtoRequestBody = VisitorResidentDto(name = name, phoneNo = phoneNo, hostEmail = residentEmail).toRequestBody()
-        api.saveVisitor(visitorResidentDtoRequestBody)
+        val visitorResidentDtoRequestBody = VisitorResidentDto(name = name, phoneNo = phoneNo).toRequestBody()
+        api.saveVisitor(residentEmail, visitorResidentDtoRequestBody)
     }
 
     override suspend fun getRecentVisitorOtp(email: String): String? {
-        return api.getRecentVisitorOtp(email).body()?.otp
+        return api.getRecentVisitorOtp(email).body()?.code
     }
 
     override suspend fun getVisitorsByResidentEmail(email: String): List<VisitorResidentDto>? {
@@ -51,9 +51,6 @@ class ResidentRepositoryImpl @Inject constructor(
     }
 
 
-//    override suspend fun saveResidentHomeDetails(flatNo: String, building: String, email: String) {
-//        api.saveResidentHomeDetails(email, flatNo.toInt(), building)
-//    }
     override suspend fun saveResidentHomeDetails(flatNo: String, building: String, email: String) {
         val homeDetailsRequestBody = UpdateResidentHome(flatNo.toInt(), building).toRequestBody()
         api.saveResidentHomeDetails(email, homeDetailsRequestBody)
@@ -63,8 +60,8 @@ class ResidentRepositoryImpl @Inject constructor(
         api.updateResidentPfp(email, pfpUrl)
     }
 
-    override suspend fun updateResidentProfile(email: String, name: String, aboutMe: String, phoneNo: String) {
-        val profileRequestBody = UpdateResidentProfile(name, aboutMe, phoneNo).toRequestBody()
+    override suspend fun updateResidentProfile(email: String, aboutMe: String, phoneNo: String) {
+        val profileRequestBody = UpdateResidentProfile(aboutMe, phoneNo).toRequestBody()
         api.updateResidentProfile(email, profileRequestBody)
     }
 

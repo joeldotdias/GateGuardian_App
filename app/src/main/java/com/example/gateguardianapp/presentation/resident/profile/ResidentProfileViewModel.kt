@@ -26,7 +26,6 @@ class ResidentProfileViewModel @Inject constructor(
     val state = _state.asStateFlow()
 
     val email = Firebase.auth.currentUser?.email!!
-    private val token = Firebase.auth.currentUser?.getIdToken(true)
 
     init {
         getProfileDetails()
@@ -37,7 +36,7 @@ class ResidentProfileViewModel @Inject constructor(
             try {
                 _state.value = state.value.copy(
                     resident = async {
-                        repository.getResidentByEmail(email, token?.await()?.token.toString())
+                        repository.getResidentByEmail(email)
                     }.await(),
                     eventMemories = async {
                         repository.getMemoriesByResident(email)
@@ -65,9 +64,9 @@ class ResidentProfileViewModel @Inject constructor(
         }
     }
 
-    fun updateResidentProfile(name: String, aboutMe: String, phoneNo: String) {
+    fun updateResidentProfile(aboutMe: String, phoneNo: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            repository.updateResidentProfile(email, name, aboutMe, phoneNo)
+            repository.updateResidentProfile(email, aboutMe, phoneNo)
         }
     }
 }

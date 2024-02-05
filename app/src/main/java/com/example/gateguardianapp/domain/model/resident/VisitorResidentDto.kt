@@ -9,15 +9,13 @@ data class VisitorResidentDto(
     val visitorId: Int? = null,
     val name: String,
     val phoneNo: String,
-    val hostEmail: String,
-    val otp: String = ""
+    val code: String = ""
 ) {
     fun toRequestBody(): RequestBody {
 
         val jsonObject = JSONObject()
         jsonObject.put("name", name)
         jsonObject.put("phoneNo", phoneNo)
-        jsonObject.put("hostEmail", hostEmail)
 
         return jsonObject.toString().toRequestBody("application/json".toMediaTypeOrNull())
     }

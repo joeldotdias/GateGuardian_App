@@ -319,7 +319,7 @@ fun ResidentProfileScreen(
                     Button(
                         onClick = {
                             coroutineScope.launch(Dispatchers.IO) {
-                                viewModel.updateResidentProfile(name, aboutMe, phoneNo)
+                                viewModel.updateResidentProfile(aboutMe, phoneNo)
                                 delay(Delays.CLOUD_UPLOAD_DELAY)
                                 onResidentDataChange()
                             }

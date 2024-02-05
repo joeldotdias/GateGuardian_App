@@ -266,7 +266,7 @@ fun VisitorRow(
                 }
                 AnimatedVisibility(visible = isOtpVisible) {
                     TextField(
-                        value = visitor.otp,
+                        value = visitor.code,
                         readOnly = true,
                         modifier = Modifier
                             .weight(1f)
@@ -275,7 +275,7 @@ fun VisitorRow(
                         trailingIcon = {
                             IconButton(
                                 onClick = {
-                                    shareVisitorOtp(visitor.otp, visitor.phoneNo)
+                                    shareVisitorOtp(visitor.code, visitor.phoneNo)
                                 }
                             ) {
                                 Icon(
