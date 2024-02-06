@@ -16,6 +16,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.gateguardianapp.domain.model.User
+import com.example.gateguardianapp.presentation.OopsieScreen
 import com.example.gateguardianapp.presentation.SplashScreen
 import com.example.gateguardianapp.presentation.auth.SignInScreen
 import com.example.gateguardianapp.presentation.auth.SignInViewModel
@@ -48,30 +49,39 @@ class MainActivity : ComponentActivity() {
                 val viewModel = hiltViewModel<SignInViewModel>()
                 val state by viewModel.state.collectAsStateWithLifecycle()
                 val navController = rememberNavController()
-                var user = User()
+                var user: User? = User()
 
                 LaunchedEffect(key1 = Unit) {
                     val authUser = googleAuthClient.getSignedInUser()
                     if(authUser != null) {
                         user = viewModel.getUserByEmail(authUser.email)
                         delay(Delays.SPLASH_DELAY)
-                        when(user.category.lowercase()) {
-                            "resident" -> {
-                                navController.navigate(AppSections.Resident.name) {
+                            if(user == null) {
+                                navController.navigate(AppSections.Error.name) {
                                     popUpTo(0)
                                 }
                             }
-                            "admin" -> {
-                                navController.navigate(AppSections.Resident.name) {
-                                    popUpTo(0)
+
+                        user?.let {
+                            when(it.category.lowercase()) {
+                                "resident" -> {
+                                    navController.navigate(AppSections.Resident.name) {
+                                        popUpTo(0)
+                                    }
                                 }
-                            }
-                            "security" -> {
-                                navController.navigate(AppSections.Security.name) {
-                                    popUpTo(0)
+                                "admin" -> {
+                                    navController.navigate(AppSections.Resident.name) {
+                                        popUpTo(0)
+                                    }
+                                }
+                                "security" -> {
+                                    navController.navigate(AppSections.Security.name) {
+                                        popUpTo(0)
+                                    }
                                 }
                             }
                         }
+
                     } else {
                         delay(Delays.SPLASH_DELAY)
                         navController.navigate(AppSections.SignIn.name)
@@ -107,7 +117,12 @@ class MainActivity : ComponentActivity() {
                                     Toast.LENGTH_LONG
                                 ).show()
                                 user = viewModel.repository.getUserByEmail(email = googleAuthClient.getSignedInUser()?.email.toString())!!
-                                when(user.category.lowercase()) {
+                                if(user == null) {
+                                    navController.navigate(AppSections.Error.name) {
+                                        popUpTo(0)
+                                    }
+                                }
+                                when(user?.category?.lowercase()) {
                                     "resident" -> {
                                         navController.navigate(AppSections.Resident.name) {
                                             popUpTo(0)
@@ -145,7 +160,7 @@ class MainActivity : ComponentActivity() {
 
                     composable(AppSections.Resident.name) {
                         ResidentDrawer(
-                            user = user,
+                            user = user!!,
                             onSignOut = {
                                 lifecycleScope.launch {
                                     googleAuthClient.signOut()
@@ -164,7 +179,7 @@ class MainActivity : ComponentActivity() {
 
                     composable(AppSections.Security.name) {
                         SecurityBottomBar(
-                            user = user,
+                            user = user!!,
                             onSignOut = {
                                 lifecycleScope.launch {
                                     googleAuthClient.signOut()
@@ -176,6 +191,16 @@ class MainActivity : ComponentActivity() {
                                     navController.navigate(AppSections.SignIn.name) {
                                         popUpTo(0)
                                     }
+                                }
+                            }
+                        )
+                    }
+
+                    composable(AppSections.Error.name) {
+                        OopsieScreen(
+                            backToSignIn = {
+                                navController.navigate(AppSections.SignIn.name) {
+                                    popUpTo(0)
                                 }
                             }
                         )

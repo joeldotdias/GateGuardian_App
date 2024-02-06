@@ -28,7 +28,7 @@ fun AdminScreen(
     resident: Resident,
     viewModel: AdminViewModel = hiltViewModel()
 ) {
-    val state = viewModel.state.collectAsState().value
+//    val state = viewModel.state.collectAsState().value
 
     val tabScreens = listOf(
         AdminScreens.People,
@@ -82,7 +82,6 @@ fun AdminScreen(
                 0 -> {
                     AdminPeopleScreen(
                         viewModel = viewModel,
-                        //adminEmail = resident.email,
                         onPeopleChange = viewModel::getAdminScreenDetails
                     )
                 }

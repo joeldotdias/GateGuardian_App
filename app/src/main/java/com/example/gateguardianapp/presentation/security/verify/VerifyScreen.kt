@@ -219,7 +219,7 @@ fun SecurityVisitorRow(
             .padding(10.dp)
             .clip(RoundedCornerShape(18.dp))
             .border(1.dp, MaterialTheme.colorScheme.onSurface, RoundedCornerShape(18.dp))
-            .background(if (isHighlighted) Color(0xFFB4F7B7) else Color.Transparent)
+            .background(if (isHighlighted) Color(0xFFC4F4C6) else Color.Transparent)
     ) {
         Column(
             modifier = Modifier
@@ -297,7 +297,7 @@ fun SecurityVisitorRow(
 
                         Button(
                             onClick = {
-                                visitor.isVerified = codeToVerify.trim() == visitor.otp
+                                visitor.isVerified = codeToVerify.trim() == visitor.code
                                 if(visitor.isVerified!!) {
                                     moveVerifiedVisitorToLogs()
                                 }

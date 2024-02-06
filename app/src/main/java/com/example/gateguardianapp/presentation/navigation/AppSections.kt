@@ -4,5 +4,6 @@ enum class AppSections {
     Splash,
     SignIn,
     Resident,
-    Security
+    Security,
+    Error
 }

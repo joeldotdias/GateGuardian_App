@@ -6,6 +6,6 @@ data class VisitorSecurityDto(
     val hostFlat: Int,
     val hostBuilding: String,
     val society: String,
-    val otp: String,
+    val code: String,
     var isVerified: Boolean? = null
 )

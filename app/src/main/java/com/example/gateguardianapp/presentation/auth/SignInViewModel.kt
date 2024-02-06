@@ -31,8 +31,8 @@ class SignInViewModel @Inject constructor(
         }
     }
 
-    suspend fun getUserByEmail(email: String): User {
-        return repository.getUserByEmail(email)!!
+    suspend fun getUserByEmail(email: String): User? {
+        return repository.getUserByEmail(email)
     }
 
     fun saveUser(name: String, email: String, category: String, society: String) {
