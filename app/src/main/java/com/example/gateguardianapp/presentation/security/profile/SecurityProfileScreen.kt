@@ -39,6 +39,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -81,18 +82,14 @@ fun SecurityProfileScreen(
     viewModel: SecurityProfileViewModel = hiltViewModel(),
     onSecurityDataChange: () -> Unit = viewModel::getSecurityProfileDetails
 ) {
-    //val state = viewModel.state.value
-    val security = viewModel.state.value.security
+    val security = viewModel.state.collectAsState().value.security
 
     val context = LocalContext.current
     val focusManager = LocalFocusManager.current
     val coroutineScope = rememberCoroutineScope()
 
-
     var isProfileEdited by remember { mutableStateOf(false) }
     var isPfpChanged by remember { mutableStateOf(false) }
-
-
 
     security?.let {
         var areSecurityDetailsNotProvided by remember { mutableStateOf(security.badgeId == null) }
