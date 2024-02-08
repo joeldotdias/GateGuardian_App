@@ -3,6 +3,7 @@ package com.example.gateguardianapp.data.repository
 import com.example.gateguardianapp.data.remote.ResidentApi
 import com.example.gateguardianapp.data.remote.dto.ResidentDto
 import com.example.gateguardianapp.data.remote.dto.SecurityDto
+import com.example.gateguardianapp.data.remote.schema.UpdatePfp
 import com.example.gateguardianapp.data.remote.schema.UpdateResidentHome
 import com.example.gateguardianapp.data.remote.schema.UpdateResidentProfile
 import com.example.gateguardianapp.domain.model.resident.EventMemory
@@ -57,7 +58,8 @@ class ResidentRepositoryImpl @Inject constructor(
     }
 
     override suspend fun updateResidentPfp(email: String, pfpUrl: String) {
-        api.updateResidentPfp(email, pfpUrl)
+        val pfpUrlRequestBody = UpdatePfp(pfpUrl).toRequestBody()
+        api.updateResidentPfp(email, pfpUrlRequestBody)
     }
 
     override suspend fun updateResidentProfile(email: String, aboutMe: String, phoneNo: String) {

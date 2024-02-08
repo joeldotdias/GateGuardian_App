@@ -35,8 +35,8 @@ class SignInViewModel @Inject constructor(
         return repository.getUserByEmail(email)
     }
 
-    fun saveUser(name: String, email: String, category: String, society: String) {
-        val userRequestBody = User(name, email, category, society).toRequestBody()
+    fun saveUser(name: String, email: String, category: String) {
+        val userRequestBody = User(name, email, category).toRequestBody()
         viewModelScope.launch {
             repository.saveUser(userRequestBody)
         }

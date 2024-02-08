@@ -182,7 +182,7 @@ fun SignInScreen(
 
                     Button(
                         onClick = {
-                            viewModel.saveUser(name, email, "Admin", society)
+                            viewModel.saveUser(name, email, "Admin")
                             isLoginFormVisible = false
                         }
                     ) {

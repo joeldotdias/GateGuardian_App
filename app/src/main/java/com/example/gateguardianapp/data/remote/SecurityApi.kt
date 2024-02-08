@@ -31,13 +31,11 @@ interface SecurityApi {
 
     // Security profile
     @PUT("update-pfp")
-    suspend fun updateSecurityPfp(@Header("email") email: String, @Query("pfpUrl") pfpUrl: String)
+    suspend fun updateSecurityPfp(@Header("email") email: String, @Body pfpUrlSchema: RequestBody)
 
     @PUT("update-profile")
     suspend fun updateSecurityProfile(
         @Header("email") email: String,
-        @Query("name") name: String,
-        @Query("badgeId") badgeId: String,
-        @Query("phoneNo") phoneNo: String
+        @Body profileDetailsSchema: RequestBody
     )
 }

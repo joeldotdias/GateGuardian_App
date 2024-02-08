@@ -92,6 +92,7 @@ fun AdminPeopleScreen(
                     IconButton(
                         onClick = {
                             isAddingResident = !isAddingResident
+                            isAddingSecurity = false
                         }
                     ) {
                         Icon(
@@ -103,6 +104,7 @@ fun AdminPeopleScreen(
                     IconButton(
                         onClick = {
                             isAddingSecurity = !isAddingSecurity
+                            isAddingResident = false
                         }
                     ) {
                         Icon(

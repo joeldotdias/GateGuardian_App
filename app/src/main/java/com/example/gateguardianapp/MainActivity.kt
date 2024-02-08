@@ -64,18 +64,18 @@ class MainActivity : ComponentActivity() {
 
                         user?.let {
                             when(it.category.lowercase()) {
-                                "resident" -> {
-                                    navController.navigate(AppSections.Resident.name) {
-                                        popUpTo(0)
-                                    }
-                                }
-                                "admin" -> {
+                                "resident", "admin" -> {
                                     navController.navigate(AppSections.Resident.name) {
                                         popUpTo(0)
                                     }
                                 }
                                 "security" -> {
                                     navController.navigate(AppSections.Security.name) {
+                                        popUpTo(0)
+                                    }
+                                }
+                                else -> {
+                                    navController.navigate(AppSections.Error.name) {
                                         popUpTo(0)
                                     }
                                 }
@@ -116,25 +116,25 @@ class MainActivity : ComponentActivity() {
                                     "Sign In Successful",
                                     Toast.LENGTH_LONG
                                 ).show()
-                                user = viewModel.repository.getUserByEmail(email = googleAuthClient.getSignedInUser()?.email.toString())!!
+                                user = viewModel.repository.getUserByEmail(email = googleAuthClient.getSignedInUser()?.email.toString())
                                 if(user == null) {
                                     navController.navigate(AppSections.Error.name) {
                                         popUpTo(0)
                                     }
                                 }
                                 when(user?.category?.lowercase()) {
-                                    "resident" -> {
-                                        navController.navigate(AppSections.Resident.name) {
-                                            popUpTo(0)
-                                        }
-                                    }
-                                    "admin" -> {
+                                    "resident", "admin" -> {
                                         navController.navigate(AppSections.Resident.name) {
                                             popUpTo(0)
                                         }
                                     }
                                     "security" -> {
                                         navController.navigate(AppSections.Security.name) {
+                                            popUpTo(0)
+                                        }
+                                    }
+                                    else -> {
+                                        navController.navigate(AppSections.Error.name) {
                                             popUpTo(0)
                                         }
                                     }

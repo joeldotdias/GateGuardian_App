@@ -139,7 +139,7 @@ fun SecurityProfileScreen(
                         focusManager = focusManager,
                         saveSecurityDetails = { phoneNo, badgeId ->
                             coroutineScope.launch(Dispatchers.IO) {
-                                viewModel.updateSecurityProfile(name, badgeId, phoneNo)
+                                viewModel.updateSecurityProfile(badgeId, phoneNo)
                                 areSecurityDetailsNotProvided = false
                                 delay(Delays.CLOUD_UPLOAD_DELAY)
                                 onSecurityDataChange()
@@ -454,7 +454,7 @@ fun SecurityProfileScreen(
                             Button(
                                 onClick = {
                                     coroutineScope.launch(Dispatchers.IO) {
-                                        viewModel.updateSecurityProfile(name, badgeId, phoneNo)
+                                        viewModel.updateSecurityProfile(badgeId, phoneNo)
                                         delay(Delays.CLOUD_UPLOAD_DELAY)
                                         onSecurityDataChange()
                                     }

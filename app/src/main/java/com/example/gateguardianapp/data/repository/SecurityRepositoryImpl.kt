@@ -5,6 +5,8 @@ import com.example.gateguardianapp.data.local.VisitorSearchEntity
 import com.example.gateguardianapp.data.mapper.toVisitorSearchEntity
 import com.example.gateguardianapp.data.remote.SecurityApi
 import com.example.gateguardianapp.data.remote.dto.VerifiedVisitorDto
+import com.example.gateguardianapp.data.remote.schema.UpdatePfp
+import com.example.gateguardianapp.data.remote.schema.UpdateSecurityProfile
 import com.example.gateguardianapp.domain.model.security.Security
 import com.example.gateguardianapp.domain.model.security.VisitorLog
 import com.example.gateguardianapp.domain.model.security.VisitorSecurityDto
@@ -49,16 +51,17 @@ class SecurityRepositoryImpl @Inject constructor(
 
 
     override suspend fun updateSecurityPfp(email: String, pfpUrl: String) {
-        api.updateSecurityPfp(email, pfpUrl)
+        val pfpUrlRequestBody = UpdatePfp(pfpUrl).toRequestBody()
+        api.updateSecurityPfp(email, pfpUrlRequestBody)
     }
 
 
     override suspend fun updateSecurityProfile(
         email: String,
-        name: String,
         badgeId: String,
         phoneNo: String
     ) {
-        api.updateSecurityProfile(email, name, badgeId, phoneNo)
+        val profileRequestBody = UpdateSecurityProfile(badgeId, phoneNo).toRequestBody()
+        api.updateSecurityProfile(email, profileRequestBody)
     }
 }

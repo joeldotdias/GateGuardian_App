@@ -50,7 +50,7 @@ interface ResidentApi {
     )
 
     @PUT("update-pfp")
-    suspend fun updateResidentPfp(@Header("email") email: String, @Query("pfpUrl") pfpUrl: String)
+    suspend fun updateResidentPfp(@Header("email") email: String, @Body pfpUrlSchema: RequestBody)
 
 
     @GET("memories")

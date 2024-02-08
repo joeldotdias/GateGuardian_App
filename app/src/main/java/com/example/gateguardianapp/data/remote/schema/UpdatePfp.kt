@@ -1,22 +1,17 @@
-package com.example.gateguardianapp.domain.model
+package com.example.gateguardianapp.data.remote.schema
 
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONObject
 
-data class User(
-    val name: String ="",
-    val email: String = "",
-    val category: String = "",
-    val society: String =""
+data class UpdatePfp(
+    val pfpUrl: String
 ) {
     fun toRequestBody(): RequestBody {
 
         val jsonObject = JSONObject()
-        jsonObject.put("name", name)
-        jsonObject.put("email", email)
-        jsonObject.put("category", category)
+        jsonObject.put("pfpUrl", pfpUrl)
 
         return jsonObject.toString().toRequestBody("application/json".toMediaTypeOrNull())
     }
