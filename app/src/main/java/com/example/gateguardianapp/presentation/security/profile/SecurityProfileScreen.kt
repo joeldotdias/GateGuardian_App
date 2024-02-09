@@ -28,14 +28,12 @@ import androidx.compose.material.icons.rounded.CameraAlt
 import androidx.compose.material.icons.rounded.Description
 import androidx.compose.material.icons.rounded.Person
 import androidx.compose.material.icons.rounded.Phone
-import androidx.compose.material.icons.rounded.PhoneInTalk
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -184,7 +182,6 @@ fun SecurityProfileScreen(
                         ) {
                             Surface(
                                 modifier = Modifier
-                                    //.align(Alignment.CenterHorizontally)
                                     .padding(top = 30.dp, bottom = 30.dp)
                             ) {
                                 Card(
@@ -262,135 +259,8 @@ fun SecurityProfileScreen(
                 }
             }
 
-
-            item {
-                Surface(
-                    modifier = Modifier
-                        .padding(top = 30.dp, bottom = 17.dp)
-                ) {
-                    Card(
-                        shape = CircleShape,
-                        colors = CardDefaults.cardColors(containerColor = Color.Transparent),
-                        border = BorderStroke(width = 1.dp, color = Color.LightGray)
-                    ) {
-                        // Do not remove this null check
-                        if (pfpUri != null) {
-                            AsyncImage(
-                                model = pfpUri.toUri(),
-                                modifier = Modifier
-                                    .size(160.dp)
-                                    .clip(CircleShape),
-                                contentScale = ContentScale.Crop,
-                                contentDescription = "Pfp"
-                            )
-                        } else {
-                            Image(
-                                imageVector = Icons.Rounded.AccountCircle,
-                                modifier = Modifier.size(160.dp),
-                                colorFilter = ColorFilter.tint(Color(0xFF59EBDD)),
-                                contentDescription = "Default Pfp icon"
-                            )
-                        }
-                    }
-
-                    IconButton(
-                        colors = IconButtonDefaults.iconButtonColors(containerColor = Color(0xFF0588F1)),
-                        onClick = {
-                            pfpPickerLauncher.launch(
-                                PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
-                            )
-                        }
-                    ) {
-                        Icon(
-                            imageVector = Icons.Rounded.CameraAlt,
-                            modifier = Modifier
-                                .size(35.dp)
-                                .padding(4.dp),
-                            tint = Color.White,
-                            contentDescription = "Photo picker icon"
-                        )
-                    }
-                }
-            }
-
-            item {
-                AnimatedVisibility(visible = isPfpChanged) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceAround
-                    ) {
-                        Button(
-                            onClick = {
-                                pfpUri = security.pfpUrl
-                                isPfpChanged = false
-                            }
-                        ) {
-                            Text(text = "Cancel")
-                        }
-
-                        Button(
-                            onClick = {
-                                coroutineScope.launch {
-                                    viewModel.uploadPfpToCloud(
-                                        uri = pfpUri.toUri(),
-                                        name = security.name,
-                                        context = context
-                                    )
-                                    delay(Delays.CLOUD_UPLOAD_DELAY)
-                                    val storageRef = Firebase.storage.reference
-                                    storageRef.child("images/pfp/${security.name}.jpg").downloadUrl
-                                        .addOnSuccessListener { imgUrl ->
-                                            coroutineScope.launch(Dispatchers.IO) {
-                                                viewModel.updateSecurityPfpUrl(imgUrl)
-                                                delay(Delays.ON_DB_CHANGE_DELAY)
-                                                onSecurityDataChange()
-                                            }
-                                        }
-                                    isPfpChanged = false
-                                }
-                            }
-                        ) {
-                            Text(text = "Save")
-                        }
-                    }
-                }
-                if (!isProfileEdited) {
-                    Text(
-                        text = name,
-                        style = MaterialTheme.typography.titleMedium,
-                        fontSize = 20.sp
-                    )
-                    badgeId?.let {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Icon(
-                                imageVector = Icons.Rounded.Badge,
-                                modifier = Modifier
-                                    .size(21.dp)
-                                    .padding(end = 3.dp),
-                                tint = Color(0xFF3F51B5),
-                                contentDescription = "Security badge icon"
-                            )
-                            Text(text = badgeId)
-                        }
-                    }
-                    if (phoneNo.length == 10) {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Icon(
-                                imageVector = Icons.Rounded.PhoneInTalk,
-                                modifier = Modifier
-                                    .size(21.dp)
-                                    .padding(end = 3.dp),
-                                tint = Color(0xFF62B065),
-                                contentDescription = "Phone icon"
-                            )
-                            Text(text = "+91 ${phoneNo.substring(0, 5)} ${phoneNo.substring(5)}")
-                        }
-                    }
-
+            if (!isProfileEdited) {
+                item {
                     Button(
                         onClick = { isProfileEdited = true }
                     ) {
@@ -401,9 +271,61 @@ fun SecurityProfileScreen(
 
             item {
                 AnimatedVisibility(visible = isProfileEdited) {
+
                     Column(
-                        modifier = Modifier.fillMaxWidth()
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalAlignment = Alignment.CenterHorizontally
                     ) {
+
+                        Surface(
+                            modifier = Modifier
+                                .padding(top = 30.dp, bottom = 17.dp)
+                        ) {
+                            Card(
+                                shape = CircleShape,
+                                colors = CardDefaults.cardColors(containerColor = Color.Transparent),
+                                border = BorderStroke(width = 1.dp, color = Color.LightGray)
+                            ) {
+                                // Do not remove this null check
+                                if (pfpUri != null) {
+                                    AsyncImage(
+                                        model = pfpUri.toUri(),
+                                        modifier = Modifier
+                                            .size(160.dp)
+                                            .clip(CircleShape),
+                                        contentScale = ContentScale.Crop,
+                                        contentDescription = "Pfp"
+                                    )
+                                } else {
+                                    Image(
+                                        imageVector = Icons.Rounded.AccountCircle,
+                                        modifier = Modifier.size(160.dp),
+                                        colorFilter = ColorFilter.tint(Color(0xFF59EBDD)),
+                                        contentDescription = "Default Pfp icon"
+                                    )
+                                }
+                            }
+
+                            IconButton(
+                                colors = IconButtonDefaults.iconButtonColors(containerColor = Color(0xFF0588F1)),
+                                onClick = {
+                                    pfpPickerLauncher.launch(
+                                        PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+                                    )
+                                }
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Rounded.CameraAlt,
+                                    modifier = Modifier
+                                        .size(35.dp)
+                                        .padding(4.dp),
+                                    tint = Color.White,
+                                    contentDescription = "Photo picker icon"
+                                )
+                            }
+                        }
+
+
                         InputForm(
                             value = name,
                             label = "Name",
@@ -415,7 +337,7 @@ fun SecurityProfileScreen(
                         )
                         InputForm(
                             value = badgeId,
-                            label = "About Me",
+                            label = "Badge ID",
                             onValChange = { badgeId = it },
                             leadingIcon = Icons.Rounded.Description,
                             capitalization = KeyboardCapitalization.Sentences,
@@ -445,6 +367,7 @@ fun SecurityProfileScreen(
                                     name = security.name
                                     badgeId = security.badgeId
                                     phoneNo = security.phoneNo
+                                    pfpUri = security.pfpUrl
                                     isProfileEdited = false
                                 }
                             ) {
@@ -453,11 +376,59 @@ fun SecurityProfileScreen(
 
                             Button(
                                 onClick = {
-                                    coroutineScope.launch(Dispatchers.IO) {
-                                        viewModel.updateSecurityProfile(badgeId, phoneNo)
-                                        delay(Delays.CLOUD_UPLOAD_DELAY)
-                                        onSecurityDataChange()
+                                    val profileDetailsChanged = security.badgeId != badgeId && security.phoneNo != phoneNo
+                                    val pfpChanged = pfpUri != security.pfpUrl
+                                    if(pfpChanged && !profileDetailsChanged) {
+                                        coroutineScope.launch(Dispatchers.IO) {
+                                            viewModel.uploadPfpToCloud(
+                                                uri = pfpUri.toUri(),
+                                                name = security.name,
+                                                context = context
+                                            )
+                                            delay(Delays.CLOUD_UPLOAD_DELAY)
+                                            val storageRef = Firebase.storage.reference
+                                            storageRef.child("images/pfp/${security.name}.jpg").downloadUrl
+                                                .addOnSuccessListener { imgUrl ->
+                                                    coroutineScope.launch(Dispatchers.IO) {
+                                                        viewModel.updateSecurityPfpUrl(imgUrl)
+                                                        delay(Delays.ON_DB_CHANGE_DELAY)
+                                                        onSecurityDataChange()
+                                                    }
+                                                }
+                                        }
+                                    } else if(profileDetailsChanged && !pfpChanged) {
+                                        coroutineScope.launch(Dispatchers.IO) {
+                                            viewModel.updateSecurityProfile(badgeId, phoneNo)
+                                            delay(Delays.CLOUD_UPLOAD_DELAY)
+                                            onSecurityDataChange()
+                                        }
+                                    } else {
+                                        coroutineScope.launch(Dispatchers.IO) {
+                                            viewModel.updateSecurityProfile(badgeId, phoneNo)
+                                            delay(Delays.CLOUD_UPLOAD_DELAY)
+                                            onSecurityDataChange()
+                                        }
+                                        coroutineScope.launch(Dispatchers.IO) {
+                                            viewModel.uploadPfpToCloud(
+                                                uri = pfpUri.toUri(),
+                                                name = security.name,
+                                                context = context
+                                            )
+                                            delay(Delays.CLOUD_UPLOAD_DELAY)
+                                            val storageRef = Firebase.storage.reference
+                                            storageRef.child("images/pfp/${security.name}.jpg").downloadUrl
+                                                .addOnSuccessListener { imgUrl ->
+                                                    coroutineScope.launch(Dispatchers.IO) {
+                                                        viewModel.updateSecurityPfpUrl(imgUrl)
+                                                        delay(Delays.ON_DB_CHANGE_DELAY)
+                                                        onSecurityDataChange()
+                                                    }
+                                                }
+                                        }
                                     }
+
+
+
                                     isProfileEdited = false
                                 }
                             ) {
@@ -467,7 +438,6 @@ fun SecurityProfileScreen(
                     }
                 }
             }
-
         }
     }
 }

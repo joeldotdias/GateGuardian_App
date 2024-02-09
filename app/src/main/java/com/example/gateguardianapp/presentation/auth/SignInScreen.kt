@@ -117,7 +117,7 @@ fun SignInScreen(
                 horizontalArrangement = Arrangement.Center
             ) {
                 Icon(
-                    painter = painterResource(id = R.drawable.gate_guardian_logo),
+                    painter = painterResource(id = R.drawable.gate_guardian_society_admin_logo),
                     modifier = Modifier.size(35.dp),
                     tint = Color.Unspecified,
                     contentDescription = "Gate Guardian logo"

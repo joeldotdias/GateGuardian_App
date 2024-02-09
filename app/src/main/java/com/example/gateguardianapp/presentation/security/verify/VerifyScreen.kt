@@ -348,18 +348,20 @@ fun SecurityVisitorRow(
                 }
             }
 
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.End
-            ) {
-                IconButton(
-                    onClick = stopHighlighting
+            AnimatedVisibility(visible = isHighlighted) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.End
                 ) {
-                    Icon(
-                        imageVector = Icons.Rounded.Cancel,
-                        modifier = Modifier.size(30.dp),
-                        contentDescription = "Hide visitor verification form icon"
-                    )
+                    IconButton(
+                        onClick = stopHighlighting
+                    ) {
+                        Icon(
+                            imageVector = Icons.Rounded.Cancel,
+                            modifier = Modifier.size(30.dp),
+                            contentDescription = "Hide visitor verification form icon"
+                        )
+                    }
                 }
             }
         }
