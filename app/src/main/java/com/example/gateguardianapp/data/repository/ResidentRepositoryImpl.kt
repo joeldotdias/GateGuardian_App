@@ -1,6 +1,7 @@
 package com.example.gateguardianapp.data.repository
 
 import com.example.gateguardianapp.data.remote.ResidentApi
+import com.example.gateguardianapp.data.remote.dto.NoticeDto
 import com.example.gateguardianapp.data.remote.dto.ResidentDto
 import com.example.gateguardianapp.data.remote.dto.SecurityDto
 import com.example.gateguardianapp.data.remote.schema.UpdatePfp
@@ -49,6 +50,15 @@ class ResidentRepositoryImpl @Inject constructor(
 
     override suspend fun getVisitorsByResidentEmail(email: String): List<VisitorResidentDto>? {
         return api.getVisitorsByResidentEmail(email).body()
+    }
+
+    override suspend fun getNotices(email: String): List<NoticeDto>? {
+        return api.getNotices(email).body()
+    }
+
+    override suspend fun addNotice(email: String, title: String, body: String) {
+        val addNoticeRequestBody = NoticeDto(title, body).toRequestBody()
+        api.addNotice(email, addNoticeRequestBody)
     }
 
 

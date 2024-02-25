@@ -3,6 +3,7 @@ package com.example.gateguardianapp.presentation.auth
 import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -77,6 +78,15 @@ fun SignInScreen(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+
+        Image(
+            painter = painterResource(id = R.drawable.gate_guardian_logo),
+            modifier = Modifier
+                .size(240.dp)
+                .padding(15.dp),
+            contentDescription = "Gate Guardian logo"
+        )
+
         Surface(
             modifier = Modifier.fillMaxWidth(0.8f),
             onClick = onSignInClick,

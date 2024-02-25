@@ -332,23 +332,23 @@ fun ResidentProfileScreen(
             }
         }
 
-        Text(
-            text = "Memories",
-            modifier = Modifier.padding(top = 15.dp),
-            fontSize = 45.sp,
-            fontFamily = FontFamily.Cursive
-        )
-
-        LazyColumn(
-            modifier = Modifier.padding(top = 15.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            state.eventMemories?.let { memories -> 
-                items(memories) { memory ->
-                    EventMemoryRow(memory)
-                }
-            }
-        }
+//        Text(
+//            text = "Memories",
+//            modifier = Modifier.padding(top = 15.dp),
+//            fontSize = 45.sp,
+//            fontFamily = FontFamily.Cursive
+//        )
+//
+//        LazyColumn(
+//            modifier = Modifier.padding(top = 15.dp),
+//            horizontalAlignment = Alignment.CenterHorizontally
+//        ) {
+//            state.eventMemories?.let { memories ->
+//                items(memories) { memory ->
+//                    EventMemoryRow(memory)
+//                }
+//            }
+//        }
     }
 }
 

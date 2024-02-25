@@ -38,9 +38,9 @@ class ResidentProfileViewModel @Inject constructor(
                     resident = async {
                         repository.getResidentByEmail(email)
                     }.await(),
-                    eventMemories = async {
-                        repository.getMemoriesByResident(email)
-                    }.await()
+//                    eventMemories = async {
+//                        repository.getMemoriesByResident(email)
+//                    }.await()
                 )
             } catch(e: Exception) {
                 _state.value = state.value.copy(errorMessage = e.message)

@@ -1,5 +1,6 @@
 package com.example.gateguardianapp.data.remote
 
+import com.example.gateguardianapp.data.remote.dto.NoticeDto
 import com.example.gateguardianapp.data.remote.schema.RecentVisitorOtp
 import com.example.gateguardianapp.data.remote.dto.ResidentDto
 import com.example.gateguardianapp.data.remote.dto.SecurityDto
@@ -61,6 +62,12 @@ interface ResidentApi {
     @GET("admin/residents")
     suspend fun getResidentsBySociety(@Header("admin") email: String): Response<List<ResidentDto>>
 
+
+    // Notices
+    @GET("notices")
+    suspend fun getNotices(@Header("email") email: String): Response<List<NoticeDto>>
+
+
     @POST("admin/save-resident")
     suspend fun saveResident(
         @Header("admin") adminEmail: String,
@@ -76,5 +83,11 @@ interface ResidentApi {
         @Header("admin") adminEmail: String,
         @Query("name") name: String,
         @Query("email") email: String
+    )
+
+    @POST("admin/notice-save")
+    suspend fun addNotice(
+        @Header("admin") adminEmail: String,
+        @Body addNoticeRequest: RequestBody
     )
 }

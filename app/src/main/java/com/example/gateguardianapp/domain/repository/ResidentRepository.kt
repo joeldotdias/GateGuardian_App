@@ -1,5 +1,6 @@
 package com.example.gateguardianapp.domain.repository
 
+import com.example.gateguardianapp.data.remote.dto.NoticeDto
 import com.example.gateguardianapp.data.remote.dto.ResidentDto
 import com.example.gateguardianapp.data.remote.dto.SecurityDto
 import com.example.gateguardianapp.domain.model.resident.EventMemory
@@ -18,10 +19,14 @@ interface ResidentRepository {
     suspend fun saveResident(name: String, email: String, adminEmail: String)
     suspend fun saveSecurity(name: String, email: String, adminEmail: String)
 
-    //Visitors
+    // Visitors
     suspend fun saveVisitor(name: String, phoneNo: String, residentEmail: String)
     suspend fun getRecentVisitorOtp(email: String): String?
     suspend fun getVisitorsByResidentEmail(email: String): List<VisitorResidentDto>?
+
+    // Notices
+    suspend fun getNotices(email: String): List<NoticeDto>?
+    suspend fun addNotice(email: String, title: String, body: String)
 
     // Resident Profile
     suspend fun saveResidentHomeDetails(flatNo: String, building: String, email: String)
