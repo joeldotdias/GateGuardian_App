@@ -65,15 +65,15 @@ fun AdminPeopleScreen(
     val residentsData = viewModel.state.collectAsState().value.residents
     val securitiesData = viewModel.state.collectAsState().value.securities
 
-    val coroutineScope = rememberCoroutineScope()
-
-    var isAddingResident by remember { mutableStateOf(false) }
     var newResidentName by remember { mutableStateOf("") }
     var newResidentEmail by remember { mutableStateOf("") }
-
-    var isAddingSecurity by remember { mutableStateOf(false) }
     var newSecurityName by remember { mutableStateOf("") }
     var newSecurityEmail by remember { mutableStateOf("") }
+
+    var isAddingResident by remember { mutableStateOf(false) }
+    var isAddingSecurity by remember { mutableStateOf(false) }
+
+    val coroutineScope = rememberCoroutineScope()
     
     LazyColumn(
         contentPadding = PaddingValues(7.dp)
@@ -178,7 +178,7 @@ fun AdminPeopleScreen(
         }
 
         residentsData?.let { residents ->
-            items(items = residents) { resident ->
+            items(residents) { resident ->
                 ResidentDetailsCard(
                     resident = resident,
                     isAdmin = resident.email == adminEmail

@@ -36,6 +36,9 @@ class AdminViewModel @Inject constructor(
                     }.await(),
                     securities = async {
                         repository.getSecuritiesBySociety(adminEmail)
+                    }.await(),
+                    notices = async {
+                        repository.getNotices(adminEmail)
                     }.await()
                 )
             } catch(e: Exception) {
@@ -55,6 +58,12 @@ class AdminViewModel @Inject constructor(
     fun addSecurity(name: String, email: String) {
         viewModelScope.launch(Dispatchers.IO) {
             repository.saveSecurity(name, email, adminEmail)
+        }
+    }
+
+    fun addNotice(title: String, body: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.addNotice(adminEmail, title, body)
         }
     }
 }

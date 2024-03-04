@@ -86,7 +86,7 @@ fun AdminScreen(
                     )
                 }
 
-                1 -> { AdminNoticesScreen() }
+                1 -> { AdminNoticesScreen(viewModel, viewModel::getAdminScreenDetails) }
                 2 -> { AdminEventsScreen() }
             }
         }
