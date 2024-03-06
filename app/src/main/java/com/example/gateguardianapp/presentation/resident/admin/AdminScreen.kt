@@ -33,7 +33,7 @@ fun AdminScreen(
     val tabScreens = listOf(
         AdminScreens.People,
         AdminScreens.Notices,
-        AdminScreens.Events
+//        AdminScreens.Events
     )
 
     var selectedTabIndex by remember { mutableIntStateOf(0) }
@@ -87,7 +87,7 @@ fun AdminScreen(
                 }
 
                 1 -> { AdminNoticesScreen(viewModel, viewModel::getAdminScreenDetails) }
-                2 -> { AdminEventsScreen() }
+//                2 -> { AdminEventsScreen() }
             }
         }
     }

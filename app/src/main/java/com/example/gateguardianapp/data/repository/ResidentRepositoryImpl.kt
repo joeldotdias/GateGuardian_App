@@ -1,6 +1,7 @@
 package com.example.gateguardianapp.data.repository
 
 import com.example.gateguardianapp.data.remote.ResidentApi
+import com.example.gateguardianapp.data.remote.dto.DashDetailsDto
 import com.example.gateguardianapp.data.remote.dto.NoticeDto
 import com.example.gateguardianapp.data.remote.dto.ResidentDto
 import com.example.gateguardianapp.data.remote.dto.SecurityDto
@@ -11,70 +12,78 @@ import com.example.gateguardianapp.domain.model.resident.EventMemory
 import com.example.gateguardianapp.domain.model.resident.Resident
 import com.example.gateguardianapp.domain.model.resident.VisitorResidentDto
 import com.example.gateguardianapp.domain.repository.ResidentRepository
+import com.google.firebase.Firebase
+import com.google.firebase.auth.auth
 import javax.inject.Inject
 
 class ResidentRepositoryImpl @Inject constructor(
     private val api: ResidentApi
 ): ResidentRepository {
 
-    override suspend fun getResidentByEmail(email: String): Resident? {
-        return api.getResidentByEmail(email).body()
+    private val currUserEmail = Firebase.auth.currentUser?.email.toString()
+
+    override suspend fun getResidentByEmail(): Resident? {
+        return api.getResidentByEmail(currUserEmail).body()
+    }
+
+    override suspend fun getDashProfile(): DashDetailsDto? {
+        return api.getDashProfile(currUserEmail).body()
     }
 
 
-    override suspend fun getResidentsBySociety(adminEmail: String): List<ResidentDto>? {
-        return api.getResidentsBySociety(adminEmail).body()
+    override suspend fun getResidentsBySociety(): List<ResidentDto>? {
+        return api.getResidentsBySociety(currUserEmail).body()
     }
 
-    override suspend fun getSecuritiesBySociety(adminEmail: String): List<SecurityDto>? {
-        return  api.getSecuritiesBySociety(adminEmail).body()
+    override suspend fun getSecuritiesBySociety(): List<SecurityDto>? {
+        return  api.getSecuritiesBySociety(currUserEmail).body()
     }
 
-    override suspend fun saveResident(name: String, email: String, adminEmail: String) {
-        api.saveResident(adminEmail, name, email)
+    override suspend fun saveResident(residentName: String, residentEmail: String) {
+        api.saveResident(currUserEmail, residentName, residentEmail)
     }
 
-    override suspend fun saveSecurity(name: String, email: String, adminEmail: String) {
-        api.saveSecurity(adminEmail, name, email)
+    override suspend fun saveSecurity(securityName: String, securityEmail: String) {
+        api.saveSecurity(currUserEmail, securityName, securityEmail)
     }
 
 
-    override suspend fun saveVisitor(name: String, phoneNo: String, residentEmail: String) {
+    override suspend fun saveVisitor(name: String, phoneNo: String) {
         val visitorResidentDtoRequestBody = VisitorResidentDto(name = name, phoneNo = phoneNo).toRequestBody()
-        api.saveVisitor(residentEmail, visitorResidentDtoRequestBody)
+        api.saveVisitor(currUserEmail, visitorResidentDtoRequestBody)
     }
 
-    override suspend fun getRecentVisitorOtp(email: String): String? {
-        return api.getRecentVisitorOtp(email).body()?.code
+    override suspend fun getRecentVisitorOtp(): String? {
+        return api.getRecentVisitorOtp(currUserEmail).body()?.code
     }
 
-    override suspend fun getVisitorsByResidentEmail(email: String): List<VisitorResidentDto>? {
-        return api.getVisitorsByResidentEmail(email).body()
+    override suspend fun getVisitorsByResidentEmail(): List<VisitorResidentDto>? {
+        return api.getVisitorsByResidentEmail(currUserEmail).body()
     }
 
-    override suspend fun getNotices(email: String): List<NoticeDto>? {
-        return api.getNotices(email).body()
+    override suspend fun getNotices(): List<NoticeDto>? {
+        return api.getNotices(currUserEmail).body()
     }
 
-    override suspend fun addNotice(email: String, title: String, body: String) {
-        val addNoticeRequestBody = NoticeDto(title, body).toRequestBody()
-        api.addNotice(email, addNoticeRequestBody)
+    override suspend fun addNotice(title: String, body: String, category: String) {
+        val addNoticeRequestBody = NoticeDto(title, body, category).toRequestBody()
+        api.addNotice(currUserEmail, addNoticeRequestBody)
     }
 
 
-    override suspend fun saveResidentHomeDetails(flatNo: String, building: String, email: String) {
+    override suspend fun saveResidentHomeDetails(flatNo: String, building: String) {
         val homeDetailsRequestBody = UpdateResidentHome(flatNo.toInt(), building).toRequestBody()
-        api.saveResidentHomeDetails(email, homeDetailsRequestBody)
+        api.saveResidentHomeDetails(currUserEmail, homeDetailsRequestBody)
     }
 
-    override suspend fun updateResidentPfp(email: String, pfpUrl: String) {
+    override suspend fun updateResidentPfp(pfpUrl: String) {
         val pfpUrlRequestBody = UpdatePfp(pfpUrl).toRequestBody()
-        api.updateResidentPfp(email, pfpUrlRequestBody)
+        api.updateResidentPfp(currUserEmail, pfpUrlRequestBody)
     }
 
-    override suspend fun updateResidentProfile(email: String, aboutMe: String, phoneNo: String) {
+    override suspend fun updateResidentProfile(aboutMe: String, phoneNo: String) {
         val profileRequestBody = UpdateResidentProfile(aboutMe, phoneNo).toRequestBody()
-        api.updateResidentProfile(email, profileRequestBody)
+        api.updateResidentProfile(currUserEmail, profileRequestBody)
     }
 
     override suspend fun getMemoriesByResident(email: String): List<EventMemory>? {

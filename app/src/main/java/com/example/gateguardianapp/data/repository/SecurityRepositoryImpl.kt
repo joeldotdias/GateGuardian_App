@@ -11,6 +11,8 @@ import com.example.gateguardianapp.domain.model.security.Security
 import com.example.gateguardianapp.domain.model.security.VisitorLog
 import com.example.gateguardianapp.domain.model.security.VisitorSecurityDto
 import com.example.gateguardianapp.domain.repository.SecurityRepository
+import com.google.firebase.Firebase
+import com.google.firebase.auth.auth
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
@@ -19,12 +21,14 @@ class SecurityRepositoryImpl @Inject constructor(
     private val dao: VisitorSearchDao
 ): SecurityRepository {
 
-    override suspend fun getSecurityByEmail(email: String): Security? {
-        return api.getSecurityByEmail(email).body()
+    private val currUserEmail = Firebase.auth.currentUser?.email.toString()
+
+    override suspend fun getSecurityByEmail(): Security? {
+        return api.getSecurityByEmail(currUserEmail).body()
     }
 
-    override suspend fun getVisitorsBySociety(email: String): List<VisitorSecurityDto>? {
-        val visitors = api.getVisitorsBySociety(email).body()
+    override suspend fun getVisitorsBySociety(): List<VisitorSecurityDto>? {
+        val visitors = api.getVisitorsBySociety(currUserEmail).body()
         dao.clearVisitorSearchEntities()
         visitors?.let {
             it.forEach { visitorSecurityDto ->
@@ -45,23 +49,19 @@ class SecurityRepositoryImpl @Inject constructor(
         api.moveVerifiedVisitorToLogs(VerifiedVisitorDto(visitorId).toRequestBody())
     }
 
-    override suspend fun getVisitorLogs(email: String): List<VisitorLog>? {
-        return api.getVisitorLogsBySociety(email).body()
+    override suspend fun getVisitorLogs(): List<VisitorLog>? {
+        return api.getVisitorLogsBySociety(currUserEmail).body()
     }
 
 
-    override suspend fun updateSecurityPfp(email: String, pfpUrl: String) {
+    override suspend fun updateSecurityPfp(pfpUrl: String) {
         val pfpUrlRequestBody = UpdatePfp(pfpUrl).toRequestBody()
-        api.updateSecurityPfp(email, pfpUrlRequestBody)
+        api.updateSecurityPfp(currUserEmail, pfpUrlRequestBody)
     }
 
 
-    override suspend fun updateSecurityProfile(
-        email: String,
-        badgeId: String,
-        phoneNo: String
-    ) {
+    override suspend fun updateSecurityProfile(badgeId: String, phoneNo: String) {
         val profileRequestBody = UpdateSecurityProfile(badgeId, phoneNo).toRequestBody()
-        api.updateSecurityProfile(email, profileRequestBody)
+        api.updateSecurityProfile(currUserEmail, profileRequestBody)
     }
 }

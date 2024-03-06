@@ -69,7 +69,6 @@ fun ResidentDrawer(
         ResidentScreens.Visitors,
         ResidentScreens.Regulars,
         ResidentScreens.Notices,
-        ResidentScreens.Events,
         ResidentScreens.Profile,
         ResidentScreens.Admin
     )
@@ -156,16 +155,17 @@ fun ResidentDrawer(
 
 
 @Composable
-fun DrawerHeader(
-    email: String
-) {
+fun DrawerHeader(email: String) {
     Row(
-        modifier = Modifier
-            .fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceEvenly,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Image(imageVector = Icons.Rounded.AccountCircle, contentDescription = null, modifier = Modifier.size(80.dp))
+        Image(
+            imageVector = Icons.Rounded.AccountCircle,
+            modifier = Modifier.size(80.dp),
+            contentDescription = "Account icon"
+        )
         Text(
             text = email,
             color = MaterialTheme.colorScheme.onPrimaryContainer,

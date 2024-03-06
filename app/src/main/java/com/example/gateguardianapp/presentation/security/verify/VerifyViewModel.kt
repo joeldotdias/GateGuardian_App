@@ -5,8 +5,6 @@ import androidx.lifecycle.viewModelScope
 import com.example.gateguardianapp.data.local.VisitorSearchEntity
 import com.example.gateguardianapp.domain.model.security.VisitorSecurityDto
 import com.example.gateguardianapp.domain.repository.SecurityRepository
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -31,8 +29,6 @@ class VerifyViewModel @Inject constructor(
 
     val visitorSearchResults = MutableStateFlow<List<VisitorSearchEntity>>(emptyList())
 
-    val email = Firebase.auth.currentUser?.email!!
-
     init {
         getVisitors()
         getVisitorSearchResults("")
@@ -42,7 +38,7 @@ class VerifyViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             mutableListOf<VisitorSecurityDto>()
             async(Dispatchers.IO) {
-                _visitors.emit(repository.getVisitorsBySociety(email))
+                _visitors.emit(repository.getVisitorsBySociety())
             }.await()
             _isRefreshing.emit(false)
         }

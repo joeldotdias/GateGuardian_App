@@ -1,5 +1,6 @@
 package com.example.gateguardianapp.data.remote
 
+import com.example.gateguardianapp.data.remote.dto.DashDetailsDto
 import com.example.gateguardianapp.data.remote.dto.NoticeDto
 import com.example.gateguardianapp.data.remote.schema.RecentVisitorOtp
 import com.example.gateguardianapp.data.remote.dto.ResidentDto
@@ -21,6 +22,11 @@ interface ResidentApi {
     // App entry
     @GET("sign-in")
     suspend fun getResidentByEmail(@Header("email") email: String): Response<Resident>
+
+
+    // Dashboard
+    @GET("dashboard")
+    suspend fun getDashProfile(@Header("email") email: String): Response<DashDetailsDto>
 
 
     // Visitors

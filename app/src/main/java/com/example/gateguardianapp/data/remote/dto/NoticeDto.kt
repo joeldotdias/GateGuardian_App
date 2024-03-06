@@ -8,6 +8,7 @@ import org.json.JSONObject
 data class NoticeDto(
     val title: String = "",
     val body: String = "",
+    val category: String = "",
     val posted: String = ""
 ) {
     fun toRequestBody(): RequestBody {
@@ -15,6 +16,7 @@ data class NoticeDto(
         val jsonObject = JSONObject()
         jsonObject.put("title", title)
         jsonObject.put("body", body)
+        jsonObject.put("category", category)
 
         return jsonObject.toString().toRequestBody("application/json".toMediaTypeOrNull())
     }

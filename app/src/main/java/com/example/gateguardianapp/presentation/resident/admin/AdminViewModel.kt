@@ -3,8 +3,6 @@ package com.example.gateguardianapp.presentation.resident.admin
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.gateguardianapp.domain.repository.ResidentRepository
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -18,8 +16,6 @@ class AdminViewModel @Inject constructor(
     private val repository: ResidentRepository
 ): ViewModel() {
 
-    private val adminEmail = Firebase.auth.currentUser?.email.toString()
-
     private val _state = MutableStateFlow(AdminScreenState())
     val state = _state.asStateFlow()
 
@@ -32,13 +28,13 @@ class AdminViewModel @Inject constructor(
             try {
                 _state.value = state.value.copy(
                     residents = async {
-                        repository.getResidentsBySociety(adminEmail)
+                        repository.getResidentsBySociety()
                     }.await(),
                     securities = async {
-                        repository.getSecuritiesBySociety(adminEmail)
+                        repository.getSecuritiesBySociety()
                     }.await(),
                     notices = async {
-                        repository.getNotices(adminEmail)
+                        repository.getNotices()
                     }.await()
                 )
             } catch(e: Exception) {
@@ -51,19 +47,19 @@ class AdminViewModel @Inject constructor(
 
     fun addResident(name: String, email: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            repository.saveResident(name, email, adminEmail)
+            repository.saveResident(name, email)
         }
     }
 
     fun addSecurity(name: String, email: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            repository.saveSecurity(name, email, adminEmail)
+            repository.saveSecurity(name, email)
         }
     }
 
-    fun addNotice(title: String, body: String) {
+    fun addNotice(title: String, body: String, category: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            repository.addNotice(adminEmail, title, body)
+            repository.addNotice(title, body, category)
         }
     }
 }

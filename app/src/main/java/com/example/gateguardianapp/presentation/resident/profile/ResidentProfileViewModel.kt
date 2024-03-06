@@ -25,8 +25,6 @@ class ResidentProfileViewModel @Inject constructor(
     private val _state = MutableStateFlow(ResidentProfileState())
     val state = _state.asStateFlow()
 
-    val email = Firebase.auth.currentUser?.email!!
-
     init {
         getProfileDetails()
     }
@@ -36,7 +34,7 @@ class ResidentProfileViewModel @Inject constructor(
             try {
                 _state.value = state.value.copy(
                     resident = async {
-                        repository.getResidentByEmail(email)
+                        repository.getResidentByEmail()
                     }.await(),
 //                    eventMemories = async {
 //                        repository.getMemoriesByResident(email)
@@ -50,7 +48,7 @@ class ResidentProfileViewModel @Inject constructor(
 
     fun saveHomeDetails(flatNo: String, building: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            repository.saveResidentHomeDetails(flatNo, building, email)
+            repository.saveResidentHomeDetails(flatNo, building)
         }
     }
 
@@ -60,13 +58,13 @@ class ResidentProfileViewModel @Inject constructor(
 
     fun updateResidentPfpUrl(imgUrl: Uri) {
         viewModelScope.launch(Dispatchers.IO) {
-            repository.updateResidentPfp(email, imgUrl.toString())
+            repository.updateResidentPfp(imgUrl.toString())
         }
     }
 
     fun updateResidentProfile(aboutMe: String, phoneNo: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            repository.updateResidentProfile(email, aboutMe, phoneNo)
+            repository.updateResidentProfile(aboutMe, phoneNo)
         }
     }
 }

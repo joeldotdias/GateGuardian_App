@@ -3,8 +3,6 @@ package com.example.gateguardianapp.presentation.resident.visitors
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.gateguardianapp.domain.repository.ResidentRepository
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,8 +15,6 @@ class VisitorsViewModel @Inject constructor(
     private val repository: ResidentRepository
 ): ViewModel() {
 
-    private val email = Firebase.auth.currentUser?.email.toString()
-
     private val _state = MutableStateFlow(VisitorsState())
     val state = _state.asStateFlow()
 
@@ -30,7 +26,7 @@ class VisitorsViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 _state.value = state.value.copy(
-                    visitors = repository.getVisitorsByResidentEmail(email)
+                    visitors = repository.getVisitorsByResidentEmail()
                 )
             } catch(e: Exception) {
                 _state.value = state.value.copy(
@@ -41,10 +37,10 @@ class VisitorsViewModel @Inject constructor(
     }
 
     suspend fun saveVisitor(name: String, phoneNo: String) {
-        repository.saveVisitor(name, phoneNo, email)
+        repository.saveVisitor(name, phoneNo)
     }
 
     suspend fun getRecentVisitorOtp(): String? {
-        return repository.getRecentVisitorOtp(email)
+        return repository.getRecentVisitorOtp()
     }
 }

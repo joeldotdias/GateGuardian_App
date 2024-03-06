@@ -33,7 +33,7 @@ class SecurityProfileViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 _state.value = state.value.copy(
-                    security = repository.getSecurityByEmail(email)
+                    security = repository.getSecurityByEmail()
                 )
             } catch(e: Exception) {
                 _state.value = state.value.copy(
@@ -49,13 +49,13 @@ class SecurityProfileViewModel @Inject constructor(
 
     fun updateSecurityPfpUrl(imgUrl: Uri) {
         viewModelScope.launch(Dispatchers.IO) {
-            repository.updateSecurityPfp(email, imgUrl.toString())
+            repository.updateSecurityPfp(imgUrl.toString())
         }
     }
 
     fun updateSecurityProfile(badgeId: String, phoneNo: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            repository.updateSecurityProfile(email, badgeId, phoneNo)
+            repository.updateSecurityProfile(badgeId, phoneNo)
         }
     }
 }

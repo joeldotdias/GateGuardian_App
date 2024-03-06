@@ -147,7 +147,7 @@ fun VisitorsScreen(
                         IconButton(
                             onClick = {
                                 coroutineScope.launch {
-                                    context.shareOtp(generatedOtp, phoneNo)
+                                    context.shareCode(generatedOtp, phoneNo)
                                     delay(150L)
                                     name = ""
                                     phoneNo = ""
@@ -186,7 +186,7 @@ fun VisitorsScreen(
                         VisitorRow(
                             visitor = visitor,
                             shareVisitorOtp = { otp, phoneNo ->
-                                context.shareOtp(otp, phoneNo)
+                                context.shareCode(otp, phoneNo)
                             }
                         )
                     }
@@ -197,12 +197,12 @@ fun VisitorsScreen(
 }
 
 
-fun Context.shareOtp(otp: String, phoneNo: String) {
+fun Context.shareCode(code: String, phoneNo: String) {
     try {
         val shareOtpIntent = Intent(Intent.ACTION_SEND).apply {
             this.type = "text/plain"
             this.`package` = "com.whatsapp"
-            this.putExtra(Intent.EXTRA_TEXT, "Hi! Here's your code to come in: $otp")
+            this.putExtra(Intent.EXTRA_TEXT, "Hi! Here's your code to come in: $code")
             this.putExtra(Intent.EXTRA_PHONE_NUMBER, "+91 $phoneNo")
         }
         startActivity(shareOtpIntent)

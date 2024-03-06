@@ -9,17 +9,17 @@ import kotlinx.coroutines.flow.Flow
 interface SecurityRepository {
 
     // App entry
-    suspend fun getSecurityByEmail(email: String): Security?
+    suspend fun getSecurityByEmail(): Security?
 
     // Verify visitors
-    suspend fun getVisitorsBySociety(email: String): List<VisitorSecurityDto>?
+    suspend fun getVisitorsBySociety(): List<VisitorSecurityDto>?
     suspend fun getVisitorSearchResults(query: String): Flow<List<VisitorSearchEntity>>
     suspend fun moveVerifiedVisitorToLogs(visitorId: Int)
 
     // Visitor logs
-    suspend fun getVisitorLogs(email: String): List<VisitorLog>?
+    suspend fun getVisitorLogs(): List<VisitorLog>?
 
     // Security profile
-    suspend fun updateSecurityPfp(email: String, pfpUrl: String)
-    suspend fun updateSecurityProfile(email: String, badgeId: String, phoneNo: String)
+    suspend fun updateSecurityPfp(pfpUrl: String)
+    suspend fun updateSecurityProfile(badgeId: String, phoneNo: String)
 }

@@ -17,6 +17,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.FilterAlt
 import androidx.compose.material.icons.rounded.AddAlert
 import androidx.compose.material.icons.rounded.Description
+import androidx.compose.material.icons.rounded.GroupWork
 import androidx.compose.material.icons.rounded.ViewHeadline
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
@@ -54,6 +55,7 @@ fun AdminNoticesScreen(
 
     var title by remember { mutableStateOf("") }
     var body by remember { mutableStateOf("") }
+    var category by remember { mutableStateOf("") }
 
     var isAddingNotice by remember { mutableStateOf(false) }
 
@@ -99,9 +101,11 @@ fun AdminNoticesScreen(
                         onTitleChange = { title = it },
                         body = body,
                         onBodyChange = { body = it },
+                        category = category,
+                        onCategoryChange = { category = it },
                         onSaveClick = {
                             coroutineScope.launch {
-                                viewModel.addNotice(title, body)
+                                viewModel.addNotice(title, body, category)
                                 delay(Delays.CLOUD_UPLOAD_DELAY)
                                 title = ""
                                 body = ""
@@ -112,6 +116,7 @@ fun AdminNoticesScreen(
                             isAddingNotice = false
                             title = ""
                             body = ""
+                            category = ""
                         }
                     )
                 }
@@ -132,6 +137,8 @@ fun AddNoticeForm(
     onTitleChange: (String) -> Unit,
     body: String,
     onBodyChange: (String) -> Unit,
+    category: String,
+    onCategoryChange: (String) -> Unit,
     onSaveClick: () -> Unit,
     onCancelClick: () -> Unit
 ) {
@@ -145,6 +152,15 @@ fun AddNoticeForm(
             label = "Title",
             onValChange = onTitleChange,
             leadingIcon = Icons.Rounded.ViewHeadline,
+            onImeAction = KeyboardActions(
+                onNext = { focusManager.moveFocus(FocusDirection.Down) }
+            )
+        )
+        InputForm(
+            value = category,
+            label = "Category",
+            onValChange = onCategoryChange,
+            leadingIcon = Icons.Rounded.GroupWork,
             onImeAction = KeyboardActions(
                 onNext = { focusManager.moveFocus(FocusDirection.Down) }
             )
