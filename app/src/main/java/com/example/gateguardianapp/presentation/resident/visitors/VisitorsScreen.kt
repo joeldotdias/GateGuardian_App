@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -41,20 +40,17 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -365,69 +361,5 @@ fun VisitorRow(
                 )
             }
         }
-
-//        Row(
-//            modifier = Modifier
-//                .fillMaxWidth()
-//                .padding(15.dp)
-//        ) {
-//            Row(
-//                modifier = Modifier.fillMaxWidth(),
-//                verticalAlignment = Alignment.CenterVertically
-//            ) {
-//                Icon(
-//                    imageVector = Icons.Rounded.Person,
-//                    contentDescription = "Person icon"
-//                )
-//                Text(text = visitor.name)
-//            }
-//
-//            Row(
-//                modifier = Modifier.fillMaxWidth(),
-//                verticalAlignment = Alignment.CenterVertically
-//            ) {
-//                Icon(
-//                    imageVector = Icons.Rounded.Phone,
-//                    contentDescription = "Phone number icon"
-//                )
-//                Text(text = visitor.phoneNo)
-//            }
-//
-//            Row(
-//                modifier = Modifier.fillMaxWidth(),
-//                verticalAlignment = Alignment.CenterVertically
-//            ) {
-//                Button(
-//                    onClick = {
-//                        isOtpVisible = !isOtpVisible
-//                    }
-//                ) {
-//                    Text(text = if(!isOtpVisible) "Show OTP" else "Hide OTP")
-//                }
-//                AnimatedVisibility(visible = isOtpVisible) {
-//                    TextField(
-//                        value = visitor.code,
-//                        readOnly = true,
-//                        modifier = Modifier
-//                            .weight(1f)
-//                            .padding(start = 18.dp, end = 12.dp),
-//                        colors = TextFieldDefaults.colors(unfocusedContainerColor = MaterialTheme.colorScheme.primaryContainer),
-//                        trailingIcon = {
-//                            IconButton(
-//                                onClick = {
-//                                    shareVisitorOtp(visitor.code, visitor.phoneNo)
-//                                }
-//                            ) {
-//                                Icon(
-//                                    imageVector = Icons.Rounded.Share,
-//                                    contentDescription = "Share otp icon"
-//                                )
-//                            }
-//                        },
-//                        onValueChange = {}
-//                    )
-//                }
-//            }
-//        }
     }
 }
