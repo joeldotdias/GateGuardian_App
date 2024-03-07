@@ -155,7 +155,6 @@ fun VisitorLogCard(visitorLog: VisitorLog) {
                     )
                 }
             }
-
         }
     }
 }

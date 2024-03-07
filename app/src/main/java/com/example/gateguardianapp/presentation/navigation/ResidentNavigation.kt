@@ -8,7 +8,6 @@ import androidx.navigation.compose.composable
 import com.example.gateguardianapp.domain.model.resident.Resident
 import com.example.gateguardianapp.presentation.resident.admin.AdminScreen
 import com.example.gateguardianapp.presentation.resident.dashboard.DashboardScreen
-import com.example.gateguardianapp.presentation.resident.events.EventsScreen
 import com.example.gateguardianapp.presentation.resident.notices.NoticesScreen
 import com.example.gateguardianapp.presentation.resident.profile.ResidentProfileScreen
 import com.example.gateguardianapp.presentation.resident.profile.ResidentProfileViewModel
@@ -36,10 +35,6 @@ fun ResidentNavigation(
 
         composable(route = ResidentScreens.Regulars.route) {
             RegularsScreen()
-        }
-
-        composable(route = ResidentScreens.Events.route) {
-            EventsScreen()
         }
 
         composable(route = ResidentScreens.Notices.route) {
