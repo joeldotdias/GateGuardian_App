@@ -275,7 +275,7 @@ fun NoticeBoard(noticesData: List<NoticeDto>?) {
     }
 }
 
-private fun iconFromCategory(category: String): ImageVector {
+fun iconFromCategory(category: String): ImageVector {
     return when(category.lowercase()) {
         "alert" -> Icons.Rounded.CrisisAlert
         "reminder" -> Icons.Rounded.Notifications

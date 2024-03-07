@@ -52,7 +52,7 @@ fun ResidentNavigation(
         }
 
         composable(route = ResidentScreens.Admin.route) {
-            AdminScreen(resident)
+            AdminScreen()
         }
     }
 }

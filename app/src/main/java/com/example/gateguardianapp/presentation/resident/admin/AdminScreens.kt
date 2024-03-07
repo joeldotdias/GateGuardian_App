@@ -1,10 +1,8 @@
 package com.example.gateguardianapp.presentation.resident.admin
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Campaign
 import androidx.compose.material.icons.filled.Groups
 import androidx.compose.material.icons.filled.Star
-import androidx.compose.material.icons.outlined.Campaign
 import androidx.compose.material.icons.outlined.Groups
 import androidx.compose.material.icons.outlined.StarBorder
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -25,11 +23,5 @@ sealed class AdminScreens(
         title = "Notices",
         unselectedIcon = Icons.Outlined.StarBorder,
         selectedIcon = Icons.Filled.Star
-    )
-
-    data object Events: AdminScreens(
-        title = "Events",
-        unselectedIcon = Icons.Outlined.Campaign,
-        selectedIcon = Icons.Filled.Campaign
     )
 }

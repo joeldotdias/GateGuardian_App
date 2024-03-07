@@ -12,7 +12,6 @@ import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
@@ -20,21 +19,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.gateguardianapp.domain.model.resident.Resident
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun AdminScreen(
-    resident: Resident,
     viewModel: AdminViewModel = hiltViewModel()
 ) {
-//    val state = viewModel.state.collectAsState().value
-
-    val tabScreens = listOf(
-        AdminScreens.People,
-        AdminScreens.Notices,
-//        AdminScreens.Events
-    )
+    val tabScreens = listOf(AdminScreens.People, AdminScreens.Notices)
 
     var selectedTabIndex by remember { mutableIntStateOf(0) }
     val pagerState = rememberPagerState( pageCount = { tabScreens.size } )
@@ -51,13 +42,11 @@ fun AdminScreen(
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
-        TabRow(selectedTabIndex = selectedTabIndex) {
+        TabRow(selectedTabIndex) {
             tabScreens.forEachIndexed { index, adminScreen -> 
                 Tab(
                     selected = index == selectedTabIndex,
-                    onClick = { 
-                        selectedTabIndex = index
-                    },
+                    onClick = { selectedTabIndex = index },
                     text = {
                         Text(text = adminScreen.title)
                     },
@@ -79,15 +68,8 @@ fun AdminScreen(
             verticalAlignment = Alignment.Top
         ) { index ->
             when(index) {
-                0 -> {
-                    AdminPeopleScreen(
-                        viewModel = viewModel,
-                        onPeopleChange = viewModel::getAdminScreenDetails
-                    )
-                }
-
-                1 -> { AdminNoticesScreen(viewModel, viewModel::getAdminScreenDetails) }
-//                2 -> { AdminEventsScreen() }
+                0 -> AdminPeopleScreen(viewModel = viewModel, onPeopleChange = viewModel::getAdminScreenDetails)
+                1 -> AdminNoticesScreen(viewModel, viewModel::getAdminScreenDetails)
             }
         }
     }
