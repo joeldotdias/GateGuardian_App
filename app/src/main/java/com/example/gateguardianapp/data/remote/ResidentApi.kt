@@ -2,9 +2,10 @@ package com.example.gateguardianapp.data.remote
 
 import com.example.gateguardianapp.data.remote.dto.DashDetailsDto
 import com.example.gateguardianapp.data.remote.dto.NoticeDto
-import com.example.gateguardianapp.data.remote.schema.RecentVisitorOtp
+import com.example.gateguardianapp.data.remote.schema.RecentOtp
 import com.example.gateguardianapp.data.remote.dto.ResidentDto
 import com.example.gateguardianapp.data.remote.dto.SecurityDto
+import com.example.gateguardianapp.data.remote.schema.RegularsSchema
 import com.example.gateguardianapp.domain.model.resident.EventMemory
 import com.example.gateguardianapp.domain.model.resident.Resident
 import com.example.gateguardianapp.domain.model.resident.VisitorResidentDto
@@ -40,7 +41,21 @@ interface ResidentApi {
     )
 
     @GET("visitor-recent")
-    suspend fun getRecentVisitorOtp(@Header("email") email: String): Response<RecentVisitorOtp>
+    suspend fun getRecentVisitorOtp(@Header("email") email: String): Response<RecentOtp>
+
+
+    // Regulars
+    @GET("regulars")
+    suspend fun getRegularsByResidentEmail(@Header("email") email: String): Response<List<RegularsSchema>>
+
+    @POST("regular-save")
+    suspend fun saveRegular(
+        @Header("email") email: String,
+        @Body regularRequestBody: RequestBody
+    )
+
+    @GET("regular-recent")
+    suspend fun getRecentRegularOtp(@Header("email") email: String): Response<RecentOtp>
 
 
     // Profile

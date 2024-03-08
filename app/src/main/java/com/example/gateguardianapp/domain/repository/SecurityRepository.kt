@@ -1,6 +1,7 @@
 package com.example.gateguardianapp.domain.repository
 
 import com.example.gateguardianapp.data.local.VisitorSearchEntity
+import com.example.gateguardianapp.data.remote.schema.RegularsSchema
 import com.example.gateguardianapp.domain.model.security.Security
 import com.example.gateguardianapp.domain.model.security.VisitorLog
 import com.example.gateguardianapp.domain.model.security.VisitorSecurityDto
@@ -18,6 +19,9 @@ interface SecurityRepository {
 
     // Visitor logs
     suspend fun getVisitorLogs(): List<VisitorLog>?
+
+    // Regulars
+    suspend fun getRegulars(): List<RegularsSchema>?
 
     // Security profile
     suspend fun updateSecurityPfp(pfpUrl: String)

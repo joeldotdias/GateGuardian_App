@@ -1,5 +1,5 @@
 package com.example.gateguardianapp.data.remote.schema
 
-data class RecentVisitorOtp(
+data class RecentOtp(
     val code: String
 )

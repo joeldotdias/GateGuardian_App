@@ -5,6 +5,7 @@ import com.example.gateguardianapp.data.remote.dto.DashDetailsDto
 import com.example.gateguardianapp.data.remote.dto.NoticeDto
 import com.example.gateguardianapp.data.remote.dto.ResidentDto
 import com.example.gateguardianapp.data.remote.dto.SecurityDto
+import com.example.gateguardianapp.data.remote.schema.RegularsSchema
 import com.example.gateguardianapp.data.remote.schema.UpdatePfp
 import com.example.gateguardianapp.data.remote.schema.UpdateResidentHome
 import com.example.gateguardianapp.data.remote.schema.UpdateResidentProfile
@@ -59,6 +60,19 @@ class ResidentRepositoryImpl @Inject constructor(
 
     override suspend fun getVisitorsByResidentEmail(): List<VisitorResidentDto>? {
         return api.getVisitorsByResidentEmail(currUserEmail).body()
+    }
+
+    override suspend fun getRegularsByResidentEmail(): List<RegularsSchema>? {
+        return api.getRegularsByResidentEmail(currUserEmail).body()
+    }
+
+    override suspend fun saveRegular(name: String, role: String, entry: String) {
+        val addRegularBody = RegularsSchema(name, role, entry).toRequestBody()
+        api.saveRegular(currUserEmail, addRegularBody)
+    }
+
+    override suspend fun getRecentRegularOtp(): String? {
+        return api.getRecentRegularOtp(currUserEmail).body()?.code
     }
 
     override suspend fun getNotices(): List<NoticeDto>? {

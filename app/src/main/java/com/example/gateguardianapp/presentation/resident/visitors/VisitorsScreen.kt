@@ -206,7 +206,7 @@ fun VisitorsScreen(
                             IconButton(
                                 onClick = {
                                     coroutineScope.launch {
-                                        context.shareCode(generatedOtp, phoneNo)
+                                        context.shareCode(generatedOtp)
                                         delay(150L)
                                         name = ""
                                         phoneNo = ""
@@ -258,8 +258,8 @@ fun VisitorsScreen(
                     items(items = visitors) { visitor ->
                         VisitorRow(
                             visitor = visitor,
-                            shareVisitorOtp = { otp, phoneNo ->
-                                context.shareCode(otp, phoneNo)
+                            shareVisitorOtp = { otp ->
+                                context.shareCode(otp)
                             }
                         )
                         HorizontalDivider()
@@ -271,13 +271,12 @@ fun VisitorsScreen(
 }
 
 
-fun Context.shareCode(code: String, phoneNo: String) {
+fun Context.shareCode(code: String) {
     try {
         val shareOtpIntent = Intent(Intent.ACTION_SEND).apply {
             this.type = "text/plain"
             this.`package` = "com.whatsapp"
             this.putExtra(Intent.EXTRA_TEXT, "Hi! Here's your code to come in: $code")
-            this.putExtra(Intent.EXTRA_PHONE_NUMBER, "+91 $phoneNo")
         }
         startActivity(shareOtpIntent)
     } catch(e: Exception) {
@@ -288,7 +287,7 @@ fun Context.shareCode(code: String, phoneNo: String) {
 @Composable
 fun VisitorRow(
     visitor: VisitorResidentDto,
-    shareVisitorOtp: (String, String) -> Unit
+    shareVisitorOtp: (String) -> Unit
 ) {
 
     var isOtpVisible by remember { mutableStateOf(false) }
@@ -346,7 +345,7 @@ fun VisitorRow(
                     trailingIcon = {
                         IconButton(
                             onClick = {
-                                shareVisitorOtp(visitor.code, visitor.phoneNo)
+                                shareVisitorOtp(visitor.code)
                             }
                         ) {
                             Icon(

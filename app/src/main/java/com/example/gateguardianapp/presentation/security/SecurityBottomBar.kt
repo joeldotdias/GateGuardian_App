@@ -30,6 +30,7 @@ fun SecurityBottomBar(
 
     val screens = listOf(
         SecurityScreens.Verify,
+        SecurityScreens.Regulars,
         SecurityScreens.Notify,
         SecurityScreens.Logs,
         SecurityScreens.Profile

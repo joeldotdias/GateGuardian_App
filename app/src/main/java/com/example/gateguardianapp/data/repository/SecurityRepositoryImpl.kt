@@ -5,6 +5,7 @@ import com.example.gateguardianapp.data.local.VisitorSearchEntity
 import com.example.gateguardianapp.data.mapper.toVisitorSearchEntity
 import com.example.gateguardianapp.data.remote.SecurityApi
 import com.example.gateguardianapp.data.remote.dto.VerifiedVisitorDto
+import com.example.gateguardianapp.data.remote.schema.RegularsSchema
 import com.example.gateguardianapp.data.remote.schema.UpdatePfp
 import com.example.gateguardianapp.data.remote.schema.UpdateSecurityProfile
 import com.example.gateguardianapp.domain.model.security.Security
@@ -51,6 +52,10 @@ class SecurityRepositoryImpl @Inject constructor(
 
     override suspend fun getVisitorLogs(): List<VisitorLog>? {
         return api.getVisitorLogsBySociety(currUserEmail).body()
+    }
+
+    override suspend fun getRegulars(): List<RegularsSchema>? {
+        return api.getRegularsBySociety(currUserEmail).body()
     }
 
 

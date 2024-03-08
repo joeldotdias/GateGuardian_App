@@ -168,7 +168,7 @@ fun VisitorsCard(visitorsData: List<VisitorResidentDto>?) {
                         Card(
                             modifier = Modifier
                                 .padding(vertical = 5.dp, horizontal = 8.dp)
-                                .clickable { context.shareCode(visitor.code, visitor.phoneNo) },
+                                .clickable { context.shareCode(visitor.code) },
                             colors = CardDefaults.cardColors(containerColor = Color(0xFF59A7E5)),
                             shape = RoundedCornerShape(12.dp),
                             elevation = CardDefaults.cardElevation(14.dp)

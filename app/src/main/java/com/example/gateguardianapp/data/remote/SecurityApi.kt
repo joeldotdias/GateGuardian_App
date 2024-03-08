@@ -1,5 +1,6 @@
 package com.example.gateguardianapp.data.remote
 
+import com.example.gateguardianapp.data.remote.schema.RegularsSchema
 import com.example.gateguardianapp.domain.model.security.Security
 import com.example.gateguardianapp.domain.model.security.VisitorLog
 import com.example.gateguardianapp.domain.model.security.VisitorSecurityDto
@@ -28,6 +29,10 @@ interface SecurityApi {
     // Visitor logs
     @GET("visitor-logs")
     suspend fun getVisitorLogsBySociety(@Header("email") email: String): Response<List<VisitorLog>>
+
+    // Regulars
+    @GET("regulars")
+    suspend fun getRegularsBySociety(@Header("email") email: String): Response<List<RegularsSchema>>
 
     // Security profile
     @PUT("update-pfp")

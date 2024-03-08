@@ -1,17 +1,21 @@
 package com.example.gateguardianapp.presentation.resident
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.rounded.AccountCircle
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
@@ -34,15 +38,22 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import coil.compose.AsyncImage
 import com.example.gateguardianapp.domain.model.User
+import com.example.gateguardianapp.presentation.components.CustomerSupportButtons
 import com.example.gateguardianapp.presentation.navigation.ResidentNavigation
 import com.example.gateguardianapp.presentation.navigation.ResidentScreens
-import com.example.gateguardianapp.presentation.components.CustomerSupportButtons
 import com.example.gateguardianapp.presentation.resident.profile.ResidentProfileViewModel
 import kotlinx.coroutines.launch
 
@@ -78,7 +89,7 @@ fun ResidentDrawer(
             ModalDrawerSheet {
                 // Header
                 Spacer(modifier = Modifier.height(20.dp))
-                DrawerHeader(user.email)
+                DrawerHeader(user.email, user.name, residentData?.pfpUrl)
                 HorizontalDivider(thickness = 2.dp)
                 Spacer(modifier = Modifier.height(20.dp))
 
@@ -105,6 +116,14 @@ fun ResidentDrawer(
                         }
                     )
                 }
+
+                Spacer(modifier = Modifier.fillMaxHeight(0.5f))
+                Text(
+                    text = "GateGuardian v1.0",
+                    fontStyle = FontStyle.Italic,
+                    fontWeight = FontWeight.Light,
+                    modifier = Modifier.padding(start = 10.dp)
+                )
             }
         },
         drawerState = drawerState
@@ -155,21 +174,42 @@ fun ResidentDrawer(
 
 
 @Composable
-fun DrawerHeader(email: String) {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceEvenly,
-        verticalAlignment = Alignment.CenterVertically
+fun DrawerHeader(email: String, name: String, pfpUrl: String?) {
+    Column(
+        modifier = Modifier
+            .fillMaxHeight(0.36f)
+            .fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Image(
-            imageVector = Icons.Rounded.AccountCircle,
-            modifier = Modifier.size(80.dp),
-            contentDescription = "Account icon"
-        )
+        Surface(
+            modifier = Modifier.padding(top = 30.dp, bottom = 17.dp)
+        ) {
+            Card(
+                shape = CircleShape,
+                colors = CardDefaults.cardColors(containerColor = Color.Transparent),
+                border = BorderStroke(width = 1.dp, color = Color.LightGray)
+            ) {
+                pfpUrl?.let {
+                    AsyncImage(
+                        model = it.toUri(),
+                        modifier = Modifier
+                            .size(120.dp)
+                            .clip(CircleShape),
+                        contentScale = ContentScale.Crop,
+                        contentDescription = "Pfp"
+                    )
+                } ?: Image(
+                    imageVector = Icons.Rounded.AccountCircle,
+                    modifier = Modifier.size(120.dp),
+                    colorFilter = ColorFilter.tint(Color(0xFF59EBDD)),
+                    contentDescription = "Default Pfp icon"
+                )
+            }
+        }
         Text(
-            text = email,
-            color = MaterialTheme.colorScheme.onPrimaryContainer,
-            textAlign = TextAlign.Center
+            text = name,
+            fontWeight = FontWeight.SemiBold
         )
+        Text(text = email)
     }
 }
