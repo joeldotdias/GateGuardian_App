@@ -181,7 +181,8 @@ fun VisitorsCard(visitorsData: List<VisitorResidentDto>?) {
 
                                 Text(
                                     text = "Code",
-                                    color = Color.LightGray,
+                                    color = Color.White,
+                                    fontWeight = FontWeight.SemiBold,
                                     modifier = Modifier.padding(end = 10.dp)
                                 )
                             }

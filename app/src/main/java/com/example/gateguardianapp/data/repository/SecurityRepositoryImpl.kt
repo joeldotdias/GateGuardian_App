@@ -60,8 +60,8 @@ class SecurityRepositoryImpl @Inject constructor(
     }
 
 
-    override suspend fun updateSecurityProfile(badgeId: String, phoneNo: String) {
-        val profileRequestBody = UpdateSecurityProfile(badgeId, phoneNo).toRequestBody()
+    override suspend fun updateSecurityProfile(name: String, phoneNo: String) {
+        val profileRequestBody = UpdateSecurityProfile(name, phoneNo).toRequestBody()
         api.updateSecurityProfile(currUserEmail, profileRequestBody)
     }
 }

@@ -6,13 +6,13 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONObject
 
 data class UpdateSecurityProfile(
-    val badgeId: String,
+    val name: String,
     val phoneNo: String
 ) {
     fun toRequestBody(): RequestBody {
 
         val jsonObject = JSONObject()
-        jsonObject.put("badgeId", badgeId)
+        jsonObject.put("name", name)
         jsonObject.put("phoneNo", phoneNo)
 
         return jsonObject.toString().toRequestBody("application/json".toMediaTypeOrNull())

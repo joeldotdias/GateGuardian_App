@@ -12,10 +12,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
@@ -30,8 +29,10 @@ import androidx.compose.material.icons.rounded.Person
 import androidx.compose.material.icons.rounded.Phone
 import androidx.compose.material.icons.rounded.PhoneInTalk
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
@@ -56,8 +57,8 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
@@ -67,7 +68,6 @@ import androidx.compose.ui.unit.sp
 import androidx.core.net.toUri
 import coil.compose.AsyncImage
 import com.example.gateguardianapp.domain.model.resident.Resident
-import com.example.gateguardianapp.presentation.components.EventMemoryRow
 import com.example.gateguardianapp.presentation.components.InputForm
 import com.example.gateguardianapp.util.Delays
 import com.google.firebase.ktx.Firebase
@@ -111,24 +111,6 @@ fun ResidentProfileScreen(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(2.dp),
-            horizontalArrangement = Arrangement.End,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(text = "Sign out", fontSize = 20.sp)
-            IconButton(
-                onClick = { signOut() }
-            ) {
-                Icon(
-                    imageVector = Icons.AutoMirrored.Filled.Logout,
-                    contentDescription = "Sign out icon"
-                )
-            }
-        }
-
         AnimatedVisibility(visible = areHomeDetailsNotProvided) {
             ProvideHomeDetailsForm(
                 focusManager = focusManager,
@@ -158,7 +140,7 @@ fun ResidentProfileScreen(
                     AsyncImage(
                         model = pfpUri.toUri(),
                         modifier = Modifier
-                            .size(160.dp)
+                            .size(140.dp)
                             .clip(CircleShape),
                         contentScale = ContentScale.Crop,
                         contentDescription = "Pfp"
@@ -166,7 +148,7 @@ fun ResidentProfileScreen(
                 } else {
                     Image(
                         imageVector = Icons.Rounded.AccountCircle,
-                        modifier = Modifier.size(160.dp),
+                        modifier = Modifier.size(140.dp),
                         colorFilter = ColorFilter.tint(Color(0xFF59EBDD)),
                         contentDescription = "Default Pfp icon"
                     )
@@ -202,7 +184,7 @@ fun ResidentProfileScreen(
                         isPfpChanged = false
                     }
                 ) {
-                    Text(text = "Cancel")
+                    Text(text = "Dismiss")
                 }
                 
                 Button(
@@ -232,37 +214,108 @@ fun ResidentProfileScreen(
             }
         }
         if(!isProfileEdited) {
-            Text(
-                text = name,
-                style = MaterialTheme.typography.titleMedium,
-                fontSize = 20.sp
-            )
-            if(aboutMe.isNotEmpty()) {
-                Text(
-                    text = aboutMe,
-                    fontStyle = FontStyle.Italic
-                )
-            }
-            if(phoneNo.length > 5) {
+            Card(
+                elevation = CardDefaults.cardElevation(20.dp),
+                colors = CardDefaults.cardColors(Color.White),
+                modifier = Modifier.padding(vertical = 10.dp, horizontal = 16.dp),
+                shape = RoundedCornerShape(20.dp)
+            ) {
                 Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(6.dp)
+                        .height(50.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Icon(
-                        imageVector = Icons.Rounded.PhoneInTalk,
-                        modifier = Modifier
-                            .size(21.dp)
-                            .padding(end = 3.dp),
-                        tint = Color(0xFF62B065),
-                        contentDescription = "Phone icon"
+                        imageVector = Icons.Rounded.AccountCircle,
+                        modifier = Modifier.padding(end = 7.dp),
+                        contentDescription = "Person icon"
                     )
-                    Text(text = "+91 ${phoneNo.substring(0,5)} ${phoneNo.substring(5)}")
+                    Text(
+                        text = name,
+                        style = MaterialTheme.typography.titleMedium,
+                        fontSize = 20.sp
+                    )
+                }
+                HorizontalDivider()
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(50.dp)
+                        .padding(6.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(
+                        imageVector = Icons.Rounded.Home,
+                        modifier = Modifier.padding(end = 7.dp),
+                        contentDescription = "Person icon"
+                    )
+                    Text(
+                        text = "${resident.building} - ${resident.flatNo}",
+                        fontSize = 20.sp
+                    )
+                }
+                HorizontalDivider()
+                if(phoneNo.length > 5) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(6.dp)
+                            .height(50.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(
+                            imageVector = Icons.Rounded.PhoneInTalk,
+                            modifier = Modifier
+                                .size(24.dp)
+                                .padding(end = 7.dp),
+                            tint = Color(0xFF62B065),
+                            contentDescription = "Phone icon"
+                        )
+                        Text(text = "+91 ${phoneNo.substring(0,5)} ${phoneNo.substring(5)}")
+                    }
                 }
             }
 
-            Button(
-                onClick = { isProfileEdited = true }
+            Card(
+                modifier = Modifier.padding(15.dp),
+                colors = CardDefaults.cardColors(Color.White)
             ) {
-                Text(text = "Edit profile")
+                Button(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(85.dp)
+                        .padding(15.dp),
+                    onClick = { isProfileEdited = true },
+                    colors = ButtonDefaults.buttonColors(Color(0xFFCAE1F3))
+                ) {
+                    Text(
+                        text = "Edit profile",
+                        fontWeight = FontWeight.SemiBold,
+                        color = Color.Blue
+                    )
+                }
+                Button(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(85.dp)
+                        .padding(15.dp),
+                    onClick = signOut,
+                    colors = ButtonDefaults.buttonColors(Color(0xFFFCCFDE))
+                ) {
+                    Icon(
+                        modifier = Modifier.padding(end = 7.dp),
+                        imageVector = Icons.AutoMirrored.Filled.Logout,
+                        tint = Color.Black,
+                        contentDescription = "Sign out"
+                    )
+                    Text(
+                        text = "Sign out",
+                        fontWeight = FontWeight.SemiBold,
+                        color = Color.Red
+                    )
+                }
             }
         }
         AnimatedVisibility(visible = isProfileEdited) {
@@ -331,24 +384,6 @@ fun ResidentProfileScreen(
                 }
             }
         }
-
-//        Text(
-//            text = "Memories",
-//            modifier = Modifier.padding(top = 15.dp),
-//            fontSize = 45.sp,
-//            fontFamily = FontFamily.Cursive
-//        )
-//
-//        LazyColumn(
-//            modifier = Modifier.padding(top = 15.dp),
-//            horizontalAlignment = Alignment.CenterHorizontally
-//        ) {
-//            state.eventMemories?.let { memories ->
-//                items(memories) { memory ->
-//                    EventMemoryRow(memory)
-//                }
-//            }
-//        }
     }
 }
 

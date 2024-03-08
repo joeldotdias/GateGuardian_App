@@ -21,5 +21,5 @@ interface SecurityRepository {
 
     // Security profile
     suspend fun updateSecurityPfp(pfpUrl: String)
-    suspend fun updateSecurityProfile(badgeId: String, phoneNo: String)
+    suspend fun updateSecurityProfile(name: String, phoneNo: String)
 }

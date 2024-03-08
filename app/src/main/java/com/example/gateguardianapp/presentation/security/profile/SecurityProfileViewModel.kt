@@ -53,9 +53,9 @@ class SecurityProfileViewModel @Inject constructor(
         }
     }
 
-    fun updateSecurityProfile(badgeId: String, phoneNo: String) {
+    fun updateSecurityProfile(name: String, phoneNo: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            repository.updateSecurityProfile(badgeId, phoneNo)
+            repository.updateSecurityProfile(name, phoneNo)
         }
     }
 }
