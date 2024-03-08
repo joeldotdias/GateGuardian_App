@@ -12,7 +12,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.converter.moshi.MoshiConverterFactory
 import javax.inject.Singleton
 
 @Module
@@ -24,7 +24,7 @@ object AppModule {
     fun provideUserApi(): UserApi {
         return Retrofit.Builder()
             .baseUrl(Constants.BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
+            .addConverterFactory(MoshiConverterFactory.create())
             .build()
             .create(UserApi::class.java)
     }
@@ -34,7 +34,7 @@ object AppModule {
     fun provideResidentApi(): ResidentApi {
         return Retrofit.Builder()
             .baseUrl("${Constants.BASE_URL}/resident/")
-            .addConverterFactory(GsonConverterFactory.create())
+            .addConverterFactory(MoshiConverterFactory.create())
             .build()
             .create(ResidentApi::class.java)
     }
@@ -44,7 +44,7 @@ object AppModule {
     fun provideSecurityApi(): SecurityApi {
         return Retrofit.Builder()
             .baseUrl("${Constants.BASE_URL}/security/")
-            .addConverterFactory(GsonConverterFactory.create())
+            .addConverterFactory(MoshiConverterFactory.create())
             .build()
             .create(SecurityApi::class.java)
     }

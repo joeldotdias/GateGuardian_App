@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -136,14 +135,14 @@ fun VisitorsScreen(
                 Card(
                     modifier = Modifier
                         .fillMaxHeight()
-                        .fillMaxWidth(0.5f)
-                        .clickable {
-                            name = ""
-                            phoneNo = ""
-                            focusManager.clearFocus()
-                        },
+                        .fillMaxWidth(0.5f),
                     colors = CardDefaults.cardColors(Color.Red),
-                    shape = RoundedCornerShape(topStart = 20.dp, bottomStart = 20.dp)
+                    shape = RoundedCornerShape(topStart = 20.dp, bottomStart = 20.dp),
+                    onClick = {
+                        name = ""
+                        phoneNo = ""
+                        focusManager.clearFocus()
+                    }
                 ) {
                     Row(
                         modifier = Modifier.fillMaxSize(),
@@ -158,23 +157,22 @@ fun VisitorsScreen(
                     }
                 }
                 Card(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .clickable {
-                            coroutineScope.launch(Dispatchers.IO) {
-                                viewModel.saveVisitor(name, phoneNo)
-                                focusManager.clearFocus()
-                                delay(Delays.CLOUD_UPLOAD_DELAY)
-                                onVisitorsDataChange()
-                                generatedOtp = viewModel
-                                    .getRecentVisitorOtp()
-                                    .toString()
-                                delay(80L)
-                                showVisitorOtp = true
-                            }
-                        },
+                    modifier = Modifier.fillMaxSize(),
                     colors = CardDefaults.cardColors(Color(0xFFA691CD)),
-                    shape = RoundedCornerShape(topEnd = 20.dp, bottomEnd = 20.dp)
+                    shape = RoundedCornerShape(topEnd = 20.dp, bottomEnd = 20.dp),
+                    onClick = {
+                        coroutineScope.launch(Dispatchers.IO) {
+                            viewModel.saveVisitor(name, phoneNo)
+                            focusManager.clearFocus()
+                            delay(Delays.CLOUD_UPLOAD_DELAY)
+                            onVisitorsDataChange()
+                            generatedOtp = viewModel
+                                .getRecentVisitorOtp()
+                                .toString()
+                            delay(80L)
+                            showVisitorOtp = true
+                        }
+                    }
                 ) {
                     Row(
                         modifier = Modifier.fillMaxSize(),

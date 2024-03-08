@@ -97,8 +97,7 @@ dependencies {
 
     // Retrofit
     implementation(libs.retrofit)
-    implementation(libs.okhttp)
-    implementation(libs.converter.gson)
+    implementation(libs.converter.moshi)
 
     // Firebase Cloud Storage
     implementation(libs.firebase.storage)

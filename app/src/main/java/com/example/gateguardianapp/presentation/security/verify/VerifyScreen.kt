@@ -1,8 +1,6 @@
 package com.example.gateguardianapp.presentation.security.verify
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -10,6 +8,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -25,12 +24,15 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.rounded.Cancel
 import androidx.compose.material.icons.rounded.DoorFront
+import androidx.compose.material.icons.rounded.Home
 import androidx.compose.material.icons.rounded.Password
 import androidx.compose.material.icons.rounded.TransferWithinAStation
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DockedSearchBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -48,7 +50,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.font.FontFamily
@@ -213,47 +214,53 @@ fun SecurityVisitorRow(
     var codeToVerify by remember { mutableStateOf("") }
     var isExpanded by remember { mutableStateOf(false) }
 
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(10.dp)
-            .clip(RoundedCornerShape(18.dp))
-            .border(1.dp, MaterialTheme.colorScheme.onSurface, RoundedCornerShape(18.dp))
-            .background(if (isHighlighted) Color(0xFFC4F4C6) else Color.Transparent)
+    Card(
+        modifier = Modifier.padding(10.dp),
+        colors = CardDefaults.cardColors(if (isHighlighted) Color(0xFFC4F4C6) else Color.White),
+        elevation = CardDefaults.cardElevation(18.dp),
+        shape = RoundedCornerShape(20.dp)
     ) {
-        Column(
+        Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(15.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+                .padding(12.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Start
-            ) {
+            Row {
                 Icon(
                     imageVector = Icons.Rounded.TransferWithinAStation,
-                    contentDescription = "Person icon"
+                    modifier = Modifier.size(25.dp),
+                    contentDescription = "Visitor icon"
                 )
+
                 Text(
                     text = visitor.name,
                     fontWeight = FontWeight.SemiBold
                 )
             }
 
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Start
+            Card(
+                colors = CardDefaults.cardColors(Color(0xFFB0EFDF))
             ) {
-                Icon(
-                    imageVector = Icons.Rounded.DoorFront,
-                    contentDescription = "Door icon"
-                )
-                Text(text = "${visitor.hostFlat}, ${visitor.hostBuilding}")
+                Row(
+                    modifier = Modifier.padding(8.dp)
+                ) {
+                   Icon(
+                       imageVector = Icons.Rounded.Home,
+                       contentDescription = "Home icon"
+                   )
+                   Text(text = "${visitor.hostBuilding} - ${visitor.hostFlat}")
+                }
             }
+        }
 
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
             AnimatedVisibility(visible = !isExpanded && visitor.isVerified == null) {
                 Button(
                     onClick = { isExpanded = true }
@@ -279,10 +286,17 @@ fun SecurityVisitorRow(
                     )
 
                     Row(
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = Modifier
+                            .height(42.dp)
+                            .fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceAround
                     ) {
-                        Button(
+                        Card(
+                            modifier = Modifier
+                                .fillMaxHeight()
+                                .fillMaxWidth(0.5f),
+                            colors = CardDefaults.cardColors(Color(0xFFE4DBDB)),
+                            shape = RoundedCornerShape(topStart = 20.dp, bottomStart = 20.dp),
                             onClick = {
                                 if(codeToVerify.isNotEmpty()) {
                                     codeToVerify = ""
@@ -292,10 +306,21 @@ fun SecurityVisitorRow(
                                 }
                             }
                         ) {
-                            Text(text = "Cancel")
+                            Row(
+                                modifier = Modifier.fillMaxSize(),
+                                horizontalArrangement = Arrangement.Center,
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Text(
+                                    text = "Dismiss",
+                                    fontWeight = FontWeight.Bold
+                                )
+                            }
                         }
-
-                        Button(
+                        Card(
+                            modifier = Modifier.fillMaxSize(),
+                            colors = CardDefaults.cardColors(Color(0xFF9FACF6)),
+                            shape = RoundedCornerShape(topEnd = 20.dp, bottomEnd = 20.dp),
                             onClick = {
                                 visitor.isVerified = codeToVerify.trim() == visitor.code
                                 if(visitor.isVerified!!) {
@@ -304,7 +329,17 @@ fun SecurityVisitorRow(
                                 isExpanded = false
                             }
                         ) {
-                            Text(text = "Verify")
+                            Row(
+                                modifier = Modifier.fillMaxSize(),
+                                horizontalArrangement = Arrangement.Center,
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Text(
+                                    text = "Confirm",
+                                    color = Color.White,
+                                    fontWeight = FontWeight.Bold
+                                )
+                            }
                         }
                     }
                 }
