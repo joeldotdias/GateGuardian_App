@@ -121,11 +121,13 @@ fun Context.mailCustomerSupport() {
 }
 
 
-fun Context.dialCustomerSupport() {
+fun Context.dialCustomerSupport(phone: String? = null) {
+    val toCall = phone ?: Constants.CUSTOMER_SUPPORT_NUMBER
+
     try {
         val dialCustomerSupportIntent = Intent(
             Intent.ACTION_DIAL,
-            Uri.fromParts("tel", Constants.CUSTOMER_SUPPORT_NUMBER, null)
+            Uri.fromParts("tel", toCall, null)
         )
         startActivity(dialCustomerSupportIntent)
     } catch (t: Throwable) {

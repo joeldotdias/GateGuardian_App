@@ -4,6 +4,7 @@ import com.example.gateguardianapp.data.local.VisitorSearchDao
 import com.example.gateguardianapp.data.local.VisitorSearchEntity
 import com.example.gateguardianapp.data.mapper.toVisitorSearchEntity
 import com.example.gateguardianapp.data.remote.SecurityApi
+import com.example.gateguardianapp.data.remote.dto.NotifyResidentsDto
 import com.example.gateguardianapp.data.remote.dto.VerifiedVisitorDto
 import com.example.gateguardianapp.data.remote.schema.RegularsSchema
 import com.example.gateguardianapp.data.remote.schema.UpdatePfp
@@ -48,6 +49,10 @@ class SecurityRepositoryImpl @Inject constructor(
 
     override suspend fun moveVerifiedVisitorToLogs(visitorId: Int) {
         api.moveVerifiedVisitorToLogs(VerifiedVisitorDto(visitorId).toRequestBody())
+    }
+
+    override suspend fun getResidentsToNotify(flatNo: Int, building: String): List<NotifyResidentsDto>? {
+        return api.getResidentsToNotify(currUserEmail, flatNo, building).body()
     }
 
     override suspend fun getVisitorLogs(): List<VisitorLog>? {

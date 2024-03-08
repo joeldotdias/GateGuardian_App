@@ -141,6 +141,7 @@ fun VisitorsScreen(
                     onClick = {
                         name = ""
                         phoneNo = ""
+                        generatedOtp = ""
                         focusManager.clearFocus()
                     }
                 ) {

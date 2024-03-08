@@ -182,6 +182,7 @@ fun RegularsScreen(
                         name = ""
                         role = ""
                         entry = ""
+                        generatedOtp = ""
                         focusManager.clearFocus()
                     }
                 ) {
